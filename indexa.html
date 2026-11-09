@@ -665,6 +665,21 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
     background: #fef2f2;
     color: #b91c1c;
 }
+.btn-show-half {
+    flex: 1;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 13px 10px;
+    font-size: 18px;
+}
+.ayah-actions-bar {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    margin-bottom: 6px;
+}
+.ayah-actions-bar .btn-rate { padding: 13px 4px; font-size: 14px; border-radius: 10px; }
 .btn-record-big:hover { background: #fee2e2; border-color: #b91c1c; }
 body.dark-mode .btn-recording.btn-record-big {
     background: #1f1315 !important;
@@ -1455,9 +1470,15 @@ function showSpecialSessionScreen() {
         <div id="action-area" class="hidden">
             <div class="action-top-row">
                 <button id="record-action-btn" class="btn-recording btn-record-big" disabled>🎙️ بداية التسجيل</button>
+                <button id="show-btn" class="btn-main btn-show-half hidden" disabled>إظهار الآيات</button>
                 <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
             </div>
-            <button id="show-btn" class="btn-main" disabled style="opacity: 0.6;">إظهار الآيات</button>
+            <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
+                <button class="btn-rate btn-forgot" onclick="console.log('زر: تعثر')">⚠️ تعثر</button>
+                <button class="btn-rate btn-hard" onclick="console.log('زر: سماع صوتي')">🎙️ صوتي</button>
+                <button class="btn-rate btn-good" onclick="console.log('زر: صوت الشيخ')">🔊 الشيخ</button>
+                <button class="btn-rate btn-easy" onclick="resumeNormalReading()">🔄 مواصلة</button>
+            </div>
         </div>
 
         <div id="rating-area" class="rating-buttons hidden">
@@ -1596,6 +1617,9 @@ function loadSpecialFullSectionExercise() {
     const recordBtn = document.getElementById('record-action-btn');
 
     specialRevealed = false;
+    ayahBarWasPlaying = false;
+    const barEl = document.getElementById('ayah-actions-bar');
+    if (barEl) barEl.classList.add('hidden');
     if (showBtn) {
         showBtn.classList.add('hidden');   // لا معنى لإظهار الآيات قبل التسجيل
         showBtn.removeAttribute('disabled');
@@ -1664,57 +1688,54 @@ function loadSpecialFullSectionExercise() {
     }
 }
 
-// الضغط على أي آية داخل المقطع يُظهر الأزرار الأربعة
+// الضغط على أي آية بعد الإظهار: تتوقف المراجعة الصوتية مؤقتاً وتحلّ الأزرار الأربعة مكان زر التسجيل في الأسفل
+let ayahBarWasPlaying = false;
+
 function handleSpecialAyahClick(ayahIndex) {
-    resetRecordingStates();
+    if (!specialRevealed) return;
+    const bar = document.getElementById('ayah-actions-bar');
+    const recordBtn = document.getElementById('record-action-btn');
+    const barAlreadyOpen = bar && !bar.classList.contains('hidden');
 
     for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
         const el = document.getElementById(`special-ayah-item-${a}`);
-        const menuEl = document.getElementById(`ayah-popup-menu-${a}`);
         if (el) el.style.backgroundColor = "transparent";
-        if (menuEl) menuEl.remove();
     }
+    const clicked = document.getElementById(`special-ayah-item-${ayahIndex}`);
+    if (clicked) clicked.style.backgroundColor = "rgba(254, 240, 138, 0.6)";
 
-    const clickedAyahSpan = document.getElementById(`special-ayah-item-${ayahIndex}`);
-    if (clickedAyahSpan) {
-        clickedAyahSpan.style.backgroundColor = "rgba(254, 240, 138, 0.6)";
-
-        const popupDiv = document.createElement('div');
-        popupDiv.id = `ayah-popup-menu-${ayahIndex}`;
-        popupDiv.style.cssText = `
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            animation: fadeIn 0.2s ease-in-out;
-        `;
-
-        popupDiv.innerHTML = `
-            <button class="btn-rate btn-forgot" style="font-size: 12px; padding: 4px 8px;" onclick="console.log('زر: تعثر (بحاجة لمراجعة) للآية ${ayahIndex + 1}')">⚠️ تعثر (بحاجة لمراجعة)</button>
-            <button class="btn-rate btn-hard" style="font-size: 12px; padding: 4px 8px;" onclick="console.log('زر: سماع صوتي للآية ${ayahIndex + 1}')">🎙️ سماع صوتي</button>
-            <button class="btn-rate btn-good" style="font-size: 12px; padding: 4px 8px;" onclick="console.log('زر: صوت الشيخ للآية ${ayahIndex + 1}')">🔊 صوت الشيخ</button>
-            <button class="btn-rate btn-easy" style="font-size: 12px; padding: 4px 8px;" onclick="resumeNormalReading(${ayahIndex})">🔄 مواصلة</button>
-        `;
-
-        clickedAyahSpan.after(popupDiv);
+    if (!barAlreadyOpen) {
+        ayahBarWasPlaying = !!isPlayingRecording;
+        if (isPlayingRecording && playbackAudioElement) {
+            playbackAudioElement.pause();
+            isPlayingRecording = false;
+        }
+        if (recordBtn) {
+            recordBtn.classList.add('hidden');
+            recordBtn.classList.remove('playing-active');
+            if (ayahBarWasPlaying) recordBtn.innerText = "▶️ مواصلة العرض";
+        }
+        if (bar) bar.classList.remove('hidden');
     }
 }
 
-// زر المواصلة: إعادة الآية لوضعها الطبيعي وإخفاء النافذة المنبثقة
-function resumeNormalReading(ayahIndex) {
-    const clickedAyahSpan = document.getElementById(`special-ayah-item-${ayahIndex}`);
-    const menuEl = document.getElementById(`ayah-popup-menu-${ayahIndex}`);
-
-    if (clickedAyahSpan) clickedAyahSpan.style.backgroundColor = "transparent";
-    if (menuEl) menuEl.remove();
+// زر المواصلة: تختفي الأزرار الأربعة ويعود العرض من حيث توقف
+function resumeNormalReading() {
+    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
+        const el = document.getElementById(`special-ayah-item-${a}`);
+        if (el) el.style.backgroundColor = "transparent";
+    }
+    const bar = document.getElementById('ayah-actions-bar');
+    const recordBtn = document.getElementById('record-action-btn');
+    if (bar) bar.classList.add('hidden');
+    if (recordBtn) recordBtn.classList.remove('hidden');
+    if (ayahBarWasPlaying && playbackAudioElement && recordBtn) {
+        playbackAudioElement.play();
+        isPlayingRecording = true;
+        recordBtn.innerText = "⏸️ إيقاف العرض";
+        recordBtn.classList.add('playing-active');
+    }
+    ayahBarWasPlaying = false;
 }
 
 function revealSpecialFullAnswer() {
