@@ -673,13 +673,11 @@ body.dark-mode .btn-recording.btn-record-big {
 }
 .rec-indicator {
     display: none;
-    position: sticky;
-    top: 0;
-    z-index: 5;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin: 0 auto 8px;
+    margin: 4px auto 8px;
+    line-height: 1.4;
     padding: 6px 16px;
     width: fit-content;
     border-radius: 999px;
@@ -1581,6 +1579,8 @@ function initiateSpecialSessionExecution() {
     loadSpecialFullSectionExercise();
 }
 
+let specialRevealed = false;
+
 function loadSpecialFullSectionExercise() {
     resetRecordingStates();
 
@@ -1595,8 +1595,9 @@ function loadSpecialFullSectionExercise() {
     const sheikhBtn = document.getElementById('sheikh-audio-btn');
     const recordBtn = document.getElementById('record-action-btn');
 
+    specialRevealed = false;
     if (showBtn) {
-        showBtn.classList.remove('hidden');
+        showBtn.classList.add('hidden');   // لا معنى لإظهار الآيات قبل التسجيل
         showBtn.removeAttribute('disabled');
         showBtn.style.opacity = '1';
         showBtn.setAttribute('onclick', 'revealSpecialFullAnswer()');
@@ -1604,6 +1605,7 @@ function loadSpecialFullSectionExercise() {
     if (ratingArea) ratingArea.classList.add('hidden');
     if (sheikhBtn) sheikhBtn.classList.add('hidden');
     if (recordBtn) {
+        recordBtn.classList.remove('hidden');
         recordBtn.removeAttribute('disabled');
         recordBtn.innerText = "🎙️ بداية التسجيل";
         recordBtn.className = "btn-recording btn-record-big";
@@ -1648,10 +1650,10 @@ function loadSpecialFullSectionExercise() {
             <span style="font-size: 14px; font-weight: bold; color: #2d6a4f;">البدء من الآية ${specialStartAyah}</span>
             <span class="surah-title" style="font-size: 16px;">سورة: ${surahsNames[selectedSpecialSurah]}</span>
         </div>
-        <div id="rec-indicator" class="rec-indicator"><span class="rec-dot"></span><span id="rec-indicator-text">جارٍ التسجيل...</span></div>
         <div class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.5;">
             ${promptText ? `<span id="${specialStartAyah === 1 ? 'special-basmala-prompt' : 'special-prev-prompt'}" class="ayah-blue">${promptText}</span>` : ""}
             ${promptNumDisplay !== "" ? `<span class="circle-num">${promptNumDisplay}</span>` : ""}
+            <div id="rec-indicator" class="rec-indicator"><span class="rec-dot"></span><span id="rec-indicator-text">جارٍ التسجيل...</span></div>
 
             <span id="special-full-target-blank" class="blank-space" style="visibility: hidden; color: #16a34a !important;">${fullTargetHTML}</span>
         </div>
@@ -1729,12 +1731,14 @@ function revealSpecialFullAnswer() {
     const ratingArea = document.getElementById('rating-area');
     const sheikhBtn = document.getElementById('sheikh-audio-btn');
 
+    specialRevealed = true;
     if (showBtn) showBtn.classList.add('hidden');
-    if (ratingArea) ratingArea.classList.remove('hidden');
-    if (sheikhBtn) sheikhBtn.classList.remove('hidden');
+    if (ratingArea) ratingArea.classList.add('hidden');
+    if (sheikhBtn) sheikhBtn.classList.add('hidden');
 
     const recordBtn = document.getElementById('record-action-btn');
     if (recordBtn) {
+        recordBtn.classList.remove('hidden');
         recordBtn.innerText = "▶️ عرض التسجيل";
         recordBtn.className = "btn-recording btn-record-big";
     }
@@ -1742,10 +1746,7 @@ function revealSpecialFullAnswer() {
 
 function handleSpecialRecordingToggle() {
     const recordBtn = document.getElementById('record-action-btn');
-    const showBtn = document.getElementById('show-btn');
-    const isAnswerRevealed = showBtn && showBtn.classList.contains('hidden');
-
-    if (isAnswerRevealed) {
+    if (specialRevealed) {
         togglePlaybackRecordedAudio(recordBtn);
     } else {
         toggleRecordUserVoice(recordBtn);
@@ -1769,6 +1770,10 @@ function updateRecIndicator(state) {
     const el = document.getElementById('rec-indicator');
     if (!el) return;
     const txt = document.getElementById('rec-indicator-text');
+    const showB = document.getElementById('show-btn');
+    // التسلسل: تسجيل جارٍ ← زر واحد (إيقاف)، متوقف ← إظهار الآيات + مواصلة
+    if (showB && state === 'live') showB.classList.add('hidden');
+    if (showB && state === 'paused') showB.classList.remove('hidden');
     el.classList.remove('on', 'live', 'paused');
     if (state === 'live') {
         el.classList.add('on', 'live');
