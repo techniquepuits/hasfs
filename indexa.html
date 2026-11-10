@@ -539,7 +539,7 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .hidden { display: none !important; }
 
 @media screen and (max-width: 768px) {
-    .welcome-container { padding: 15px 10px; width: 96%; height: 94vh; }
+    .welcome-container { padding: 15px 10px; width: 96%; height: 94vh; height: calc(100dvh - 22px); }
     .app-title { font-size: 30px; }
     .exercise-box { font-size: 21px !important; line-height: 2.8; padding: 12px 8px !important; }
     .circle-num { width: 22px; height: 22px; font-size: 11px; }
@@ -677,6 +677,14 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .rec-inline { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 12px 0 14px; }
 .rec-inline .btn-record-big, .rec-inline .btn-show-half { flex: none; width: 100%; }
 .rec-inline:empty { display: none; }
+.progress-text { font-weight: bold; color: #1b4d3e; font-size: 15px; }
+body.dark-mode .progress-text { color: #34d399; }
+.frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
+body.dark-mode .frame-surah { color: #34d399; }
+.review-box .continuous-quran-text { margin-top: 18px; }
+.mic-btn { width: 28px; height: 28px; font-size: 15px; bottom: 4px; left: 4px; }
+.mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: pulse-red 1.2s infinite; }
+.btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
 .speed-ctl { display: inline-flex; align-items: center; gap: 4px; direction: ltr; }
 .speed-ctl button { background: #64748b; color: #fff; border: none; width: 30px; height: 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
 .speed-ctl .speed-val { min-width: 26px; text-align: center; font-weight: bold; font-size: 15px; color: #1b4d3e; }
@@ -1195,16 +1203,13 @@ function showReviewScreen() {
                 <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
             </div>
-            <div id="daily-progress-badge" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 4px 12px; border-radius: 8px; font-weight: bold; color: #1b4d3e; font-size: 15px;">
-                راجعتَ: 0
-            </div>
-            <div id="surah-name" class="surah-title" style="font-size: 16px;">سورة: ---</div>
+            <div id="daily-progress-badge" class="progress-text">راجعتَ: 0</div>
         </div>
 
-        <div class="exercise-box" id="exercise-container">
+        <div class="exercise-box review-box" id="exercise-container">
             <button class="expand-arc-btn" onclick="expandContext()" title="إظهار الآية السابقة للمساعدة">&#8593;</button>
-            <button id="play-ayah-audio-btn" onclick="playCurrentTargetAyahAudio()" class="audio-btn">🔊</button>
-            <audio id="ayah-audio-element" class="hidden"></audio>
+            <div id="surah-name" class="frame-surah">سورة: ---</div>
+            <button id="mic-icon-btn" onclick="toggleReviewMic()" class="audio-btn mic-btn" title="سجّل صوتك (اضغط للبدء، واضغط مرة أخرى للإيقاف)">🎙️</button>
 
             <div class="continuous-quran-text">
                 <span id="prev-ayahs-container"></span>
@@ -1220,8 +1225,8 @@ function showReviewScreen() {
 
         <div id="action-area">
             <div class="action-top-row">
-                <button id="record-action-btn" class="btn-recording" onclick="handleDailyRecordingToggle()">🎙️ تسجيل</button>
-                <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
+                <button id="record-action-btn" class="btn-recording btn-review-act hidden" onclick="handleDailyRecordingToggle()">▶️ عرض التسجيل</button>
+                <button id="sheikh-audio-btn" class="btn-audio-sheikh btn-review-act hidden" onclick="handleSheikhAudioPlaceholder()">🔊 صوت الشيخ</button>
             </div>
             <button id="show-btn" class="btn-main" onclick="revealDailyAnswer()">عرض الإجابة</button>
         </div>
@@ -1307,6 +1312,8 @@ function loadNextAyahToReview() {
     if (ratingArea) ratingArea.classList.add('hidden');
     if (sheikhBtn) sheikhBtn.classList.add('hidden');
     if (actionArea) actionArea.classList.remove('hidden');
+    const recBtn0 = document.getElementById('record-action-btn');
+    if (recBtn0) { recBtn0.classList.add('hidden'); recBtn0.innerText = "▶️ عرض التسجيل"; recBtn0.className = "btn-recording btn-review-act hidden"; }
 
     const promptAyahEl = document.getElementById('prompt-ayah');
     const promptNumEl = document.getElementById('prompt-num');
@@ -1316,7 +1323,7 @@ function loadNextAyahToReview() {
     const targetBlank2 = document.getElementById('target-blank-2');
     const surahNameEl = document.getElementById('surah-name');
     const expandBtn = document.querySelector('.expand-arc-btn');
-    const audioBtn = document.getElementById('play-ayah-audio-btn');
+    const audioBtn = document.getElementById('mic-icon-btn');
     if (expandBtn) expandBtn.style.display = '';
     if (audioBtn) audioBtn.style.display = '';
 
@@ -1367,12 +1374,23 @@ function loadNextAyahToReview() {
     }
 }
 
-function revealDailyAnswer() {
-    if (isRecording && mediaRecorder && mediaRecorder.state === "recording") {
-        mediaRecorder.stop();
-        isRecording = false;
-        isRecordingPaused = false;
+// أيقونة الميكروفون داخل الإطار: ضغطة تبدأ التسجيل (وتنبض)، وضغطة ثانية توقفه
+function toggleReviewMic() {
+    if (!isRecording && !isRecordingPaused) {
+        // تسجيل جديد يلغي السابق
+        if (playbackAudioElement) { try { playbackAudioElement.pause(); } catch (e) {} playbackAudioElement = null; }
+        recordedAudioBlob = null;
+        isPlayingRecording = false;
+        const dummy = { innerText: '', classList: { add() {}, remove() {} } };
+        toggleRecordUserVoice(dummy);
+    } else {
+        stopRecordingCompletely();
     }
+}
+
+function revealDailyAnswer() {
+    const hadRecording = !!recordedAudioBlob || isRecording || isRecordingPaused;
+    stopRecordingCompletely();
 
     const blank1 = document.getElementById('target-blank-1');
     const blank2 = document.getElementById('target-blank-2');
@@ -1392,10 +1410,11 @@ function revealDailyAnswer() {
     if (ratingArea) ratingArea.classList.remove('hidden');
     if (sheikhBtn) sheikhBtn.classList.remove('hidden');
 
+    // زر «عرض التسجيل» لا يظهر إلا إذا سجّل المستخدم فعلاً
     const recordBtn = document.getElementById('record-action-btn');
     if (recordBtn) {
         recordBtn.innerText = "▶️ عرض التسجيل";
-        recordBtn.className = "btn-recording";
+        recordBtn.className = "btn-recording btn-review-act" + (hadRecording ? "" : " hidden");
     }
 }
 
@@ -1786,6 +1805,8 @@ function ayahAudioUrls(riwaya, surah, ayah) {
 function refreshSheikhBtn() {
     const b = document.getElementById('sheikh-bar-btn');
     if (b) b.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 الشيخ";
+    const r = document.getElementById('sheikh-audio-btn');
+    if (r) r.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 صوت الشيخ";
 }
 
 function stopSheikh() {
@@ -1808,6 +1829,8 @@ function playSheikhAyah(surah, ayah) {
     if (playbackAudioElement && isPlayingRecording) {
         playbackAudioElement.pause();
         isPlayingRecording = false;
+        const pb = document.getElementById('record-action-btn');
+        if (pb && /إيقاف العرض/.test(pb.innerText)) { pb.innerText = "▶️ مواصلة العرض"; pb.classList.remove('playing-active'); }
     }
     const fail = () => { stopSheikh(); showToast("تعذر تشغيل صوت الشيخ. تحقق من الاتصال بالإنترنت."); };
     let i = 0;
@@ -2015,6 +2038,8 @@ function handleSpecialRecordingToggle() {
     const recordBtn = document.getElementById('record-action-btn');
     if (specialRevealed) {
         togglePlaybackRecordedAudio(recordBtn);
+        // عند بدء العرض: يتوقف النزول التلقائي 3 ثوانٍ ليبدأ المستخدم القراءة ثم ينزل
+        if (isPlayingRecording) autoScrollHoldUntil = Date.now() + 3000;
     } else {
         toggleRecordUserVoice(recordBtn);
     }
@@ -2034,6 +2059,8 @@ let recMediaStream = null;
 let recToken = 0;
 
 function updateRecIndicator(state) {
+    const mic = document.getElementById('mic-icon-btn');
+    if (mic) mic.classList.toggle('mic-live', state === 'live');
     const el = document.getElementById('rec-indicator');
     if (!el) return;
     const txt = document.getElementById('rec-indicator-text');
@@ -2101,8 +2128,9 @@ function toggleRecordUserVoice(btnElement) {
 
                 playbackAudioElement.onended = () => {
                     isPlayingRecording = false;
-                    btnElement.innerText = "▶️ عرض التسجيل";
-                    btnElement.classList.remove('playing-active');
+                    const pb = document.getElementById('record-action-btn') || btnElement;
+                    pb.innerText = "▶️ عرض التسجيل";
+                    pb.classList.remove('playing-active');
                 };
             };
 
