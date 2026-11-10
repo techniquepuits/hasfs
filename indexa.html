@@ -674,6 +674,9 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
     font-size: 18px;
 }
 .ayah-stumbled { border-bottom: 3px solid #d97706; }
+.rec-inline { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 12px 0 14px; }
+.rec-inline .btn-record-big, .rec-inline .btn-show-half { flex: none; width: 100%; }
+.rec-inline:empty { display: none; }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
@@ -1185,7 +1188,7 @@ function showReviewScreen() {
     const reviewScreenHTML = `
         <div class="header-box">
             <div style="display: flex; gap: 6px; align-items: center;">
-                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية">🏠 القائمة</button>
+                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
             </div>
             <div id="daily-progress-badge" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 4px 12px; border-radius: 8px; font-weight: bold; color: #1b4d3e; font-size: 15px;">
@@ -1473,7 +1476,7 @@ function showSpecialSessionScreen() {
     const specialScreenHTML = `
         <div class="header-box">
             <div style="display: flex; gap: 6px; align-items: center;">
-                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية">🏠 القائمة</button>
+                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
             </div>
             <div class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
@@ -1699,6 +1702,7 @@ function loadSpecialFullSectionExercise() {
             ${promptText ? `<span id="${specialStartAyah === 1 ? 'special-basmala-prompt' : 'special-prev-prompt'}" class="ayah-blue">${promptText}</span>` : ""}
             ${promptNumDisplay !== "" ? `<span class="circle-num">${promptNumDisplay}</span>` : ""}
             <div id="rec-indicator" class="rec-indicator"><span class="rec-dot"></span><span id="rec-indicator-text">جارٍ التسجيل...</span></div>
+            <div id="rec-inline" class="rec-inline"></div>
 
             <span id="special-full-target-blank" class="blank-space" style="visibility: hidden; color: #16a34a !important;">${fullTargetHTML}</span>
         </div>
@@ -1706,6 +1710,12 @@ function loadSpecialFullSectionExercise() {
 
     if (exerciseContainer) {
         exerciseContainer.innerHTML = customLayoutHTML;
+    }
+    // قبل إظهار الآيات: زرّا التسجيل وإظهار الآيات داخل الصفحة بعرض الشاشة، واحد فوق الآخر
+    const inlineBox = document.getElementById('rec-inline');
+    if (inlineBox) {
+        if (recordBtn) inlineBox.appendChild(recordBtn);
+        if (showBtn) inlineBox.appendChild(showBtn);
     }
 }
 
@@ -1910,6 +1920,12 @@ function revealSpecialFullAnswer() {
     if (sheikhBtn) sheikhBtn.classList.add('hidden');
 
     const recordBtn = document.getElementById('record-action-btn');
+    // بعد الإظهار: زر العرض/الإيقاف يعود إلى الأسفل
+    const bottomRow = document.querySelector('#action-area .action-top-row');
+    if (bottomRow) {
+        if (recordBtn) bottomRow.insertBefore(recordBtn, bottomRow.firstChild);
+        if (showBtn) bottomRow.appendChild(showBtn);
+    }
     if (recordBtn) {
         recordBtn.classList.remove('hidden');
         recordBtn.innerText = "▶️ عرض التسجيل";
