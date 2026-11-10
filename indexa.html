@@ -673,6 +673,8 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
     padding: 13px 10px;
     font-size: 18px;
 }
+.ayah-stumbled { border-bottom: 3px solid #d97706; }
+.circle-num:empty { display: none; }
 .ayah-actions-bar {
     display: flex;
     gap: 6px;
@@ -766,6 +768,7 @@ const STATIC_FILES = {
 const LS_KEYS = {
     settings: "ibnbadis.settings",
     migrated: "ibnbadis.migrated",
+    ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
     texts: (riwaya) => "ibnbadis.texts.v1." + riwaya   // v1: ارفع الرقم لإجبار إعادة التنزيل
 };
 
@@ -776,7 +779,6 @@ const LS_KEYS = {
 
 let Riwaya = ['ورش عن نافع', 'حفص عن عاصم'];  // [0] ورش | [1] حفص
 let userRiwaya = 0;                           // الرواية الحالية
-let userCountLearningPlannedToday = 10;       // عدد آيات المراجعة اليومية
 let isDarkMode = false;
 
 // أسماء السور مرتبة حسب المصحف (0 إلى 113)
@@ -795,16 +797,10 @@ const surahsNames = [
     "المسد", "الإخلاص", "الفلق", "الناس"
 ];
 
-// متغيرات جاهزة لخوارزمية التكرار المتباعد (لم تُستخدم بعد)
-let referenceTime = 1;    // الزمن المرجعي (tRef)
-let urgencyScore = 1;     // مؤشر الإلحاح (u)
-
 // متغيرات شاشات المراجعة
 let currentReviewItem = null;
 let targetAyahTextCache = "";
 let currentContextOffset = 0;
-let currentProgressIndex = 1;
-let totalDailyTargetCount = 8;
 
 // متغيرات الجلسة الخاصة (المقطع الكامل)
 let selectedSpecialSurah = null;
@@ -849,16 +845,12 @@ function lsSet(key, value) {
 function loadSettings() {
     const s = lsGet(LS_KEYS.settings, {}) || {};
     if (s.riwaya === 0 || s.riwaya === 1) userRiwaya = s.riwaya;
-    if (Number.isFinite(s.dailyLearningTarget) && s.dailyLearningTarget >= 1) {
-        userCountLearningPlannedToday = s.dailyLearningTarget;
-    }
     isDarkMode = s.darkMode === true;
 }
 
 function saveSettings() {
     lsSet(LS_KEYS.settings, {
         riwaya: userRiwaya,
-        dailyLearningTarget: userCountLearningPlannedToday,
         darkMode: isDarkMode
     });
 }
@@ -973,8 +965,6 @@ async function migrateFromOldIndexedDBOnce() {
         const old = await readOldIndexedDB();
         if (old && old.config) {
             if (old.config.riwaya === 0 || old.config.riwaya === 1) userRiwaya = old.config.riwaya;
-            const n = Number(old.config.dailyLearningTarget);
-            if (Number.isFinite(n) && n >= 1) userCountLearningPlannedToday = n;
             saveSettings();
         }
     }
@@ -1151,11 +1141,6 @@ function showSettings() {
             </div>
         </div>
 
-        <div class="setting-row-box">
-            <span class="setting-row-label">عدد آيات المراجعة اليومية:</span>
-            <input type="number" id="daily-count-input" value="${userCountLearningPlannedToday}" min="1" max="100" style="padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; width: 70px; text-align: center;">
-        </div>
-
         <button class="btn-main" style="margin-top: 20px;" onclick="saveSettingsAndReturn()">العودة للقائمة</button>
     `;
 
@@ -1177,10 +1162,6 @@ async function changeRiwayaSetting(riwayaIndex) {
 }
 
 async function saveSettingsAndReturn() {
-    const dailyCountEl = document.getElementById('daily-count-input');
-    const parsed = dailyCountEl ? parseInt(dailyCountEl.value, 10) : NaN;
-    userCountLearningPlannedToday = Math.max(1, parsed || 10);
-
     // لا نغادر الإعدادات قبل أن تكون نصوص الرواية المختارة جاهزة
     try {
         await ensureTextsForRiwaya(userRiwaya);
@@ -1207,7 +1188,7 @@ function showReviewScreen() {
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
             </div>
             <div id="daily-progress-badge" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 4px 12px; border-radius: 8px; font-weight: bold; color: #1b4d3e; font-size: 15px;">
-                1 / 8
+                راجعتَ: 0
             </div>
             <div id="surah-name" class="surah-title" style="font-size: 16px;">سورة: ---</div>
         </div>
@@ -1247,103 +1228,134 @@ function showReviewScreen() {
 
     renderInContainer(reviewScreenHTML);
     applyTheme();
-    loadRandomActiveAyahToReview();
+    reviewedThisSession = 0;
+    lastReviewedKey = null;
+    loadNextAyahToReview();
 }
 
-function loadRandomActiveAyahToReview() {
+// ----------------------------------------------------------
+// خوارزمية عقال الآيات
+// قائمة الآيات تبدأ فارغة؛ تُضاف إليها الآية عند التعثر فيها في المراجعة اليومية بصعوبة 10.
+// ----------------------------------------------------------
+const RATING_POINTS = { easy: 1, good: 4, hard: 7, forgot: 10 };
+const BASE_DAYS = 180;
+const DAY_MS = 86400000;
+let reviewedThisSession = 0;
+let lastReviewedKey = null;
+
+function ayahKey(surah, ayah) { return surah + ":" + ayah; }
+function loadAyahStore(riwaya) {
+    const o = lsGet(LS_KEYS.ayahs(riwaya), {});
+    return (o && typeof o === "object" && !Array.isArray(o)) ? o : {};
+}
+function saveAyahStore(riwaya, store) { lsSet(LS_KEYS.ayahs(riwaya), store); }
+
+// الزمن المرجعي بالأيام = Base ^ ((10 - الصعوبة) / 9)
+function refTimeDays(d) { return Math.pow(BASE_DAYS, (10 - d) / 9); }
+// الأولوية = الزمن المنقضي ÷ الزمن المرجعي
+function priorityOf(rec, now) { return ((now - rec.t) / DAY_MS) / refTimeDays(rec.d); }
+
+// تُستدعى من المراجعة اليومية عند الضغط على «تعثر»: تدخل الآية (أو تعود) بصعوبة 10
+function addStumbledAyah(surah, ayah) {
+    const store = loadAyahStore(userRiwaya);
+    store[ayahKey(surah, ayah)] = { d: 10, t: Date.now() };
+    saveAyahStore(userRiwaya, store);
+}
+
+// أعلى أولوية أولاً؛ نتجنب تكرار الآية التي راجعناها للتو إن وُجدت غيرها
+function pickNextAyahForReview(excludeKey) {
+    const riwaya = userRiwaya;
+    const store = loadAyahStore(riwaya);
+    const now = Date.now();
+    let best = null, bestP = -Infinity, bestT = 0;
+    let fallback = null;
+    for (const k in store) {
+        const rec = store[k];
+        if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
+        const parts = k.split(":");
+        const s = Number(parts[0]), a = Number(parts[1]);
+        if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, riwaya)) continue;
+        const p = priorityOf(rec, now);
+        const cand = { riwaya, surah: s, ayah: a, key: k };
+        if (k === excludeKey) { fallback = cand; continue; }
+        if (p > bestP || (p === bestP && rec.t < bestT)) { best = cand; bestP = p; bestT = rec.t; }
+    }
+    return best || fallback;
+}
+
+function loadNextAyahToReview() {
     resetRecordingStates();
     currentContextOffset = 0;
 
-    totalDailyTargetCount = userCountLearningPlannedToday;
-
     const badgeEl = document.getElementById('daily-progress-badge');
-    if (badgeEl) {
-        badgeEl.innerText = `${currentProgressIndex} / ${totalDailyTargetCount}`;
-    }
+    if (badgeEl) badgeEl.innerText = `راجعتَ: ${reviewedThisSession}`;
 
     const showBtn = document.getElementById('show-btn');
     const ratingArea = document.getElementById('rating-area');
     const sheikhBtn = document.getElementById('sheikh-audio-btn');
+    const actionArea = document.getElementById('action-area');
 
     if (showBtn) showBtn.classList.remove('hidden');
     if (ratingArea) ratingArea.classList.add('hidden');
     if (sheikhBtn) sheikhBtn.classList.add('hidden');
+    if (actionArea) actionArea.classList.remove('hidden');
 
-    const currentRiwaya = userRiwaya;
     const promptAyahEl = document.getElementById('prompt-ayah');
-
-    if (promptAyahEl) promptAyahEl.innerText = "جاري اختيار الآية...";
-
+    const promptNumEl = document.getElementById('prompt-num');
     const prevAyahsContainer = document.getElementById('prev-ayahs-container');
-    if (prevAyahsContainer) prevAyahsContainer.innerHTML = "";
-
     const blank1 = document.getElementById('target-blank-1');
     const targetNum1El = document.getElementById('target-num-1');
     const targetBlank2 = document.getElementById('target-blank-2');
-    const promptNumEl = document.getElementById('prompt-num');
+    const surahNameEl = document.getElementById('surah-name');
+    const expandBtn = document.querySelector('.expand-arc-btn');
+    const audioBtn = document.getElementById('play-ayah-audio-btn');
+    if (expandBtn) expandBtn.style.display = '';
+    if (audioBtn) audioBtn.style.display = '';
 
-    if (targetBlank2) {
-        targetBlank2.style.visibility = 'hidden';
-        targetBlank2.innerText = "";
-    }
-    if (blank1) {
-        blank1.style.visibility = 'hidden';
-        blank1.innerText = "";
-        blank1.classList.remove('ayah-green');
-    }
+    if (prevAyahsContainer) prevAyahsContainer.innerHTML = "";
+    if (targetBlank2) { targetBlank2.style.visibility = 'hidden'; targetBlank2.innerText = ""; }
+    if (blank1) { blank1.style.visibility = 'hidden'; blank1.innerText = ""; blank1.classList.remove('ayah-green'); }
     if (targetNum1El) targetNum1El.innerText = "";
     if (promptNumEl) promptNumEl.innerText = "";
 
-    // كل آيات المصحف متاحة؛ نستثني فقط الآية الأخيرة من كل سورة لأن التمرين يطلب الآية التالية
-    let totalEligible = 0;
-    for (let s = 0; s < surahsNames.length; s++) {
-        totalEligible += Math.max(0, getAyatCount(s, currentRiwaya) - 1);
-    }
+    const item = pickNextAyahForReview(lastReviewedKey);
+    currentReviewItem = item;
 
-    if (totalEligible === 0) {
-        if (promptAyahEl) promptAyahEl.innerText = "تعذر تحميل المصحف. تحقق من الاتصال بالإنترنت ثم أعد المحاولة.";
+    // القائمة فارغة: لا شيء يُراجَع بعد
+    if (!item) {
+        if (promptAyahEl) promptAyahEl.innerText = "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
+        if (surahNameEl) surahNameEl.innerText = "سورة: ---";
+        if (actionArea) actionArea.classList.add('hidden');
+        if (expandBtn) expandBtn.style.display = 'none';
+        if (audioBtn) audioBtn.style.display = 'none';
         return;
     }
 
-    let pick = Math.floor(Math.random() * totalEligible);
-    let targetCoord = null;
-    for (let s = 0; s < surahsNames.length; s++) {
-        const n = Math.max(0, getAyatCount(s, currentRiwaya) - 1);
-        if (pick < n) {
-            targetCoord = { riwaya: currentRiwaya, surah: s, ayah: pick };
-            break;
-        }
-        pick -= n;
-    }
-    currentReviewItem = targetCoord;
+    const r = item.riwaya, sIdx = item.surah, t = item.ayah;   // t = الآية المطلوب استحضارها
+    if (surahNameEl) surahNameEl.innerText = `سورة: ${surahsNames[sIdx]}`;
 
-    const ayahText = getAyahText(targetCoord.riwaya, targetCoord.surah, targetCoord.ayah);
-    if (promptAyahEl) promptAyahEl.innerText = ayahText || "تعذر جلب نص الآية.";
-
-    if (promptNumEl) promptNumEl.innerText = targetCoord.ayah + 1;
-
-    const surahNameEl = document.getElementById('surah-name');
-    if (surahNameEl) {
-        surahNameEl.innerText = `سورة: ${surahsNames[targetCoord.surah]}`;
-    }
-
-    const maxCurrentSurahAyats = getAyatCount(targetCoord.surah, currentRiwaya);
-
-    if (targetCoord.ayah + 1 < maxCurrentSurahAyats) {
-        const nextFullAyahText = getAyahText(targetCoord.riwaya, targetCoord.surah, targetCoord.ayah + 1);
-        targetAyahTextCache = nextFullAyahText || "تعذر جلب الآية المستهدفة.";
-        if (blank1) blank1.innerText = targetAyahTextCache;
-        if (targetNum1El) targetNum1El.innerText = targetCoord.ayah + 2;
-    }
-
-    if (targetCoord.ayah + 2 < maxCurrentSurahAyats) {
-        const thirdAyahText = getAyahText(targetCoord.riwaya, targetCoord.surah, targetCoord.ayah + 2);
-        if (thirdAyahText) {
-            const nextThreeWords = thirdAyahText.split(" ").slice(0, 3).join(" ");
-            if (targetBlank2) targetBlank2.innerText = nextThreeWords + " ...";
-        }
+    // مطلع التمرين (الأزرق): الآية السابقة، أو عند أول آية: البسملة في ورش وعبارة «بداية السورة» في حفص
+    if (t > 0) {
+        if (promptAyahEl) promptAyahEl.innerText = getAyahText(r, sIdx, t - 1) || "";
+        if (promptNumEl) promptNumEl.innerText = t;
+    } else if (r === 0 && sIdx !== 8) {
+        if (promptAyahEl) promptAyahEl.innerText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
     } else {
-        if (targetBlank2) targetBlank2.innerText = "نهاية السورة...";
+        if (promptAyahEl) promptAyahEl.innerText = "— بداية السورة —";
+    }
+
+    const targetText = getAyahText(r, sIdx, t) || "تعذر جلب الآية المستهدفة.";
+    targetAyahTextCache = targetText;
+    if (blank1) blank1.innerText = targetText;
+    if (targetNum1El) targetNum1El.innerText = t + 1;
+
+    // تلميح رمادي: أول 3 كلمات من الآية التي بعدها
+    const total = getAyatCount(sIdx, r);
+    if (t + 1 < total) {
+        const nextText = getAyahText(r, sIdx, t + 1);
+        if (nextText && targetBlank2) targetBlank2.innerText = nextText.split(" ").slice(0, 3).join(" ") + " ...";
+    } else if (targetBlank2) {
+        targetBlank2.innerText = "نهاية السورة...";
     }
 }
 
@@ -1391,26 +1403,32 @@ function handleDailyRecordingToggle() {
     }
 }
 
-// نقطة الربط المستقبلية لخوارزمية التكرار المتباعد:
 // ratingType: 'forgot' | 'hard' | 'good' | 'easy' و item = { riwaya, surah, ayah }
+// الصعوبة الجديدة = (القديمة + نقطة الزر) ÷ 2 ، ويُحدَّث تاريخ آخر مراجعة
 function onAyahRated(item, ratingType) {
-    // لم تُنفَّذ بعد
+    const pt = RATING_POINTS[ratingType];
+    if (!item || !pt) return;
+    const store = loadAyahStore(item.riwaya);
+    const k = ayahKey(item.surah, item.ayah);
+    const rec = store[k] || { d: 10, t: Date.now() };
+    rec.d = (rec.d + pt) / 2;
+    rec.t = Date.now();
+    store[k] = rec;
+    saveAyahStore(item.riwaya, store);
+    lastReviewedKey = k;
 }
 
 function nextDailyQuestion(ratingType) {
+    if (!currentReviewItem) return;
     onAyahRated(currentReviewItem, ratingType);
-
-    currentProgressIndex++;
-    if (currentProgressIndex > totalDailyTargetCount) {
-        currentProgressIndex = 1;
-    }
-    loadRandomActiveAyahToReview();
+    reviewedThisSession++;
+    loadNextAyahToReview();
 }
 
 function expandContext() {
     if (!currentReviewItem) return;
     currentContextOffset++;
-    const targetAyahIndex = currentReviewItem.ayah - currentContextOffset;
+    const targetAyahIndex = currentReviewItem.ayah - 1 - currentContextOffset;
     if (targetAyahIndex < 0) {
         alert("هذه هي الآية الأولى في السورة.");
         currentContextOffset--;
@@ -1474,7 +1492,7 @@ function showSpecialSessionScreen() {
                 <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
-                <button class="btn-rate btn-forgot" onclick="console.log('زر: تعثر')">⚠️ تعثر</button>
+                <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">⚠️ تعثر</button>
                 <button class="btn-rate btn-hard" onclick="console.log('زر: سماع صوتي')">🎙️ صوتي</button>
                 <button class="btn-rate btn-good" onclick="console.log('زر: صوت الشيخ')">🔊 الشيخ</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">🔄 مواصلة</button>
@@ -1618,6 +1636,8 @@ function loadSpecialFullSectionExercise() {
 
     specialRevealed = false;
     ayahBarWasPlaying = false;
+    ayahBarIndex = null;
+    stumbledSet = new Set();
     const barEl = document.getElementById('ayah-actions-bar');
     if (barEl) barEl.classList.add('hidden');
     if (showBtn) {
@@ -1690,6 +1710,24 @@ function loadSpecialFullSectionExercise() {
 
 // الضغط على أي آية بعد الإظهار: تتوقف المراجعة الصوتية مؤقتاً وتحلّ الأزرار الأربعة مكان زر التسجيل في الأسفل
 let ayahBarWasPlaying = false;
+let ayahBarIndex = null;
+let stumbledSet = new Set();
+
+function refreshStumbleBtn() {
+    const btn = document.getElementById('stumble-btn');
+    if (!btn) return;
+    btn.innerText = stumbledSet.has(ayahBarIndex) ? "✓ أُدرجت" : "⚠️ تعثر";
+}
+
+// «تعثر»: تُدرج الآية المحددة في عقال الآيات بصعوبة 10
+function markStumbled() {
+    if (ayahBarIndex === null || selectedSpecialSurah === null) return;
+    addStumbledAyah(selectedSpecialSurah, ayahBarIndex);
+    stumbledSet.add(ayahBarIndex);
+    const el = document.getElementById(`special-ayah-item-${ayahBarIndex}`);
+    if (el) el.classList.add('ayah-stumbled');
+    refreshStumbleBtn();
+}
 
 function handleSpecialAyahClick(ayahIndex) {
     if (!specialRevealed) return;
@@ -1703,6 +1741,8 @@ function handleSpecialAyahClick(ayahIndex) {
     }
     const clicked = document.getElementById(`special-ayah-item-${ayahIndex}`);
     if (clicked) clicked.style.backgroundColor = "rgba(254, 240, 138, 0.6)";
+    ayahBarIndex = ayahIndex;
+    refreshStumbleBtn();
 
     if (!barAlreadyOpen) {
         ayahBarWasPlaying = !!isPlayingRecording;
