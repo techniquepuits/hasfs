@@ -326,6 +326,15 @@ body.dark-mode .menu-sub { color: #94a3b8; }
 }
 .modal-actions .btn-start-review { background: linear-gradient(135deg, #2d6a4f 0%, #1b4d3e 100%); color: #ffffff; border: none; }
 .modal-actions .btn-cancel { background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; }
+.modal-actions.stack { flex-direction: column; gap: 10px; margin-top: 16px; }
+.modal-actions.stack button { flex: none; width: 100%; padding: 14px 10px; font-size: 17px; border-radius: 12px; }
+.resume-info { text-align: center; background: #f0f7f3; border: 1.5px solid #cfe3d8; border-radius: 12px; padding: 12px 10px; margin-top: 6px; }
+.resume-surah { font-size: 22px; font-weight: bold; color: #1b4d3e; }
+.resume-ayah { font-size: 16px; color: #475569; margin-top: 4px; }
+.resume-note { font-size: 13px; color: #64748b; margin-top: 6px; }
+body.dark-mode .resume-info { background: #0f172a !important; border-color: #334155 !important; }
+body.dark-mode .resume-surah { color: #34d399 !important; }
+body.dark-mode .resume-ayah, body.dark-mode .resume-note { color: #cbd5e1 !important; }
 body.dark-mode .modal-box { background: #1e293b !important; border-color: #334155 !important; }
 body.dark-mode .modal-title { color: #34d399 !important; }
 body.dark-mode .modal-actions .btn-cancel { background: #0f172a !important; color: #e2e8f0 !important; border-color: #475569 !important; }
@@ -1664,7 +1673,6 @@ function stopAndSavePosition() {
     lsSet(LS_KEYS.lastStop, rec);
     resetRecordingStates();
     showMainButtons();
-    showToast(`حُفظ موضع توقفك: سورة ${surahsNames[rec.surah]}، الآية ${rec.ayah}`);
 }
 
 // عند فتح صفحة اختيار السورة: تذكير بآخر موضع توقف
@@ -1674,27 +1682,40 @@ function maybeShowResumePrompt() {
     if (!surahsNames[rec.surah]) return;
     const modal = document.getElementById('special-ayah-modal');
     if (!modal) return;
+    const nx = resolveResumePoint(rec);
+    const note = nx.surah !== rec.surah ? `كانت آخر آية في السورة، فستبدأ من سورة ${surahsNames[nx.surah]}` : "";
     modal.innerHTML = `
         <div class="modal-box">
             <div class="modal-title">آخر موضع توقفت عنده</div>
-            <div style="text-align:center; font-size:18px; line-height:1.9; margin: 6px 0 14px; font-weight:bold;">
-                سورة ${surahsNames[rec.surah]}<br>الآية ${rec.ayah}
+            <div class="resume-info">
+                <div class="resume-surah">سورة ${surahsNames[rec.surah]}</div>
+                <div class="resume-ayah">الآية ${rec.ayah}</div>
+                ${note ? `<div class="resume-note">${note}</div>` : ""}
             </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                <button type="button" class="btn-start-review" style="width:100%" onclick="resumeFromLastStop()">مواصلة من حيث توقفت</button>
-                <button type="button" class="btn-cancel" style="width:100%" onclick="closeSpecialModal()">اختيار آية بداية أخرى</button>
+            <div class="modal-actions stack">
+                <button type="button" class="btn-start-review" onclick="resumeFromLastStop()">مواصلة من حيث توقفت</button>
+                <button type="button" class="btn-cancel" onclick="closeSpecialModal()">اختيار آية بداية أخرى</button>
             </div>
         </div>
     `;
     modal.classList.remove('hidden');
 }
 
+// الآية التي توقف عندها المستخدم قد سبق استحضارها، فتصبح هي المطلع الأزرق ويبدأ المطلوب من التي بعدها؛
+// وإن كانت آخر آية في السورة نبدأ من أول السورة التالية
+function resolveResumePoint(rec) {
+    const total = getAyatCount(rec.surah) || 7;
+    if (rec.ayah < total) return { surah: rec.surah, start: rec.ayah + 1 };
+    return { surah: (rec.surah + 1) % surahsNames.length, start: 1 };
+}
+
 function resumeFromLastStop() {
     const rec = lsGet(LS_KEYS.lastStop, null);
     if (!rec) { closeSpecialModal(); return; }
-    const maxAyats = getAyatCount(rec.surah) || 7;
-    selectedSpecialSurah = rec.surah;
-    specialStartAyah = Math.min(Math.max(1, rec.ayah), maxAyats);
+    const nx = resolveResumePoint(rec);
+    const maxAyats = getAyatCount(nx.surah) || 7;
+    selectedSpecialSurah = nx.surah;
+    specialStartAyah = Math.min(Math.max(1, nx.start), maxAyats);
     specialEndAyah = maxAyats;
     closeSpecialModal();
     loadSpecialFullSectionExercise();
