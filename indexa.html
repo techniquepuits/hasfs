@@ -674,6 +674,7 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
     font-size: 18px;
 }
 .ayah-stumbled { border-bottom: 3px solid #d97706; }
+.toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
     display: flex;
@@ -1493,8 +1494,8 @@ function showSpecialSessionScreen() {
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">⚠️ تعثر</button>
-                <button class="btn-rate btn-hard" onclick="console.log('زر: سماع صوتي')">🎙️ صوتي</button>
-                <button class="btn-rate btn-good" onclick="console.log('زر: صوت الشيخ')">🔊 الشيخ</button>
+                <button class="btn-rate btn-hard" onclick="playMyLastFiveSeconds()">🎙️ صوتي</button>
+                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">🔊 الشيخ</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">🔄 مواصلة</button>
             </div>
         </div>
@@ -1729,6 +1730,108 @@ function markStumbled() {
     refreshStumbleBtn();
 }
 
+// ----------------------------------------------------------
+// زرّا «صوتي» و«الشيخ»
+// ----------------------------------------------------------
+let ayahBarPausePos = 0;
+let myClipHandler = null;
+let sheikhAudio = null;
+let sheikhPlaying = false;
+
+// مصدر تلاوة الآيات (آية بآية). حفص فقط حالياً؛ ورش غير متاح بعد.
+const SHEIKH_AUDIO_BASE = { 1: "https://everyayah.com/data/Alafasy_128kbps/" };
+
+function showToast(msg) {
+    const old = document.getElementById('app-toast');
+    if (old) old.remove();
+    const t = document.createElement('div');
+    t.id = 'app-toast';
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { if (t.parentNode) t.remove(); }, 3500);
+}
+
+// قائمة روابط الملفات الصوتية للآية (قد تكون بسملة ثم الآية)
+function ayahAudioUrls(riwaya, surah, ayah) {
+    const base = SHEIKH_AUDIO_BASE[riwaya];
+    if (!base) return null;
+    const f = (s, a) => base + String(s + 1).padStart(3, "0") + String(a + 1).padStart(3, "0") + ".mp3";
+    const urls = [];
+    // في حفص نص الآية الأولى يتضمن البسملة، بينما ملف الآية الأولى في المصدر بدونها
+    if (riwaya === 1 && ayah === 0 && surah !== 0 && surah !== 8) urls.push(f(0, 0));
+    urls.push(f(surah, ayah));
+    return urls;
+}
+
+function refreshSheikhBtn() {
+    const b = document.getElementById('sheikh-bar-btn');
+    if (b) b.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 الشيخ";
+}
+
+function stopSheikh() {
+    if (sheikhAudio) {
+        sheikhAudio.onended = null;
+        sheikhAudio.onerror = null;
+        try { sheikhAudio.pause(); } catch (e) {}
+        sheikhAudio = null;
+    }
+    sheikhPlaying = false;
+    refreshSheikhBtn();
+}
+
+function playSheikhAyah(surah, ayah) {
+    if (sheikhPlaying) { stopSheikh(); return; }
+    if (surah === null || surah === undefined || ayah === null || ayah === undefined) return;
+    const urls = ayahAudioUrls(userRiwaya, surah, ayah);
+    if (!urls) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    stopMyClip();
+    if (playbackAudioElement && isPlayingRecording) {
+        playbackAudioElement.pause();
+        isPlayingRecording = false;
+    }
+    const fail = () => { stopSheikh(); showToast("تعذر تشغيل صوت الشيخ. تحقق من الاتصال بالإنترنت."); };
+    let i = 0;
+    const next = () => {
+        if (i >= urls.length) { stopSheikh(); return; }
+        const a = new Audio(urls[i++]);
+        sheikhAudio = a;
+        a.onended = next;
+        a.onerror = fail;
+        a.play().catch(fail);
+    };
+    sheikhPlaying = true;
+    refreshSheikhBtn();
+    next();
+}
+
+function stopMyClip() {
+    if (playbackAudioElement && myClipHandler) {
+        playbackAudioElement.removeEventListener('timeupdate', myClipHandler);
+        try { playbackAudioElement.pause(); } catch (e) {}
+    }
+    myClipHandler = null;
+}
+
+// «صوتي»: يعيد آخر 5 ثوانٍ من تسجيلك قبل لحظة الضغط على الآية
+function playMyLastFiveSeconds() {
+    const a = playbackAudioElement;
+    if (!a || !recordedAudioBlob) { showToast("لا يوجد تسجيل لك لسماعه."); return; }
+    const end = ayahBarPausePos;
+    if (end < 0.5) { showToast("شغّل التسجيل أولاً، ثم اضغط على الآية عند موضع التعثر."); return; }
+    stopSheikh();
+    stopMyClip();
+    try { a.currentTime = Math.max(0, end - 5); } catch (e) {}
+    myClipHandler = () => {
+        if (a.currentTime >= end - 0.05) {
+            stopMyClip();
+            try { a.currentTime = end; } catch (e) {}
+        }
+    };
+    a.addEventListener('timeupdate', myClipHandler);
+    a.play().catch(() => {});
+}
+
 function handleSpecialAyahClick(ayahIndex) {
     if (!specialRevealed) return;
     const bar = document.getElementById('ayah-actions-bar');
@@ -1750,6 +1853,7 @@ function handleSpecialAyahClick(ayahIndex) {
             playbackAudioElement.pause();
             isPlayingRecording = false;
         }
+        ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
         if (recordBtn) {
             recordBtn.classList.add('hidden');
             recordBtn.classList.remove('playing-active');
@@ -1769,11 +1873,19 @@ function resumeNormalReading() {
     const recordBtn = document.getElementById('record-action-btn');
     if (bar) bar.classList.add('hidden');
     if (recordBtn) recordBtn.classList.remove('hidden');
-    if (ayahBarWasPlaying && playbackAudioElement && recordBtn) {
-        playbackAudioElement.play();
+    stopMyClip();
+    stopSheikh();
+    if (playbackAudioElement) {
+        try { playbackAudioElement.currentTime = ayahBarPausePos; } catch (e) {}
+    }
+    const atEnd = playbackAudioElement && isFinite(playbackAudioElement.duration) && ayahBarPausePos >= playbackAudioElement.duration - 0.05;
+    if (ayahBarWasPlaying && playbackAudioElement && recordBtn && !atEnd) {
+        playbackAudioElement.play().catch(() => {});
         isPlayingRecording = true;
         recordBtn.innerText = "⏸️ إيقاف العرض";
         recordBtn.classList.add('playing-active');
+    } else if (ayahBarWasPlaying && recordBtn) {
+        recordBtn.innerText = "▶️ عرض التسجيل";
     }
     ayahBarWasPlaying = false;
 }
@@ -1880,9 +1992,18 @@ function toggleRecordUserVoice(btnElement) {
             };
 
             mediaRecorder.onstop = () => {
-                recordedAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                recordedAudioBlob = new Blob(audioChunks, { type: (mediaRecorder && mediaRecorder.mimeType) || 'audio/webm' });
                 recordedAudioUrl = URL.createObjectURL(recordedAudioBlob);
                 playbackAudioElement = new Audio(recordedAudioUrl);
+                // تسجيلات المتصفح بلا مدة معلنة فلا يمكن القفز داخلها؛ نجبر المتصفح على حساب المدة
+                const pa = playbackAudioElement;
+                pa.addEventListener('loadedmetadata', () => {
+                    if (pa.duration === Infinity) {
+                        pa.currentTime = 1e101;
+                        const fix = () => { pa.removeEventListener('timeupdate', fix); pa.currentTime = 0; };
+                        pa.addEventListener('timeupdate', fix);
+                    }
+                });
 
                 playbackAudioElement.onended = () => {
                     isPlayingRecording = false;
@@ -1941,6 +2062,8 @@ function togglePlaybackRecordedAudio(btnElement) {
 }
 
 function resetRecordingStates() {
+    stopSheikh();
+    stopMyClip();
     stopRecordingCompletely();
     if (playbackAudioElement) {
         playbackAudioElement.pause();
@@ -1954,8 +2077,9 @@ function resetRecordingStates() {
     audioChunks = [];
 }
 
+// زر «الآية بصوت الشيخ» في عقال الآيات: يقرأ الآية المطلوبة
 function handleSheikhAudioPlaceholder() {
-    console.log("زر صوت الشيخ - جاهز للنقاش المستقبلي");
+    if (currentReviewItem) playSheikhAyah(currentReviewItem.surah, currentReviewItem.ayah);
 }
 
 
