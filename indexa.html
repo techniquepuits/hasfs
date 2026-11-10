@@ -697,7 +697,9 @@ body.dark-mode .speed-ctl .speed-val { color: #e2e8f0; }
     width: 100%;
     margin-bottom: 6px;
 }
-.ayah-actions-bar .btn-rate { padding: 13px 4px; font-size: 14px; border-radius: 10px; }
+.ayah-actions-bar { gap: 5px; }
+.ayah-actions-bar .btn-rate { padding: 13px 2px; font-size: 13px; border-radius: 10px; min-width: 0; white-space: nowrap; }
+.btn-stop { background-color: #475569; }
 .btn-record-big:hover { background: #fee2e2; border-color: #b91c1c; }
 body.dark-mode .btn-recording.btn-record-big {
     background: #1f1315 !important;
@@ -785,6 +787,7 @@ const LS_KEYS = {
     settings: "ibnbadis.settings",
     migrated: "ibnbadis.migrated",
     ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
+    lastStop: "ibnbadis.lastStop",   // آخر آية توقف عندها في المراجعة اليومية: {riwaya, surah (من 0), ayah (من 1)}
     texts: (riwaya) => "ibnbadis.texts.v1." + riwaya   // v1: ارفع الرقم لإجبار إعادة التنزيل
 };
 
@@ -1524,10 +1527,11 @@ function showSpecialSessionScreen() {
                 <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
-                <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">⚠️ تعثر</button>
-                <button class="btn-rate btn-hard" onclick="playMyLastFiveSeconds()">🎙️ صوتي</button>
-                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">🔊 الشيخ</button>
-                <button class="btn-rate btn-easy" onclick="resumeNormalReading()">🔄 مواصلة</button>
+                <button class="btn-rate btn-hard" onclick="playMyLastFiveSeconds()">صوتي</button>
+                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
+                <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
+                <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
+                <button class="btn-rate btn-stop" onclick="stopAndSavePosition()">توقف</button>
             </div>
         </div>
 
@@ -1543,6 +1547,7 @@ function showSpecialSessionScreen() {
 
     renderInContainer(specialScreenHTML);
     applyTheme();
+    maybeShowResumePrompt();
 }
 
 // اختيار السورة (راديو، سورة واحدة فقط) يفتح نافذة منبثقة لاختيار آية البداية.
@@ -1652,6 +1657,49 @@ function initiateSpecialSessionExecution() {
 
 let specialRevealed = false;
 
+// «توقف»: نحفظ السورة والآية المحددة كآخر موضع، ونعود للقائمة
+function stopAndSavePosition() {
+    if (ayahBarIndex === null || selectedSpecialSurah === null) return;
+    const rec = { riwaya: userRiwaya, surah: selectedSpecialSurah, ayah: ayahBarIndex + 1 };
+    lsSet(LS_KEYS.lastStop, rec);
+    resetRecordingStates();
+    showMainButtons();
+    showToast(`حُفظ موضع توقفك: سورة ${surahsNames[rec.surah]}، الآية ${rec.ayah}`);
+}
+
+// عند فتح صفحة اختيار السورة: تذكير بآخر موضع توقف
+function maybeShowResumePrompt() {
+    const rec = lsGet(LS_KEYS.lastStop, null);
+    if (!rec || rec.riwaya !== userRiwaya || !(rec.surah >= 0) || !(rec.ayah >= 1)) return;
+    if (!surahsNames[rec.surah]) return;
+    const modal = document.getElementById('special-ayah-modal');
+    if (!modal) return;
+    modal.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">آخر موضع توقفت عنده</div>
+            <div style="text-align:center; font-size:18px; line-height:1.9; margin: 6px 0 14px; font-weight:bold;">
+                سورة ${surahsNames[rec.surah]}<br>الآية ${rec.ayah}
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button type="button" class="btn-start-review" style="width:100%" onclick="resumeFromLastStop()">مواصلة من حيث توقفت</button>
+                <button type="button" class="btn-cancel" style="width:100%" onclick="closeSpecialModal()">اختيار آية بداية أخرى</button>
+            </div>
+        </div>
+    `;
+    modal.classList.remove('hidden');
+}
+
+function resumeFromLastStop() {
+    const rec = lsGet(LS_KEYS.lastStop, null);
+    if (!rec) { closeSpecialModal(); return; }
+    const maxAyats = getAyatCount(rec.surah) || 7;
+    selectedSpecialSurah = rec.surah;
+    specialStartAyah = Math.min(Math.max(1, rec.ayah), maxAyats);
+    specialEndAyah = maxAyats;
+    closeSpecialModal();
+    loadSpecialFullSectionExercise();
+}
+
 function loadSpecialFullSectionExercise() {
     resetRecordingStates();
 
@@ -1755,7 +1803,7 @@ let stumbledSet = new Set();
 function refreshStumbleBtn() {
     const btn = document.getElementById('stumble-btn');
     if (!btn) return;
-    btn.innerText = stumbledSet.has(ayahBarIndex) ? "✓ أُدرجت" : "⚠️ تعثر";
+    btn.innerText = stumbledSet.has(ayahBarIndex) ? "✓ أُدرجت" : "تعثر";
 }
 
 // «تعثر»: تُدرج الآية المحددة في عقال الآيات بصعوبة 10
@@ -1804,7 +1852,7 @@ function ayahAudioUrls(riwaya, surah, ayah) {
 
 function refreshSheikhBtn() {
     const b = document.getElementById('sheikh-bar-btn');
-    if (b) b.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 الشيخ";
+    if (b) b.innerText = sheikhPlaying ? "إيقاف" : "الشيخ";
     const r = document.getElementById('sheikh-audio-btn');
     if (r) r.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 صوت الشيخ";
 }
