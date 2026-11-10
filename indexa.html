@@ -677,6 +677,10 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .rec-inline { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 12px 0 14px; }
 .rec-inline .btn-record-big, .rec-inline .btn-show-half { flex: none; width: 100%; }
 .rec-inline:empty { display: none; }
+.speed-ctl { display: inline-flex; align-items: center; gap: 4px; direction: ltr; }
+.speed-ctl button { background: #64748b; color: #fff; border: none; width: 30px; height: 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+.speed-ctl .speed-val { min-width: 26px; text-align: center; font-weight: bold; font-size: 15px; color: #1b4d3e; }
+body.dark-mode .speed-ctl .speed-val { color: #e2e8f0; }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
@@ -1478,6 +1482,11 @@ function showSpecialSessionScreen() {
             <div style="display: flex; gap: 6px; align-items: center;">
                 <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
+                <span id="speed-ctl" class="speed-ctl hidden" title="سرعة النزول التلقائي">
+                    <button onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button>
+                    <span id="speed-val" class="speed-val">10</span>
+                    <button onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button>
+                </span>
             </div>
             <div class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
         </div>
@@ -1900,6 +1909,74 @@ function resumeNormalReading() {
     ayahBarWasPlaying = false;
 }
 
+// ----------------------------------------------------------
+// النزول التلقائي أثناء «عرض التسجيل» (السرعة يختارها المستخدم وتُحفظ)
+// ----------------------------------------------------------
+const SCROLL_KEY = 'ibnbadis.scrollSpeed';
+const SCROLL_PX_PER_LEVEL = 1.5;   // بكسل/ثانية لكل درجة؛ الدرجة 10 = المتوسطة
+let scrollLevel = 10;
+let autoScrollOn = false;
+let autoScrollHoldUntil = 0;
+let autoScrollPos = 0;
+let autoScrollLast = 0;
+
+try {
+    const v = parseInt(localStorage.getItem(SCROLL_KEY), 10);
+    if (v >= 1 && v <= 40) scrollLevel = v;
+} catch (e) {}
+
+function changeScrollSpeed(delta) {
+    scrollLevel = Math.max(1, Math.min(40, scrollLevel + delta));
+    try { localStorage.setItem(SCROLL_KEY, String(scrollLevel)); } catch (e) {}
+    const el = document.getElementById('speed-val');
+    if (el) el.textContent = scrollLevel;
+}
+
+function autoScrollFrame(ts) {
+    if (!autoScrollOn) return;
+    const box = document.getElementById('exercise-container');
+    if (!box || !specialRevealed) { stopAutoScroll(); return; }
+    const bar = document.getElementById('ayah-actions-bar');
+    const barOpen = bar && !bar.classList.contains('hidden');
+    const dt = autoScrollLast ? Math.min(0.1, (ts - autoScrollLast) / 1000) : 0;
+    autoScrollLast = ts;
+    if (isPlayingRecording && !barOpen && Date.now() >= autoScrollHoldUntil) {
+        // إن حرّك المستخدم الصفحة بيده نبدأ من موضعه الجديد
+        if (Math.abs(box.scrollTop - autoScrollPos) > 2) autoScrollPos = box.scrollTop;
+        autoScrollPos += scrollLevel * SCROLL_PX_PER_LEVEL * dt;
+        box.scrollTop = autoScrollPos;
+    } else {
+        autoScrollPos = box.scrollTop;
+    }
+    requestAnimationFrame(autoScrollFrame);
+}
+
+function startAutoScroll() {
+    const box = document.getElementById('exercise-container');
+    if (!box) return;
+    stopAutoScroll();
+    autoScrollOn = true;
+    autoScrollLast = 0;
+    autoScrollPos = box.scrollTop;
+    // لمس المستخدم أو تحريكه للصفحة يوقف النزول 3 ثوانٍ ثم يتابع من حيث تركها
+    const hold = () => { autoScrollHoldUntil = Date.now() + 3000; };
+    if (!box._holdBound) {
+        box._holdBound = true;
+        ['touchmove', 'wheel'].forEach(ev => box.addEventListener(ev, hold, { passive: true }));
+    }
+    const ctl = document.getElementById('speed-ctl');
+    const val = document.getElementById('speed-val');
+    if (ctl) ctl.classList.remove('hidden');
+    if (val) val.textContent = scrollLevel;
+    requestAnimationFrame(autoScrollFrame);
+}
+
+function stopAutoScroll() {
+    autoScrollOn = false;
+    const ctl = document.getElementById('speed-ctl');
+    if (ctl) ctl.classList.add('hidden');
+}
+
 function revealSpecialFullAnswer() {
     // إيقاف التسجيل تلقائياً سواء كان جارياً أو متوقفاً مؤقتاً، وتحرير الميكروفون
     stopRecordingCompletely();
@@ -1931,6 +2008,7 @@ function revealSpecialFullAnswer() {
         recordBtn.innerText = "▶️ عرض التسجيل";
         recordBtn.className = "btn-recording btn-record-big";
     }
+    startAutoScroll();
 }
 
 function handleSpecialRecordingToggle() {
@@ -2078,6 +2156,7 @@ function togglePlaybackRecordedAudio(btnElement) {
 }
 
 function resetRecordingStates() {
+    stopAutoScroll();
     stopSheikh();
     stopMyClip();
     stopRecordingCompletely();
