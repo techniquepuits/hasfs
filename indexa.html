@@ -704,6 +704,12 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
 .stats-line { gap: 5px; }
 .header-box .btn-home { padding: 8px 11px; }
 .header-box .btn-end-session { padding: 8px 9px; font-size: 12.5px; }
+.header-box.hdr3 { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 6px; }
+.hdr3 .hdr-start { display: flex; justify-content: flex-start; overflow: hidden; min-width: 0; }
+.hdr3 .hdr-end { display: flex; justify-content: flex-end; min-width: 0; }
+.hdr3 .hdr-mid { display: flex; justify-content: center; align-items: center; text-align: center; }
+.header-box .btn-theme { white-space: nowrap; }
+.header-box .btn-theme.icon-only { padding: 8px 11px; font-size: 14px; }
 .progress-text { font-weight: bold; color: #1b4d3e; font-size: 15px; }
 body.dark-mode .progress-text { color: #34d399; }
 .frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
@@ -1095,18 +1101,30 @@ function renderInContainer(htmlContent) {
 
 function applyTheme() {
     document.body.classList.toggle('dark-mode', isDarkMode);
+    fitDarkBtn();
 }
+
+// زر الوضع الليلي: نكتب الاسم إن اتسع المكان، وإلا نكتفي بالأيقونة
+function fitDarkBtn() {
+    const btn = document.getElementById('dark-mode-btn');
+    if (!btn) return;
+    const full = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
+    btn.title = full;
+    btn.classList.remove('icon-only');
+    btn.textContent = full;
+    const cell = btn.parentElement;
+    if (cell && cell.scrollWidth > cell.clientWidth + 1) {
+        btn.textContent = isDarkMode ? '☀️' : '🌙';
+        btn.classList.add('icon-only');
+    }
+}
+window.addEventListener('resize', fitDarkBtn);
 
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
     applyTheme();
     saveSettings();
 
-    const darkBtn = document.getElementById('dark-mode-btn');
-    if (darkBtn) {
-        darkBtn.innerText = isDarkMode ? '☀️' : '🌙';
-        darkBtn.title = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
-    }
 }
 
 function showWelcomeScreen() {
@@ -1289,10 +1307,11 @@ let reviewOnlyKeys = null;
 function showReviewScreen(onlyKeys) {
     reviewOnlyKeys = (Array.isArray(onlyKeys) && onlyKeys.length) ? new Set(onlyKeys) : null;
     const reviewScreenHTML = `
-        <div class="header-box">
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
-                <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
+        <div class="header-box hdr3">
+            <div class="hdr-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="hdr-mid">
 <span class="stats-line" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
                     <span id="due-forgot" class="due-num due-forgot">0</span>
                     <span id="due-hard" class="due-num due-hard">0</span>
@@ -1301,7 +1320,7 @@ function showReviewScreen(onlyKeys) {
                     <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
                 </span>
             </div>
-            <button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button>
+            <div class="hdr-end"><button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button></div>
         </div>
 
         <div class="exercise-box review-box" id="exercise-container">
@@ -1700,10 +1719,12 @@ function showSpecialSessionScreen() {
 
     // هذه الصفحة للاختيار فقط: زرّا التسجيل وعرض الإجابة مخفيان حتى يؤكّد المستخدم السورة والآية
     const specialScreenHTML = `
-        <div class="header-box">
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
-                <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
+        <div class="header-box hdr3">
+            <div class="hdr-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="hdr-mid">
+                <div id="special-title" class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
                 <span id="speed-ctl" class="speed-ctl hidden" title="سرعة النزول التلقائي">
                     <span class="stepper sm">
                         <button type="button" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button>
@@ -1712,8 +1733,7 @@ function showSpecialSessionScreen() {
                     </span>
                 </span>
             </div>
-            <div id="special-title" class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
-            <button id="end-session-btn" class="btn-home btn-end-session hidden" onclick="openStopSessionDialog()">إنهاء الجلسة</button>
+            <div class="hdr-end"><button id="end-session-btn" class="btn-home btn-end-session" onclick="openStopSessionDialog()">إنهاء الجلسة</button></div>
         </div>
 
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
@@ -1740,7 +1760,7 @@ function showSpecialSessionScreen() {
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
                 <div id="replay-panel" class="replay-panel">
                     <button type="button" class="rp-btn rp-go" onclick="replayMyVoice()">إعادة الصوت</button>
-                    <span class="stepper">
+                    <span class="stepper sm">
                         <button type="button" onclick="changeReplaySeconds(-1)" aria-label="إنقاص">−</button>
                         <span class="st-val" dir="ltr"><span id="replay-sec">3</span>&nbsp;s</span>
                         <button type="button" onclick="changeReplaySeconds(1)" aria-label="زيادة">+</button>
@@ -1878,7 +1898,9 @@ let specialRevealed = false;
 let stopPickMode = false;
 
 function openStopSessionDialog() {
-    if (selectedSpecialSurah === null) return;
+    const t = document.getElementById('special-title');
+    const inSession = t && t.classList.contains('hidden');
+    if (!inSession || selectedSpecialSurah === null) { showMainButtons(); return; }
     // نوقف عرض التسجيل مؤقتاً
     if (isPlayingRecording && playbackAudioElement) {
         playbackAudioElement.pause();
