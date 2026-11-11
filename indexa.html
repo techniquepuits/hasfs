@@ -703,12 +703,29 @@ body.dark-mode .progress-text { color: #34d399; }
 .frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
 body.dark-mode .frame-surah { color: #34d399; }
 .review-box .continuous-quran-text { margin-top: 18px; }
+.rec-indicator { display: none !important; }
+.btn-recording.rec-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 10px; border-radius: 16px; width: 100%; }
+.rc-main { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
+.rc-hint { font-size: 13px; font-weight: normal; opacity: 0.55; }
+.rc-timer { font-size: 22px; font-weight: bold; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+.rc-dot { width: 14px; height: 14px; border-radius: 50%; background: #94a3b8; display: inline-block; }
+.rc-dot.live { background: #dc2626; animation: pulse-red 1.2s infinite; }
+.ayah-actions-bar .replay-panel { display: none; width: 100%; align-items: center; justify-content: space-between; gap: 6px; }
+.ayah-actions-bar.replay-mode > .btn-rate { display: none; }
+.ayah-actions-bar.replay-mode > .replay-panel { display: flex; }
+.rp-btn { border: none; border-radius: 10px; padding: 13px 8px; font-weight: bold; font-size: 14px; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.rp-go { background: #16a34a; color: #fff; }
+.rp-cancel { background: #64748b; color: #fff; }
+.rp-step { width: 38px; height: 42px; border: none; border-radius: 10px; background: #e2e8f0; color: #1b4d3e; font-size: 22px; font-weight: bold; cursor: pointer; }
+.rp-val { min-width: 46px; text-align: center; font-size: 20px; font-weight: bold; color: #1b4d3e; }
+body.dark-mode .rp-step { background: #334155 !important; color: #e2e8f0 !important; }
+body.dark-mode .rp-val { color: #e2e8f0 !important; }
 .btn-end-session { font-size: 13px; padding: 8px 10px; white-space: nowrap; }
 .mic-wrap { position: absolute; bottom: 4px; left: 4px; display: flex; align-items: center; gap: 8px; direction: ltr; z-index: 5; }
 .mic-wrap .mic-btn { position: static; }
 .mic-hint { font-size: 12px; color: #94a3b8; direction: rtl; unicode-bidi: plaintext; }
 .mic-btn.voice-mode { width: auto; height: 30px; border-radius: 15px; padding: 0 14px; font-size: 14px; font-weight: bold; font-family: inherit; }
-.sheikh-icon { bottom: 4px; right: 4px; left: auto; width: 30px; height: 30px; font-size: 16px; }
+.sheikh-icon { bottom: 4px; right: 4px; left: auto; width: auto; height: 30px; border-radius: 15px; padding: 0 14px; font-size: 14px; font-weight: bold; font-family: inherit; }
 .mic-btn { width: 28px; height: 28px; font-size: 15px; bottom: 4px; left: 4px; }
 .mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: pulse-red 1.2s infinite; }
 .btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
@@ -1285,7 +1302,7 @@ function showReviewScreen(onlyKeys) {
                 <button id="mic-icon-btn" onclick="onReviewMicClick()" class="audio-btn mic-btn" title="سجّل صوتك">🎙️</button>
                 <span id="mic-hint" class="mic-hint">اضغط للتسجيل</span>
             </div>
-            <button id="sheikh-icon-btn" onclick="handleSheikhAudioPlaceholder()" class="audio-btn sheikh-icon" style="display:none" title="الآية بصوت الشيخ">🔊</button>
+            <button id="sheikh-icon-btn" onclick="handleSheikhAudioPlaceholder()" class="audio-btn sheikh-icon" style="display:none" title="الآية بصوت الشيخ">🎙️ الشيخ</button>
 
             <div class="continuous-quran-text">
                 <span id="prev-ayahs-container"></span>
@@ -1526,7 +1543,7 @@ function setReviewVoiceMode(revealed) {
 function refreshReviewMyVoiceBtn() {
     const mic = document.getElementById('mic-icon-btn');
     if (!mic || !reviewRevealed || !reviewHasRecording) return;
-    mic.innerText = isPlayingRecording ? 'إيقاف' : 'صوتي';
+    mic.innerText = isPlayingRecording ? '⏹ إيقاف' : '🎙️ صوتي';
     mic.classList.toggle('playing-active', !!isPlayingRecording);
 }
 
@@ -1706,10 +1723,17 @@ function showSpecialSessionScreen() {
                 <button type="button" onclick="cancelStopPick()">إلغاء</button>
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
-                <button class="btn-rate btn-hard" onclick="playMyLastFiveSeconds()">صوتي</button>
-                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
+                <button class="btn-rate btn-hard" onclick="openReplayPanel()">صوتي</button>
+                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
+                <div id="replay-panel" class="replay-panel">
+                    <button type="button" class="rp-btn rp-go" onclick="replayMyVoice()">إعادة الصوت</button>
+                    <button type="button" class="rp-step" onclick="changeReplaySeconds(1)" aria-label="زيادة">+</button>
+                    <span class="rp-val" dir="ltr"><span id="replay-sec">3</span> s</span>
+                    <button type="button" class="rp-step" onclick="changeReplaySeconds(-1)" aria-label="إنقاص">−</button>
+                    <button type="button" class="rp-btn rp-cancel" onclick="closeReplayPanel()">إلغاء</button>
+                </div>
             </div>
         </div>
 
@@ -2043,8 +2067,7 @@ function loadSpecialFullSectionExercise() {
     if (recordBtn) {
         recordBtn.classList.remove('hidden');
         recordBtn.removeAttribute('disabled');
-        recordBtn.innerText = "🎙️ بداية التسجيل";
-        recordBtn.className = "btn-recording btn-record-big";
+        recordBtn.className = "btn-recording btn-record-big rec-card";
         recordBtn.setAttribute('onclick', 'handleSpecialRecordingToggle()');
     }
 
@@ -2105,6 +2128,9 @@ function loadSpecialFullSectionExercise() {
         if (recordBtn) inlineBox.appendChild(recordBtn);
         if (showBtn) inlineBox.appendChild(showBtn);
     }
+    recTimerReset();
+    renderRecCard('idle');
+    scheduleAutoRecord();
 }
 
 // الضغط على أي آية بعد الإظهار: تتوقف المراجعة الصوتية مؤقتاً وتحلّ الأزرار الأربعة مكان زر التسجيل في الأسفل
@@ -2166,7 +2192,7 @@ function refreshSheikhBtn() {
     const b = document.getElementById('sheikh-bar-btn');
     if (b) b.innerText = sheikhPlaying ? "إيقاف" : "الشيخ";
     const r = document.getElementById('sheikh-icon-btn');
-    if (r) r.innerText = sheikhPlaying ? "⏹" : "🔊";
+    if (r) r.innerText = sheikhPlaying ? "⏹ إيقاف" : "🎙️ الشيخ";
 }
 
 function stopSheikh() {
@@ -2216,7 +2242,37 @@ function stopMyClip() {
     myClipHandler = null;
 }
 
-// «صوتي»: يعيد آخر 5 ثوانٍ من تسجيلك قبل لحظة الضغط على الآية
+// عدد الثواني التي تُعاد بزر «صوتي» (يختارها المستخدم وتُحفظ)
+const REPLAY_KEY = 'ibnbadis.replaySeconds';
+let replaySeconds = 3;
+try {
+    const rv = parseInt(localStorage.getItem(REPLAY_KEY), 10);
+    if (rv >= 1 && rv <= 30) replaySeconds = rv;
+} catch (e) {}
+
+function openReplayPanel() {
+    const bar = document.getElementById('ayah-actions-bar');
+    const el = document.getElementById('replay-sec');
+    if (el) el.textContent = replaySeconds;
+    if (bar) bar.classList.add('replay-mode');
+}
+
+function closeReplayPanel() {
+    stopMyClip();
+    const bar = document.getElementById('ayah-actions-bar');
+    if (bar) bar.classList.remove('replay-mode');
+}
+
+function changeReplaySeconds(delta) {
+    replaySeconds = Math.max(1, Math.min(30, replaySeconds + delta));
+    try { localStorage.setItem(REPLAY_KEY, String(replaySeconds)); } catch (e) {}
+    const el = document.getElementById('replay-sec');
+    if (el) el.textContent = replaySeconds;
+}
+
+function replayMyVoice() { playMyLastFiveSeconds(); }
+
+// «إعادة الصوت»: يعيد آخر N ثوانٍ من تسجيلك قبل لحظة الضغط على الآية
 function playMyLastFiveSeconds() {
     const a = playbackAudioElement;
     if (!a || !recordedAudioBlob) { showToast("لا يوجد تسجيل لك لسماعه."); return; }
@@ -2224,7 +2280,7 @@ function playMyLastFiveSeconds() {
     if (end < 0.5) { showToast("شغّل التسجيل أولاً، ثم اضغط على الآية عند موضع التعثر."); return; }
     stopSheikh();
     stopMyClip();
-    try { a.currentTime = Math.max(0, end - 5); } catch (e) {}
+    try { a.currentTime = Math.max(0, end - replaySeconds); } catch (e) {}
     myClipHandler = () => {
         if (a.currentTime >= end - 0.05) {
             stopMyClip();
@@ -2258,6 +2314,7 @@ function handleSpecialAyahClick(ayahIndex) {
             isPlayingRecording = false;
         }
         ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
+        closeReplayPanel();
         if (recordBtn) {
             recordBtn.classList.add('hidden');
             recordBtn.classList.remove('playing-active');
@@ -2277,7 +2334,7 @@ function resumeNormalReading() {
     const recordBtn = document.getElementById('record-action-btn');
     if (bar) bar.classList.add('hidden');
     if (recordBtn) recordBtn.classList.remove('hidden');
-    stopMyClip();
+    closeReplayPanel();
     stopSheikh();
     if (playbackAudioElement) {
         try { playbackAudioElement.currentTime = ayahBarPausePos; } catch (e) {}
@@ -2397,6 +2454,59 @@ function revealSpecialFullAnswer() {
     startAutoScroll();
 }
 
+const NOOP_BTN = { innerText: '', classList: { add() {}, remove() {} } };
+
+// ---- بطاقة التسجيل الواحدة (نقطة + حالة + تلميح باهت + مؤقت) ----
+let autoRecTimer = null;
+let recAccumMs = 0;
+let recLiveSince = 0;
+let recTick = null;
+
+function clearAutoRecTimer() {
+    if (autoRecTimer) { clearTimeout(autoRecTimer); autoRecTimer = null; }
+}
+
+function scheduleAutoRecord() {
+    clearAutoRecTimer();
+    autoRecTimer = setTimeout(() => {
+        autoRecTimer = null;
+        if (!specialRevealed && !isRecording && !isRecordingPaused && document.getElementById('rec-inline')) {
+            handleSpecialRecordingToggle();
+        }
+    }, 2000);
+}
+
+function recElapsedMs() {
+    return recAccumMs + (recLiveSince ? Date.now() - recLiveSince : 0);
+}
+
+function formatHMS(ms) {
+    const t = Math.floor(ms / 1000);
+    const h = String(Math.floor(t / 3600)).padStart(2, '0');
+    const m = String(Math.floor((t % 3600) / 60)).padStart(2, '0');
+    const sec = String(t % 60).padStart(2, '0');
+    return `${h}:${m}:${sec}`;
+}
+
+function recTimerReset() {
+    if (recTick) { clearInterval(recTick); recTick = null; }
+    recAccumMs = 0;
+    recLiveSince = 0;
+}
+
+function renderRecCard(state) {
+    const btn = document.getElementById('record-action-btn');
+    if (!btn || specialRevealed) return;
+    const timer = `<span id="rec-timer" class="rc-timer" dir="ltr">${formatHMS(recElapsedMs())}</span>`;
+    if (state === 'live') {
+        btn.innerHTML = `<span class="rc-main"><span class="rc-dot live"></span>جارٍ التسجيل</span><span class="rc-hint">اضغط لإيقاف التسجيل</span>${timer}`;
+    } else if (state === 'paused') {
+        btn.innerHTML = `<span class="rc-main"><span class="rc-dot"></span>التسجيل متوقف</span><span class="rc-hint">اضغط لمواصلة التسجيل</span>${timer}`;
+    } else {
+        btn.innerHTML = `<span class="rc-main">🎙️ بداية التسجيل</span><span class="rc-hint">يبدأ التسجيل تلقائياً بعد ثانيتين، أو اضغط للبدء الآن</span>`;
+    }
+}
+
 function handleSpecialRecordingToggle() {
     const recordBtn = document.getElementById('record-action-btn');
     if (specialRevealed) {
@@ -2404,7 +2514,8 @@ function handleSpecialRecordingToggle() {
         // عند بدء العرض: يتوقف النزول التلقائي 3 ثوانٍ ليبدأ المستخدم القراءة ثم ينزل
         if (isPlayingRecording) autoScrollHoldUntil = Date.now() + 3000;
     } else {
-        toggleRecordUserVoice(recordBtn);
+        clearAutoRecTimer();
+        toggleRecordUserVoice(NOOP_BTN);
     }
 }
 
@@ -2422,6 +2533,18 @@ let recMediaStream = null;
 let recToken = 0;
 
 function updateRecIndicator(state) {
+    if (state === 'live') {
+        recLiveSince = Date.now();
+        if (recTick) clearInterval(recTick);
+        recTick = setInterval(() => {
+            const t = document.getElementById('rec-timer');
+            if (t) t.textContent = formatHMS(recElapsedMs());
+        }, 250);
+    } else if (state === 'paused' || state === null) {
+        if (recLiveSince) { recAccumMs += Date.now() - recLiveSince; recLiveSince = 0; }
+        if (recTick) { clearInterval(recTick); recTick = null; }
+    }
+    if (state === 'live' || state === 'paused') renderRecCard(state);
     const mic = document.getElementById('mic-icon-btn');
     if (mic) mic.classList.toggle('mic-live', state === 'live');
     const micHint = document.getElementById('mic-hint');
@@ -2550,6 +2673,8 @@ function togglePlaybackRecordedAudio(btnElement) {
 }
 
 function resetRecordingStates() {
+    clearAutoRecTimer();
+    recTimerReset();
     stopAutoScroll();
     stopSheikh();
     stopMyClip();
