@@ -421,6 +421,8 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
     border: 1.5px solid #cbd5e1;
     margin-bottom: 20px;
 }
+.sheikh-select { width: 100%; margin-top: 4px; font-family: inherit; font-size: 16px; padding: 10px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; }
+body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !important; border-color: #475569 !important; }
 .setting-row-label {
     font-size: 15px;
     font-weight: bold;
@@ -891,16 +893,29 @@ function lsSet(key, value) {
 }
 
 // --- الإعدادات ---
+// القرّاء المتاحون لزر «الشيخ» (حفص فقط): المفتاح = اسم المجلد في everyayah.com
+const SHEIKH_RECITERS = [
+    { id: "Alafasy_128kbps", name: "مشاري العفاسي" },
+    { id: "Husary_128kbps", name: "محمود خليل الحصري" },
+    { id: "Abdul_Basit_Murattal_192kbps", name: "عبد الباسط عبد الصمد (مرتّل)" },
+    { id: "Abdurrahmaan_As-Sudais_192kbps", name: "عبد الرحمن السديس" },
+    { id: "Hudhaify_128kbps", name: "علي الحذيفي" },
+    { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب" }
+];
+let userSheikh = SHEIKH_RECITERS[0].id;
+
 function loadSettings() {
     const s = lsGet(LS_KEYS.settings, {}) || {};
     if (s.riwaya === 0 || s.riwaya === 1) userRiwaya = s.riwaya;
     isDarkMode = s.darkMode === true;
+    if (SHEIKH_RECITERS.some((r) => r.id === s.sheikh)) userSheikh = s.sheikh;
 }
 
 function saveSettings() {
     lsSet(LS_KEYS.settings, {
         riwaya: userRiwaya,
-        darkMode: isDarkMode
+        darkMode: isDarkMode,
+        sheikh: userSheikh
     });
 }
 
@@ -1190,10 +1205,23 @@ function showSettings() {
             </div>
         </div>
 
+        <div class="setting-row-box" style="flex-direction: column; align-items: stretch; gap: 4px;">
+            <span class="setting-row-label">القارئ في زر «الشيخ» (رواية حفص):</span>
+            <select id="sheikh-select" class="sheikh-select" onchange="changeSheikhSetting(this.value)">
+                ${SHEIKH_RECITERS.map((r) => `<option value="${r.id}" ${r.id === userSheikh ? 'selected' : ''}>${r.name}</option>`).join('')}
+            </select>
+        </div>
+
         <button class="btn-main" style="margin-top: 20px;" onclick="saveSettingsAndReturn()">العودة للقائمة</button>
     `;
 
     renderInContainer(settingsHTML);
+}
+
+function changeSheikhSetting(id) {
+    if (!SHEIKH_RECITERS.some((r) => r.id === id)) return;
+    userSheikh = id;
+    saveSettings();
 }
 
 async function changeRiwayaSetting(riwayaIndex) {
@@ -2109,7 +2137,7 @@ let sheikhAudio = null;
 let sheikhPlaying = false;
 
 // مصدر تلاوة الآيات (آية بآية). حفص فقط حالياً؛ ورش غير متاح بعد.
-const SHEIKH_AUDIO_BASE = { 1: "https://everyayah.com/data/Alafasy_128kbps/" };
+const SHEIKH_AUDIO_HOST = "https://everyayah.com/data/";
 
 function showToast(msg) {
     const old = document.getElementById('app-toast');
@@ -2124,8 +2152,8 @@ function showToast(msg) {
 
 // قائمة روابط الملفات الصوتية للآية (قد تكون بسملة ثم الآية)
 function ayahAudioUrls(riwaya, surah, ayah) {
-    const base = SHEIKH_AUDIO_BASE[riwaya];
-    if (!base) return null;
+    if (riwaya !== 1) return null;
+    const base = SHEIKH_AUDIO_HOST + userSheikh + "/";
     const f = (s, a) => base + String(s + 1).padStart(3, "0") + String(a + 1).padStart(3, "0") + ".mp3";
     const urls = [];
     // في حفص نص الآية الأولى يتضمن البسملة، بينما ملف الآية الأولى في المصدر بدونها
