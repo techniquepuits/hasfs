@@ -692,12 +692,21 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .due-hard { color: #ea580c; }
 .due-good { color: #2563eb; }
 .due-easy { color: #16a34a; }
-.stats-line .progress-text { margin-inline-start: 6px; }
+.stats-line .progress-text { margin-inline-start: 4px; white-space: nowrap; font-size: 14px; }
+.stats-line { gap: 5px; }
+.header-box .btn-home { padding: 8px 11px; }
+.header-box .btn-end-session { padding: 8px 9px; font-size: 12.5px; }
 .progress-text { font-weight: bold; color: #1b4d3e; font-size: 15px; }
 body.dark-mode .progress-text { color: #34d399; }
 .frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
 body.dark-mode .frame-surah { color: #34d399; }
 .review-box .continuous-quran-text { margin-top: 18px; }
+.btn-end-session { font-size: 13px; padding: 8px 10px; white-space: nowrap; }
+.mic-wrap { position: absolute; bottom: 4px; left: 4px; display: flex; align-items: center; gap: 8px; direction: ltr; z-index: 5; }
+.mic-wrap .mic-btn { position: static; }
+.mic-hint { font-size: 12px; color: #94a3b8; direction: rtl; unicode-bidi: plaintext; }
+.mic-btn.voice-mode { width: auto; height: 30px; border-radius: 15px; padding: 0 14px; font-size: 14px; font-weight: bold; font-family: inherit; }
+.sheikh-icon { bottom: 4px; right: 4px; left: auto; width: 30px; height: 30px; font-size: 16px; }
 .mic-btn { width: 28px; height: 28px; font-size: 15px; bottom: 4px; left: 4px; }
 .mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: pulse-red 1.2s infinite; }
 .btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
@@ -1238,12 +1247,17 @@ function showReviewScreen(onlyKeys) {
                     <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
                 </span>
             </div>
+            <button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button>
         </div>
 
         <div class="exercise-box review-box" id="exercise-container">
             <button class="expand-arc-btn" onclick="expandContext()" title="إظهار الآية السابقة للمساعدة">&#8593;</button>
             <div id="surah-name" class="frame-surah">سورة: ---</div>
-            <button id="mic-icon-btn" onclick="toggleReviewMic()" class="audio-btn mic-btn" title="سجّل صوتك (اضغط للبدء، واضغط مرة أخرى للإيقاف)">🎙️</button>
+            <div class="mic-wrap">
+                <button id="mic-icon-btn" onclick="onReviewMicClick()" class="audio-btn mic-btn" title="سجّل صوتك">🎙️</button>
+                <span id="mic-hint" class="mic-hint">اضغط للتسجيل</span>
+            </div>
+            <button id="sheikh-icon-btn" onclick="handleSheikhAudioPlaceholder()" class="audio-btn sheikh-icon" style="display:none" title="الآية بصوت الشيخ">🔊</button>
 
             <div class="continuous-quran-text">
                 <span id="prev-ayahs-container"></span>
@@ -1258,10 +1272,6 @@ function showReviewScreen(onlyKeys) {
         </div>
 
         <div id="action-area">
-            <div class="action-top-row">
-                <button id="record-action-btn" class="btn-recording btn-review-act hidden" onclick="handleDailyRecordingToggle()">▶️ عرض التسجيل</button>
-                <button id="sheikh-audio-btn" class="btn-audio-sheikh btn-review-act hidden" onclick="handleSheikhAudioPlaceholder()">🔊 صوت الشيخ</button>
-            </div>
             <button id="show-btn" class="btn-main" onclick="revealDailyAnswer()">عرض الإجابة</button>
         </div>
 
@@ -1388,8 +1398,7 @@ function loadNextAyahToReview() {
     if (ratingArea) ratingArea.classList.add('hidden');
     if (sheikhBtn) sheikhBtn.classList.add('hidden');
     if (actionArea) actionArea.classList.remove('hidden');
-    const recBtn0 = document.getElementById('record-action-btn');
-    if (recBtn0) { recBtn0.classList.add('hidden'); recBtn0.innerText = "▶️ عرض التسجيل"; recBtn0.className = "btn-recording btn-review-act hidden"; }
+    setReviewVoiceMode(false);
 
     const promptAyahEl = document.getElementById('prompt-ayah');
     const promptNumEl = document.getElementById('prompt-num');
@@ -1454,6 +1463,68 @@ function loadNextAyahToReview() {
     }
 }
 
+let reviewRevealed = false;
+let reviewHasRecording = false;
+
+// قبل الإجابة: ميكروفون للتسجيل (ومعه عبارة باهتة)، وزر الشيخ مخفي.
+// بعد الإجابة: يصبح الزر «صوتي» لإعادة صوتك (إن سجّلت) ويظهر زر الشيخ.
+function setReviewVoiceMode(revealed) {
+    reviewRevealed = revealed;
+    const mic = document.getElementById('mic-icon-btn');
+    const hint = document.getElementById('mic-hint');
+    const sk = document.getElementById('sheikh-icon-btn');
+    if (!mic) return;
+    mic.classList.remove('mic-live', 'playing-active');
+    if (!revealed) {
+        reviewHasRecording = false;
+        mic.classList.remove('voice-mode');
+        mic.innerText = '🎙️';
+        mic.style.display = '';
+        if (hint) { hint.style.display = ''; hint.innerText = 'اضغط للتسجيل'; }
+        if (sk) sk.style.display = 'none';
+    } else {
+        if (hint) hint.style.display = 'none';
+        if (reviewHasRecording) {
+            mic.classList.add('voice-mode');
+            mic.style.display = '';
+            refreshReviewMyVoiceBtn();
+        } else {
+            mic.style.display = 'none';
+        }
+        if (sk) sk.style.display = '';
+    }
+}
+
+function refreshReviewMyVoiceBtn() {
+    const mic = document.getElementById('mic-icon-btn');
+    if (!mic || !reviewRevealed || !reviewHasRecording) return;
+    mic.innerText = isPlayingRecording ? 'إيقاف' : 'صوتي';
+    mic.classList.toggle('playing-active', !!isPlayingRecording);
+}
+
+function onReviewMicClick() {
+    if (!reviewRevealed) { toggleReviewMic(); return; }
+    if (!playbackAudioElement) { showToast("جارٍ تجهيز التسجيل... حاول بعد لحظة."); return; }
+    stopSheikh();
+    if (isPlayingRecording) {
+        playbackAudioElement.pause();
+        isPlayingRecording = false;
+    } else {
+        if (playbackAudioElement.ended || (isFinite(playbackAudioElement.duration) && playbackAudioElement.currentTime >= playbackAudioElement.duration - 0.05)) {
+            try { playbackAudioElement.currentTime = 0; } catch (e) {}
+        }
+        playbackAudioElement.play().catch(() => {});
+        isPlayingRecording = true;
+    }
+    refreshReviewMyVoiceBtn();
+}
+
+function leaveReviewScreen() {
+    reviewOnlyKeys = null;
+    resetRecordingStates();
+    showMainButtons();
+}
+
 // أيقونة الميكروفون داخل الإطار: ضغطة تبدأ التسجيل (وتنبض)، وضغطة ثانية توقفه
 function toggleReviewMic() {
     if (!isRecording && !isRecordingPaused) {
@@ -1490,12 +1561,9 @@ function revealDailyAnswer() {
     if (ratingArea) ratingArea.classList.remove('hidden');
     if (sheikhBtn) sheikhBtn.classList.remove('hidden');
 
-    // زر «عرض التسجيل» لا يظهر إلا إذا سجّل المستخدم فعلاً
-    const recordBtn = document.getElementById('record-action-btn');
-    if (recordBtn) {
-        recordBtn.innerText = "▶️ عرض التسجيل";
-        recordBtn.className = "btn-recording btn-review-act" + (hadRecording ? "" : " hidden");
-    }
+    // بعد الإجابة: زر التسجيل يصبح «صوتي» (إن سجّل) ويظهر زر الشيخ
+    reviewHasRecording = hadRecording;
+    setReviewVoiceMode(true);
 }
 
 function handleDailyRecordingToggle() {
@@ -1588,7 +1656,8 @@ function showSpecialSessionScreen() {
                     <button onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button>
                 </span>
             </div>
-            <div class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
+            <div id="special-title" class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
+            <button id="end-session-btn" class="btn-home btn-end-session hidden" onclick="openStopSessionDialog()">إنهاء الجلسة</button>
         </div>
 
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
@@ -1601,7 +1670,6 @@ function showSpecialSessionScreen() {
         <div id="action-area" class="hidden">
             <div class="action-top-row">
                 <button id="record-action-btn" class="btn-recording btn-record-big" disabled>🎙️ بداية التسجيل</button>
-                <button id="stop-session-btn" class="btn-recording btn-record-big btn-stop-session hidden" onclick="openStopSessionDialog()">⏹ توقف الجلسة</button>
                 <button id="show-btn" class="btn-main btn-show-half hidden" disabled>إظهار الآيات</button>
                 <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
             </div>
@@ -1745,7 +1813,7 @@ let specialRevealed = false;
 let stopPickMode = false;
 
 function openStopSessionDialog() {
-    if (!specialRevealed) return;
+    if (selectedSpecialSurah === null) return;
     // نوقف عرض التسجيل مؤقتاً
     if (isPlayingRecording && playbackAudioElement) {
         playbackAudioElement.pause();
@@ -1757,16 +1825,26 @@ function openStopSessionDialog() {
     const d = document.createElement('div');
     d.id = 'stop-dialog';
     d.className = 'modal-overlay';
-    d.innerHTML = `
+    d.innerHTML = specialRevealed ? `
         <div class="modal-box">
-            <div class="modal-title">توقف الجلسة</div>
+            <div class="modal-title">إنهاء الجلسة</div>
             <div style="text-align:center; font-size:17px; line-height:1.9; margin: 4px 0 6px;">
                 إذا أردت أن تواصل في الجلسة القادمة من حيث انتهينا اليوم،
                 <b>اضغط على آخر آية راجعتها اليوم</b>.
             </div>
             <div class="modal-actions stack">
                 <button type="button" class="btn-start-review" onclick="beginStopPick()">حسناً، سأختار الآية</button>
-                <button type="button" class="btn-cancel" onclick="endSessionWithoutSaving()">إنهاء بدون حفظ</button>
+                <button type="button" class="btn-cancel" onclick="endSessionWithoutSaving()">إنهاء دون حفظ الموضع</button>
+                <button type="button" class="btn-cancel" onclick="closeStopDialog()">متابعة الجلسة</button>
+            </div>
+        </div>` : `
+        <div class="modal-box">
+            <div class="modal-title">إنهاء الجلسة</div>
+            <div style="text-align:center; font-size:17px; line-height:1.9; margin: 4px 0 6px;">
+                لم تُظهر الآيات بعد، فلا يوجد موضع لحفظه.
+            </div>
+            <div class="modal-actions stack">
+                <button type="button" class="btn-start-review" onclick="endSessionWithoutSaving()">إنهاء الجلسة</button>
                 <button type="button" class="btn-cancel" onclick="closeStopDialog()">متابعة الجلسة</button>
             </div>
         </div>`;
@@ -1916,8 +1994,11 @@ function loadSpecialFullSectionExercise() {
     stopPickMode = false;
     closeStopDialog();
     setStopPickUI(false);
-    const stopSessBtn0 = document.getElementById('stop-session-btn');
-    if (stopSessBtn0) stopSessBtn0.classList.add('hidden');
+    // بدء الجلسة: يحلّ زر «إنهاء الجلسة» محل عنوان الصفحة
+    const titleEl = document.getElementById('special-title');
+    const endBtn = document.getElementById('end-session-btn');
+    if (titleEl) titleEl.classList.add('hidden');
+    if (endBtn) endBtn.classList.remove('hidden');
     ayahBarWasPlaying = false;
     ayahBarIndex = null;
     stumbledSet = new Set();
@@ -2056,8 +2137,8 @@ function ayahAudioUrls(riwaya, surah, ayah) {
 function refreshSheikhBtn() {
     const b = document.getElementById('sheikh-bar-btn');
     if (b) b.innerText = sheikhPlaying ? "إيقاف" : "الشيخ";
-    const r = document.getElementById('sheikh-audio-btn');
-    if (r) r.innerText = sheikhPlaying ? "⏹ إيقاف" : "🔊 صوت الشيخ";
+    const r = document.getElementById('sheikh-icon-btn');
+    if (r) r.innerText = sheikhPlaying ? "⏹" : "🔊";
 }
 
 function stopSheikh() {
@@ -2082,6 +2163,7 @@ function playSheikhAyah(surah, ayah) {
         isPlayingRecording = false;
         const pb = document.getElementById('record-action-btn');
         if (pb && /إيقاف العرض/.test(pb.innerText)) { pb.innerText = "▶️ مواصلة العرض"; pb.classList.remove('playing-active'); }
+        refreshReviewMyVoiceBtn();
     }
     const fail = () => { stopSheikh(); showToast("تعذر تشغيل صوت الشيخ. تحقق من الاتصال بالإنترنت."); };
     let i = 0;
@@ -2148,8 +2230,6 @@ function handleSpecialAyahClick(ayahIndex) {
             isPlayingRecording = false;
         }
         ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
-        const stopBtn0 = document.getElementById('stop-session-btn');
-        if (stopBtn0) stopBtn0.classList.add('hidden');
         if (recordBtn) {
             recordBtn.classList.add('hidden');
             recordBtn.classList.remove('playing-active');
@@ -2169,8 +2249,6 @@ function resumeNormalReading() {
     const recordBtn = document.getElementById('record-action-btn');
     if (bar) bar.classList.add('hidden');
     if (recordBtn) recordBtn.classList.remove('hidden');
-    const stopBtn1 = document.getElementById('stop-session-btn');
-    if (stopBtn1) stopBtn1.classList.remove('hidden');
     stopMyClip();
     stopSheikh();
     if (playbackAudioElement) {
@@ -2282,8 +2360,7 @@ function revealSpecialFullAnswer() {
         if (recordBtn) bottomRow.insertBefore(recordBtn, bottomRow.firstChild);
         if (showBtn) bottomRow.appendChild(showBtn);
     }
-    const stopSessBtn = document.getElementById('stop-session-btn');
-    if (stopSessBtn) stopSessBtn.classList.remove('hidden');
+
     if (recordBtn) {
         recordBtn.classList.remove('hidden');
         recordBtn.innerText = "▶️ عرض التسجيل";
@@ -2319,6 +2396,8 @@ let recToken = 0;
 function updateRecIndicator(state) {
     const mic = document.getElementById('mic-icon-btn');
     if (mic) mic.classList.toggle('mic-live', state === 'live');
+    const micHint = document.getElementById('mic-hint');
+    if (micHint && !reviewRevealed) micHint.innerText = state === 'live' ? 'اضغط لإيقاف التسجيل' : 'اضغط للتسجيل';
     const el = document.getElementById('rec-indicator');
     if (!el) return;
     const txt = document.getElementById('rec-indicator-text');
@@ -2389,6 +2468,7 @@ function toggleRecordUserVoice(btnElement) {
                     const pb = document.getElementById('record-action-btn') || btnElement;
                     pb.innerText = "▶️ عرض التسجيل";
                     pb.classList.remove('playing-active');
+                    refreshReviewMyVoiceBtn();
                 };
             };
 
