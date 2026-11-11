@@ -300,6 +300,7 @@ body.dark-mode .menu-sub { color: #94a3b8; }
     animation: fadeIn 0.15s ease-in-out;
 }
 .modal-box {
+    position: relative;
     width: 100%;
     max-width: 380px;
     max-height: 94vh;
@@ -312,6 +313,11 @@ body.dark-mode .menu-sub { color: #94a3b8; }
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     text-align: center;
 }
+.modal-x { position: absolute; top: 6px; left: 8px; width: 32px; height: 32px; border: none; background: transparent; color: #64748b; font-size: 20px; font-weight: bold; font-family: Arial, sans-serif; line-height: 1; cursor: pointer; border-radius: 8px; }
+.modal-x:active { background: #e2e8f0; }
+body.dark-mode .modal-x { color: #cbd5e1 !important; }
+.confirm-words { font-size: 21px; line-height: 1.9; color: #1b4d3e; margin-top: 6px; }
+body.dark-mode .confirm-words { color: #e2e8f0 !important; }
 .modal-title { font-size: 19px; font-weight: bold; color: #1b4d3e; margin-bottom: 10px; }
 .modal-actions { display: flex; gap: 8px; margin-top: 12px; }
 .modal-actions button {
@@ -713,13 +719,19 @@ body.dark-mode .frame-surah { color: #34d399; }
 .ayah-actions-bar .replay-panel { display: none; width: 100%; align-items: center; justify-content: space-between; gap: 6px; }
 .ayah-actions-bar.replay-mode > .btn-rate { display: none; }
 .ayah-actions-bar.replay-mode > .replay-panel { display: flex; }
-.rp-btn { border: none; border-radius: 10px; padding: 13px 8px; font-weight: bold; font-size: 14px; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.rp-btn { flex: 1 1 0; min-width: 0; height: 44px; border: none; border-radius: 12px; padding: 0 6px; font-weight: bold; font-size: 15px; font-family: inherit; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; }
 .rp-go { background: #16a34a; color: #fff; }
 .rp-cancel { background: #64748b; color: #fff; }
-.rp-step { width: 38px; height: 42px; border: none; border-radius: 10px; background: #e2e8f0; color: #1b4d3e; font-size: 22px; font-weight: bold; cursor: pointer; }
-.rp-val { min-width: 46px; text-align: center; font-size: 20px; font-weight: bold; color: #1b4d3e; }
-body.dark-mode .rp-step { background: #334155 !important; color: #e2e8f0 !important; }
-body.dark-mode .rp-val { color: #e2e8f0 !important; }
+.stepper { display: inline-flex; align-items: stretch; flex: none; height: 44px; border: 1.5px solid #94a3b8; border-radius: 12px; background: #f1f5f9; overflow: hidden; direction: ltr; }
+.stepper button { width: 38px; border: none; background: transparent; color: #1b4d3e; font-size: 22px; font-weight: bold; font-family: inherit; cursor: pointer; padding: 0; touch-action: manipulation; }
+.stepper button:active { background: #dbe4ee; }
+.stepper .st-val { min-width: 50px; padding: 0 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #1b4d3e; border-left: 1.5px solid #cbd5e1; border-right: 1.5px solid #cbd5e1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stepper.sm { height: 32px; border-radius: 9px; }
+.stepper.sm button { width: 28px; font-size: 18px; }
+.stepper.sm .st-val { min-width: 32px; padding: 0 4px; font-size: 15px; }
+body.dark-mode .stepper { background: #334155 !important; border-color: #64748b !important; }
+body.dark-mode .stepper button, body.dark-mode .stepper .st-val { color: #e2e8f0 !important; }
+body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 .btn-end-session { font-size: 13px; padding: 8px 10px; white-space: nowrap; }
 .mic-wrap { position: absolute; bottom: 4px; left: 4px; display: flex; align-items: center; gap: 8px; direction: ltr; z-index: 5; }
 .mic-wrap .mic-btn { position: static; }
@@ -729,10 +741,7 @@ body.dark-mode .rp-val { color: #e2e8f0 !important; }
 .mic-btn { width: 28px; height: 28px; font-size: 15px; bottom: 4px; left: 4px; }
 .mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: pulse-red 1.2s infinite; }
 .btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
-.speed-ctl { display: inline-flex; align-items: center; gap: 4px; direction: ltr; }
-.speed-ctl button { background: #64748b; color: #fff; border: none; width: 30px; height: 32px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
-.speed-ctl .speed-val { min-width: 26px; text-align: center; font-weight: bold; font-size: 15px; color: #1b4d3e; }
-body.dark-mode .speed-ctl .speed-val { color: #e2e8f0; }
+.speed-ctl { display: inline-flex; align-items: center; }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
@@ -1696,9 +1705,11 @@ function showSpecialSessionScreen() {
                 <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
                 <span id="speed-ctl" class="speed-ctl hidden" title="سرعة النزول التلقائي">
-                    <button onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button>
-                    <span id="speed-val" class="speed-val">10</span>
-                    <button onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button>
+                    <span class="stepper sm">
+                        <button type="button" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button>
+                        <span id="speed-val" class="st-val speed-val">10</span>
+                        <button type="button" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button>
+                    </span>
                 </span>
             </div>
             <div id="special-title" class="surah-title" style="font-size: 16px;">المراجعة اليومية</div>
@@ -1729,9 +1740,11 @@ function showSpecialSessionScreen() {
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
                 <div id="replay-panel" class="replay-panel">
                     <button type="button" class="rp-btn rp-go" onclick="replayMyVoice()">إعادة الصوت</button>
-                    <button type="button" class="rp-step" onclick="changeReplaySeconds(1)" aria-label="زيادة">+</button>
-                    <span class="rp-val" dir="ltr"><span id="replay-sec">3</span> s</span>
-                    <button type="button" class="rp-step" onclick="changeReplaySeconds(-1)" aria-label="إنقاص">−</button>
+                    <span class="stepper">
+                        <button type="button" onclick="changeReplaySeconds(-1)" aria-label="إنقاص">−</button>
+                        <span class="st-val" dir="ltr"><span id="replay-sec">3</span>&nbsp;s</span>
+                        <button type="button" onclick="changeReplaySeconds(1)" aria-label="زيادة">+</button>
+                    </span>
                     <button type="button" class="rp-btn rp-cancel" onclick="closeReplayPanel()">إلغاء</button>
                 </div>
             </div>
@@ -1879,6 +1892,7 @@ function openStopSessionDialog() {
     d.className = 'modal-overlay';
     d.innerHTML = specialRevealed ? `
         <div class="modal-box">
+            <button type="button" class="modal-x" onclick="closeStopDialog()" aria-label="إغلاق">X</button>
             <div class="modal-title">إنهاء الجلسة</div>
             <div style="text-align:center; font-size:17px; line-height:1.9; margin: 4px 0 6px;">
                 إذا أردت أن تواصل في الجلسة القادمة من حيث انتهينا اليوم،
@@ -1887,17 +1901,16 @@ function openStopSessionDialog() {
             <div class="modal-actions stack">
                 <button type="button" class="btn-start-review" onclick="beginStopPick()">حسناً، سأختار الآية</button>
                 <button type="button" class="btn-cancel" onclick="endSessionWithoutSaving()">إنهاء دون حفظ الموضع</button>
-                <button type="button" class="btn-cancel" onclick="closeStopDialog()">متابعة الجلسة</button>
             </div>
         </div>` : `
         <div class="modal-box">
+            <button type="button" class="modal-x" onclick="closeStopDialog()" aria-label="إغلاق">X</button>
             <div class="modal-title">إنهاء الجلسة</div>
             <div style="text-align:center; font-size:17px; line-height:1.9; margin: 4px 0 6px;">
                 لم تُظهر الآيات بعد، فلا يوجد موضع لحفظه.
             </div>
             <div class="modal-actions stack">
                 <button type="button" class="btn-start-review" onclick="endSessionWithoutSaving()">إنهاء الجلسة</button>
-                <button type="button" class="btn-cancel" onclick="closeStopDialog()">متابعة الجلسة</button>
             </div>
         </div>`;
     document.body.appendChild(d);
@@ -1906,6 +1919,49 @@ function openStopSessionDialog() {
 function closeStopDialog() {
     const d = document.getElementById('stop-dialog');
     if (d) d.remove();
+    closeStopConfirm();
+}
+
+function closeStopConfirm() {
+    const d = document.getElementById('stop-confirm');
+    if (d) d.remove();
+}
+
+// آخر كلمات الآية (للتأكيد)
+function lastWordsOf(text, n) {
+    const w = String(text || "").replace(/<[^>]*>/g, " ").trim().split(/\s+/).filter(Boolean);
+    if (!w.length) return "";
+    return (w.length > n ? "… " : "") + w.slice(-n).join(" ");
+}
+
+function openStopConfirm(ayahIndex) {
+    closeStopConfirm();
+    const text = getAyahText(userRiwaya, selectedSpecialSurah, ayahIndex) || "";
+    const d = document.createElement('div');
+    d.id = 'stop-confirm';
+    d.className = 'modal-overlay';
+    d._ayah = ayahIndex;
+    d.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">آخر آية توقفت عندها</div>
+            <div class="resume-info">
+                <div class="resume-surah">سورة ${surahsNames[selectedSpecialSurah]} — الآية ${ayahIndex + 1}</div>
+                <div class="confirm-words">${lastWordsOf(text, 5)}</div>
+            </div>
+            <div class="modal-actions stack">
+                <button type="button" class="btn-start-review" onclick="confirmStopPick()">تأكيد</button>
+                <button type="button" class="btn-cancel" onclick="closeStopConfirm()">إلغاء</button>
+            </div>
+        </div>`;
+    document.body.appendChild(d);
+}
+
+function confirmStopPick() {
+    const d = document.getElementById('stop-confirm');
+    if (!d) return;
+    const i = d._ayah;
+    closeStopConfirm();
+    finishStopPick(i);
 }
 
 function setStopPickUI(on) {
@@ -2293,7 +2349,7 @@ function playMyLastFiveSeconds() {
 
 function handleSpecialAyahClick(ayahIndex) {
     if (!specialRevealed) return;
-    if (stopPickMode) { finishStopPick(ayahIndex); return; }
+    if (stopPickMode) { openStopConfirm(ayahIndex); return; }
     const bar = document.getElementById('ayah-actions-bar');
     const recordBtn = document.getElementById('record-action-btn');
     const barAlreadyOpen = bar && !bar.classList.contains('hidden');
