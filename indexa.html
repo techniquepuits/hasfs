@@ -686,6 +686,12 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .rec-inline { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 12px 0 14px; }
 .rec-inline .btn-record-big, .rec-inline .btn-show-half { flex: none; width: 100%; }
 .rec-inline:empty { display: none; }
+.due-counts { display: inline-flex; gap: 4px; }
+.due-chip { min-width: 22px; padding: 4px 5px; border-radius: 8px; color: #fff; font-weight: bold; font-size: 14px; text-align: center; line-height: 1.2; }
+.due-forgot { background: #dc2626; }
+.due-hard { background: #ea580c; }
+.due-good { background: #2563eb; }
+.due-easy { background: #16a34a; }
 .progress-text { font-weight: bold; color: #1b4d3e; font-size: 15px; }
 body.dark-mode .progress-text { color: #34d399; }
 .frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
@@ -1214,6 +1220,12 @@ function showReviewScreen() {
             <div style="display: flex; gap: 6px; align-items: center;">
                 <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
+                <span class="due-counts" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
+                    <span id="due-forgot" class="due-chip due-forgot">0</span>
+                    <span id="due-hard" class="due-chip due-hard">0</span>
+                    <span id="due-good" class="due-chip due-good">0</span>
+                    <span id="due-easy" class="due-chip due-easy">0</span>
+                </span>
             </div>
             <div id="daily-progress-badge" class="progress-text">راجعتَ: 0</div>
         </div>
@@ -1283,8 +1295,41 @@ function priorityOf(rec, now) { return ((now - rec.t) / DAY_MS) / refTimeDays(re
 // تُستدعى من المراجعة اليومية عند الضغط على «تعثر»: تدخل الآية (أو تعود) بصعوبة 10
 function addStumbledAyah(surah, ayah) {
     const store = loadAyahStore(userRiwaya);
-    store[ayahKey(surah, ayah)] = { d: 10, t: Date.now() };
+    store[ayahKey(surah, ayah)] = { d: 10, t: Date.now(), last: 'forgot' };
     saveAyahStore(userRiwaya, store);
+}
+
+// لا تُعرض في عقال الآيات إلا الآيات التي بلغت أولويتها هذا الحد
+const DUE_THRESHOLD = 0.5;
+
+// آخر تقييم للآية؛ للسجلات القديمة بلا تقييم نستنتجه من الصعوبة
+function lastRatingOf(rec) {
+    if (rec.last === 'forgot' || rec.last === 'hard' || rec.last === 'good' || rec.last === 'easy') return rec.last;
+    if (rec.d >= 8.5) return 'forgot';
+    if (rec.d >= 5.5) return 'hard';
+    if (rec.d >= 2.5) return 'good';
+    return 'easy';
+}
+
+// عدد الآيات المستحقة الآن (أولويتها ≥ الحد) مصنفةً حسب آخر تقييم
+function countDueByLast() {
+    const store = loadAyahStore(userRiwaya);
+    const now = Date.now();
+    const c = { forgot: 0, hard: 0, good: 0, easy: 0 };
+    for (const k in store) {
+        const rec = store[k];
+        if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
+        if (priorityOf(rec, now) >= DUE_THRESHOLD) c[lastRatingOf(rec)]++;
+    }
+    return c;
+}
+
+function updateDueCounts() {
+    const c = countDueByLast();
+    ['forgot', 'hard', 'good', 'easy'].forEach(k => {
+        const el = document.getElementById('due-' + k);
+        if (el) el.textContent = c[k];
+    });
 }
 
 // أعلى أولوية أولاً؛ نتجنب تكرار الآية التي راجعناها للتو إن وُجدت غيرها
@@ -1301,6 +1346,7 @@ function pickNextAyahForReview(excludeKey) {
         const s = Number(parts[0]), a = Number(parts[1]);
         if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, riwaya)) continue;
         const p = priorityOf(rec, now);
+        if (p < DUE_THRESHOLD) continue;
         const cand = { riwaya, surah: s, ayah: a, key: k };
         if (k === excludeKey) { fallback = cand; continue; }
         if (p > bestP || (p === bestP && rec.t < bestT)) { best = cand; bestP = p; bestT = rec.t; }
@@ -1314,6 +1360,7 @@ function loadNextAyahToReview() {
 
     const badgeEl = document.getElementById('daily-progress-badge');
     if (badgeEl) badgeEl.innerText = `راجعتَ: ${reviewedThisSession}`;
+    updateDueCounts();
 
     const showBtn = document.getElementById('show-btn');
     const ratingArea = document.getElementById('rating-area');
@@ -1350,7 +1397,10 @@ function loadNextAyahToReview() {
 
     // القائمة فارغة: لا شيء يُراجَع بعد
     if (!item) {
-        if (promptAyahEl) promptAyahEl.innerText = "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
+        const hasAny = Object.keys(loadAyahStore(userRiwaya)).length > 0;
+        if (promptAyahEl) promptAyahEl.innerText = hasAny
+            ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
+            : "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
         if (surahNameEl) surahNameEl.innerText = "سورة: ---";
         if (actionArea) actionArea.classList.add('hidden');
         if (expandBtn) expandBtn.style.display = 'none';
@@ -1452,6 +1502,7 @@ function onAyahRated(item, ratingType) {
     const rec = store[k] || { d: 10, t: Date.now() };
     rec.d = (rec.d + pt) / 2;
     rec.t = Date.now();
+    rec.last = ratingType;
     store[k] = rec;
     saveAyahStore(item.riwaya, store);
     lastReviewedKey = k;
