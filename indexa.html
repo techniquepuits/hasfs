@@ -1220,7 +1220,11 @@ async function saveSettingsAndReturn() {
 // 7. مراجعة آية بآية (عقال الآيات)
 // ==========================================================
 
-function showReviewScreen() {
+// عند القدوم من نهاية الجلسة: نعرض فقط آيات التعثر في تلك الجلسة (مجموعة مفاتيح «سورة:آية»)؛ null = كل الآيات
+let reviewOnlyKeys = null;
+
+function showReviewScreen(onlyKeys) {
+    reviewOnlyKeys = (Array.isArray(onlyKeys) && onlyKeys.length) ? new Set(onlyKeys) : null;
     const reviewScreenHTML = `
         <div class="header-box">
             <div style="display: flex; gap: 6px; align-items: center;">
@@ -1330,6 +1334,7 @@ function countDueByLast() {
     for (const k in store) {
         const rec = store[k];
         if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
+        if (reviewOnlyKeys && !reviewOnlyKeys.has(k)) continue;
         if (isDue(rec, now)) c[lastRatingOf(rec)]++;
     }
     return c;
@@ -1357,6 +1362,7 @@ function pickNextAyahForReview(excludeKey) {
         const s = Number(parts[0]), a = Number(parts[1]);
         if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, riwaya)) continue;
         const p = priorityOf(rec, now);
+        if (reviewOnlyKeys && !reviewOnlyKeys.has(k)) continue;
         if (!isDue(rec, now)) continue;
         const cand = { riwaya, surah: s, ayah: a, key: k };
         if (k === excludeKey) { fallback = cand; continue; }
@@ -1409,7 +1415,8 @@ function loadNextAyahToReview() {
     // القائمة فارغة: لا شيء يُراجَع بعد
     if (!item) {
         const hasAny = Object.keys(loadAyahStore(userRiwaya)).length > 0;
-        if (promptAyahEl) promptAyahEl.innerText = hasAny
+        if (reviewOnlyKeys) { if (promptAyahEl) promptAyahEl.innerText = "أنهيتَ مراجعة الآيات التي تعثرت فيها في هذه الجلسة.\nيمكنك العودة إلى القائمة الرئيسية."; }
+        else if (promptAyahEl) promptAyahEl.innerText = hasAny
             ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
             : "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
         if (surahNameEl) surahNameEl.innerText = "سورة: ---";
@@ -1789,20 +1796,60 @@ function cancelStopPick() {
     setStopPickUI(false);
 }
 
-function endSessionWithoutSaving() {
-    closeStopDialog();
+// نهاية الجلسة (بحفظ آخر آية أو بدونه): نعود للقائمة، ثم نعرض سؤال مراجعة آيات التعثر إن وُجدت
+function leaveSession() {
+    const keys = selectedSpecialSurah === null ? [] : [...stumbledSet].map((a) => ayahKey(selectedSpecialSurah, a));
     stopPickMode = false;
     resetRecordingStates();
     showMainButtons();
+    if (keys.length) showStumbleReviewPrompt(keys);
+}
+
+function showStumbleReviewPrompt(keys) {
+    const old = document.getElementById('stumble-prompt');
+    if (old) old.remove();
+    const d = document.createElement('div');
+    d.id = 'stumble-prompt';
+    d.className = 'modal-overlay';
+    d._keys = keys;
+    d.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">آيات التعثر</div>
+            <div class="resume-info">
+                <div class="resume-surah">${keys.length} ${keys.length === 1 ? "آية" : (keys.length <= 10 ? "آيات" : "آية")}</div>
+                <div class="resume-ayah">تعثرتَ فيها خلال هذه الجلسة</div>
+            </div>
+            <div style="text-align:center; font-size:17px; margin-top:12px;">هل تريد مراجعتها الآن؟</div>
+            <div class="modal-actions stack">
+                <button type="button" class="btn-start-review" onclick="reviewSessionStumbles()">نعم، راجعها الآن</button>
+                <button type="button" class="btn-cancel" onclick="closeStumblePrompt()">لا، شكراً</button>
+            </div>
+        </div>`;
+    document.body.appendChild(d);
+}
+
+function closeStumblePrompt() {
+    const d = document.getElementById('stumble-prompt');
+    if (d) d.remove();
+}
+
+function reviewSessionStumbles() {
+    const d = document.getElementById('stumble-prompt');
+    const keys = d ? d._keys : [];
+    closeStumblePrompt();
+    showReviewScreen(keys);
+}
+
+function endSessionWithoutSaving() {
+    closeStopDialog();
+    leaveSession();
 }
 
 // الضغط على آية أثناء وضع الاختيار: نحفظها كآخر آية راجعها المستخدم ونخرج
 function finishStopPick(ayahIndex) {
     if (selectedSpecialSurah === null) return;
     lsSet(LS_KEYS.lastStop, { riwaya: userRiwaya, surah: selectedSpecialSurah, ayah: ayahIndex + 1 });
-    stopPickMode = false;
-    resetRecordingStates();
-    showMainButtons();
+    leaveSession();
 }
 
 // عند فتح صفحة اختيار السورة: تذكير بآخر موضع توقف
