@@ -686,12 +686,13 @@ body.dark-mode .numpad .np-del, body.dark-mode .numpad .np-clear { color: #fca5a
 .rec-inline { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 12px 0 14px; }
 .rec-inline .btn-record-big, .rec-inline .btn-show-half { flex: none; width: 100%; }
 .rec-inline:empty { display: none; }
-.due-counts { display: inline-flex; gap: 4px; }
-.due-chip { min-width: 22px; padding: 4px 5px; border-radius: 8px; color: #fff; font-weight: bold; font-size: 14px; text-align: center; line-height: 1.2; }
-.due-forgot { background: #dc2626; }
-.due-hard { background: #ea580c; }
-.due-good { background: #2563eb; }
-.due-easy { background: #16a34a; }
+.stats-line { display: inline-flex; align-items: center; gap: 7px; margin-inline-start: 4px; }
+.due-num { font-weight: bold; font-size: 17px; }
+.due-forgot { color: #dc2626; }
+.due-hard { color: #ea580c; }
+.due-good { color: #2563eb; }
+.due-easy { color: #16a34a; }
+.stats-line .progress-text { margin-inline-start: 6px; }
 .progress-text { font-weight: bold; color: #1b4d3e; font-size: 15px; }
 body.dark-mode .progress-text { color: #34d399; }
 .frame-surah { position: absolute; top: 2px; right: 8px; font-weight: bold; font-size: 15px; line-height: 20px; color: #1b4d3e; z-index: 5; }
@@ -714,7 +715,12 @@ body.dark-mode .speed-ctl .speed-val { color: #e2e8f0; }
 }
 .ayah-actions-bar { gap: 5px; }
 .ayah-actions-bar .btn-rate { padding: 13px 2px; font-size: 13px; border-radius: 10px; min-width: 0; white-space: nowrap; }
-.btn-stop { background-color: #475569; }
+.btn-stop-session { border-color: #64748b; background: #f1f5f9; color: #334155; }
+body.dark-mode .btn-recording.btn-record-big.btn-stop-session { background: #0f172a !important; color: #e2e8f0 !important; border-color: #64748b !important; }
+#action-area .action-top-row .btn-record-big, #action-area .action-top-row .btn-stop-session { font-size: 16px; padding: 13px 6px; }
+.stop-pick-banner { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fef9c3; border: 1.5px solid #facc15; color: #713f12; border-radius: 12px; padding: 10px 12px; font-weight: bold; font-size: 15px; }
+.stop-pick-banner button { background: #fff; border: 1.5px solid #ca8a04; color: #713f12; border-radius: 8px; padding: 6px 12px; font-weight: bold; font-family: inherit; cursor: pointer; }
+body.dark-mode .stop-pick-banner { background: #422006 !important; color: #fde68a !important; border-color: #a16207 !important; }
 .btn-record-big:hover { background: #fee2e2; border-color: #b91c1c; }
 body.dark-mode .btn-recording.btn-record-big {
     background: #1f1315 !important;
@@ -1220,14 +1226,14 @@ function showReviewScreen() {
             <div style="display: flex; gap: 6px; align-items: center;">
                 <button class="btn-home" onclick="showMainButtons()" title="العودة للقائمة الرئيسية" aria-label="القائمة الرئيسية">🏠</button>
                 <button id="dark-mode-btn" class="btn-home" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '🌙'}</button>
-                <span class="due-counts" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
-                    <span id="due-forgot" class="due-chip due-forgot">0</span>
-                    <span id="due-hard" class="due-chip due-hard">0</span>
-                    <span id="due-good" class="due-chip due-good">0</span>
-                    <span id="due-easy" class="due-chip due-easy">0</span>
+<span class="stats-line" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
+                    <span id="due-forgot" class="due-num due-forgot">0</span>
+                    <span id="due-hard" class="due-num due-hard">0</span>
+                    <span id="due-good" class="due-num due-good">0</span>
+                    <span id="due-easy" class="due-num due-easy">0</span>
+                    <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
                 </span>
             </div>
-            <div id="daily-progress-badge" class="progress-text">راجعتَ: 0</div>
         </div>
 
         <div class="exercise-box review-box" id="exercise-container">
@@ -1311,6 +1317,11 @@ function lastRatingOf(rec) {
     return 'easy';
 }
 
+// مستحقة الآن: بلغت أولويتها الحد، أو كان آخر تقييم لها «نسيت/تعثر» فتعود اليوم مباشرة
+function isDue(rec, now) {
+    return priorityOf(rec, now) >= DUE_THRESHOLD || lastRatingOf(rec) === 'forgot';
+}
+
 // عدد الآيات المستحقة الآن (أولويتها ≥ الحد) مصنفةً حسب آخر تقييم
 function countDueByLast() {
     const store = loadAyahStore(userRiwaya);
@@ -1319,7 +1330,7 @@ function countDueByLast() {
     for (const k in store) {
         const rec = store[k];
         if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
-        if (priorityOf(rec, now) >= DUE_THRESHOLD) c[lastRatingOf(rec)]++;
+        if (isDue(rec, now)) c[lastRatingOf(rec)]++;
     }
     return c;
 }
@@ -1346,7 +1357,7 @@ function pickNextAyahForReview(excludeKey) {
         const s = Number(parts[0]), a = Number(parts[1]);
         if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, riwaya)) continue;
         const p = priorityOf(rec, now);
-        if (p < DUE_THRESHOLD) continue;
+        if (!isDue(rec, now)) continue;
         const cand = { riwaya, surah: s, ayah: a, key: k };
         if (k === excludeKey) { fallback = cand; continue; }
         if (p > bestP || (p === bestP && rec.t < bestT)) { best = cand; bestP = p; bestT = rec.t; }
@@ -1583,15 +1594,19 @@ function showSpecialSessionScreen() {
         <div id="action-area" class="hidden">
             <div class="action-top-row">
                 <button id="record-action-btn" class="btn-recording btn-record-big" disabled>🎙️ بداية التسجيل</button>
+                <button id="stop-session-btn" class="btn-recording btn-record-big btn-stop-session hidden" onclick="openStopSessionDialog()">⏹ توقف الجلسة</button>
                 <button id="show-btn" class="btn-main btn-show-half hidden" disabled>إظهار الآيات</button>
                 <button id="sheikh-audio-btn" class="btn-audio-sheikh hidden" onclick="handleSheikhAudioPlaceholder()">🔊 الآية بصوت الشيخ</button>
+            </div>
+            <div id="stop-pick-banner" class="stop-pick-banner hidden">
+                <span>👆 اضغط على آخر آية راجعتها اليوم</span>
+                <button type="button" onclick="cancelStopPick()">إلغاء</button>
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
                 <button class="btn-rate btn-hard" onclick="playMyLastFiveSeconds()">صوتي</button>
                 <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
-                <button class="btn-rate btn-stop" onclick="stopAndSavePosition()">توقف</button>
             </div>
         </div>
 
@@ -1717,11 +1732,75 @@ function initiateSpecialSessionExecution() {
 
 let specialRevealed = false;
 
-// «توقف»: نحفظ السورة والآية المحددة كآخر موضع، ونعود للقائمة
-function stopAndSavePosition() {
-    if (ayahBarIndex === null || selectedSpecialSurah === null) return;
-    const rec = { riwaya: userRiwaya, surah: selectedSpecialSurah, ayah: ayahBarIndex + 1 };
-    lsSet(LS_KEYS.lastStop, rec);
+// ----------------------------------------------------------
+// «توقف الجلسة»: نافذة تذكير ثم اختيار آخر آية راجعها المستخدم اليوم
+// ----------------------------------------------------------
+let stopPickMode = false;
+
+function openStopSessionDialog() {
+    if (!specialRevealed) return;
+    // نوقف عرض التسجيل مؤقتاً
+    if (isPlayingRecording && playbackAudioElement) {
+        playbackAudioElement.pause();
+        isPlayingRecording = false;
+        const pb = document.getElementById('record-action-btn');
+        if (pb) { pb.innerText = "▶️ مواصلة العرض"; pb.classList.remove('playing-active'); }
+    }
+    closeStopDialog();
+    const d = document.createElement('div');
+    d.id = 'stop-dialog';
+    d.className = 'modal-overlay';
+    d.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">توقف الجلسة</div>
+            <div style="text-align:center; font-size:17px; line-height:1.9; margin: 4px 0 6px;">
+                إذا أردت أن تواصل في الجلسة القادمة من حيث انتهينا اليوم،
+                <b>اضغط على آخر آية راجعتها اليوم</b>.
+            </div>
+            <div class="modal-actions stack">
+                <button type="button" class="btn-start-review" onclick="beginStopPick()">حسناً، سأختار الآية</button>
+                <button type="button" class="btn-cancel" onclick="endSessionWithoutSaving()">إنهاء بدون حفظ</button>
+                <button type="button" class="btn-cancel" onclick="closeStopDialog()">متابعة الجلسة</button>
+            </div>
+        </div>`;
+    document.body.appendChild(d);
+}
+
+function closeStopDialog() {
+    const d = document.getElementById('stop-dialog');
+    if (d) d.remove();
+}
+
+function setStopPickUI(on) {
+    const row = document.querySelector('#action-area .action-top-row');
+    const banner = document.getElementById('stop-pick-banner');
+    if (row) row.classList.toggle('hidden', on);
+    if (banner) banner.classList.toggle('hidden', !on);
+}
+
+function beginStopPick() {
+    closeStopDialog();
+    stopPickMode = true;
+    setStopPickUI(true);
+}
+
+function cancelStopPick() {
+    stopPickMode = false;
+    setStopPickUI(false);
+}
+
+function endSessionWithoutSaving() {
+    closeStopDialog();
+    stopPickMode = false;
+    resetRecordingStates();
+    showMainButtons();
+}
+
+// الضغط على آية أثناء وضع الاختيار: نحفظها كآخر آية راجعها المستخدم ونخرج
+function finishStopPick(ayahIndex) {
+    if (selectedSpecialSurah === null) return;
+    lsSet(LS_KEYS.lastStop, { riwaya: userRiwaya, surah: selectedSpecialSurah, ayah: ayahIndex + 1 });
+    stopPickMode = false;
     resetRecordingStates();
     showMainButtons();
 }
@@ -1787,6 +1866,11 @@ function loadSpecialFullSectionExercise() {
     const recordBtn = document.getElementById('record-action-btn');
 
     specialRevealed = false;
+    stopPickMode = false;
+    closeStopDialog();
+    setStopPickUI(false);
+    const stopSessBtn0 = document.getElementById('stop-session-btn');
+    if (stopSessBtn0) stopSessBtn0.classList.add('hidden');
     ayahBarWasPlaying = false;
     ayahBarIndex = null;
     stumbledSet = new Set();
@@ -1996,6 +2080,7 @@ function playMyLastFiveSeconds() {
 
 function handleSpecialAyahClick(ayahIndex) {
     if (!specialRevealed) return;
+    if (stopPickMode) { finishStopPick(ayahIndex); return; }
     const bar = document.getElementById('ayah-actions-bar');
     const recordBtn = document.getElementById('record-action-btn');
     const barAlreadyOpen = bar && !bar.classList.contains('hidden');
@@ -2016,6 +2101,8 @@ function handleSpecialAyahClick(ayahIndex) {
             isPlayingRecording = false;
         }
         ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
+        const stopBtn0 = document.getElementById('stop-session-btn');
+        if (stopBtn0) stopBtn0.classList.add('hidden');
         if (recordBtn) {
             recordBtn.classList.add('hidden');
             recordBtn.classList.remove('playing-active');
@@ -2035,6 +2122,8 @@ function resumeNormalReading() {
     const recordBtn = document.getElementById('record-action-btn');
     if (bar) bar.classList.add('hidden');
     if (recordBtn) recordBtn.classList.remove('hidden');
+    const stopBtn1 = document.getElementById('stop-session-btn');
+    if (stopBtn1) stopBtn1.classList.remove('hidden');
     stopMyClip();
     stopSheikh();
     if (playbackAudioElement) {
@@ -2146,6 +2235,8 @@ function revealSpecialFullAnswer() {
         if (recordBtn) bottomRow.insertBefore(recordBtn, bottomRow.firstChild);
         if (showBtn) bottomRow.appendChild(showBtn);
     }
+    const stopSessBtn = document.getElementById('stop-session-btn');
+    if (stopSessBtn) stopSessBtn.classList.remove('hidden');
     if (recordBtn) {
         recordBtn.classList.remove('hidden');
         recordBtn.innerText = "▶️ عرض التسجيل";
