@@ -758,7 +758,8 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 }
 .ayah-actions-bar { gap: 5px; }
 .ayah-actions-bar .btn-rate { padding: 13px 2px; font-size: 13px; border-radius: 10px; min-width: 0; white-space: nowrap; }
-.pause-bar .btn-rate { flex: 1 1 0; font-size: 16px; padding: 14px 6px; }
+.pause-bar .btn-record-big { flex: 1 1 0; min-width: 0; width: auto; margin: 0; font-size: 16px; padding: 13px 6px; }
+.ayah-actions-bar.replay-mode > .btn-record-big { display: none; }
 .btn-stop-session { border-color: #64748b; background: #f1f5f9; color: #334155; }
 body.dark-mode .btn-recording.btn-record-big.btn-stop-session { background: #0f172a !important; color: #e2e8f0 !important; border-color: #64748b !important; }
 #action-area .action-top-row .btn-record-big, #action-area .action-top-row .btn-stop-session { font-size: 16px; padding: 13px 6px; }
@@ -1760,8 +1761,8 @@ function showSpecialSessionScreen() {
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
             </div>
             <div id="pause-bar" class="ayah-actions-bar pause-bar hidden">
-                <button type="button" class="btn-rate btn-hard" onclick="openReplayPanel()">إعادة</button>
-                <button type="button" class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
+                <button type="button" class="btn-recording btn-record-big playing-active" onclick="openReplayPanel()">إعادة</button>
+                <button type="button" class="btn-recording btn-record-big playing-active" onclick="resumeNormalReading()">مواصلة</button>
                 <div id="replay-panel" class="replay-panel">
                     <button type="button" class="rp-btn rp-go" onclick="replayMyVoice()">إعادة الصوت</button>
                     <span class="stepper sm">
