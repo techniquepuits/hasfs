@@ -758,6 +758,7 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 }
 .ayah-actions-bar { gap: 5px; }
 .ayah-actions-bar .btn-rate { padding: 13px 2px; font-size: 13px; border-radius: 10px; min-width: 0; white-space: nowrap; }
+.pause-bar .btn-rate { flex: 1 1 0; font-size: 16px; padding: 14px 6px; }
 .btn-stop-session { border-color: #64748b; background: #f1f5f9; color: #334155; }
 body.dark-mode .btn-recording.btn-record-big.btn-stop-session { background: #0f172a !important; color: #e2e8f0 !important; border-color: #64748b !important; }
 #action-area .action-top-row .btn-record-big, #action-area .action-top-row .btn-stop-session { font-size: 16px; padding: 13px 6px; }
@@ -1755,14 +1756,17 @@ function showSpecialSessionScreen() {
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
-                <button class="btn-rate btn-hard" onclick="openReplayPanel()">صوتي</button>
                 <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
+            </div>
+            <div id="pause-bar" class="ayah-actions-bar pause-bar hidden">
+                <button type="button" class="btn-rate btn-hard" onclick="openReplayPanel()">إعادة</button>
+                <button type="button" class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
                 <div id="replay-panel" class="replay-panel">
                     <button type="button" class="rp-btn rp-go" onclick="replayMyVoice()">إعادة الصوت</button>
                     <span class="stepper sm">
                         <button type="button" onclick="changeReplaySeconds(-1)" aria-label="إنقاص">−</button>
-                        <span class="st-val" dir="ltr"><span id="replay-sec">3</span>&nbsp;s</span>
+                        <span class="st-val" dir="ltr"><span id="replay-sec">5</span>&nbsp;s</span>
                         <button type="button" onclick="changeReplaySeconds(1)" aria-label="زيادة">+</button>
                     </span>
                     <button type="button" class="rp-btn rp-cancel" onclick="closeReplayPanel()">إلغاء</button>
@@ -1905,8 +1909,7 @@ function openStopSessionDialog() {
     if (isPlayingRecording && playbackAudioElement) {
         playbackAudioElement.pause();
         isPlayingRecording = false;
-        const pb = document.getElementById('record-action-btn');
-        if (pb) { pb.innerText = "▶️ مواصلة العرض"; pb.classList.remove('playing-active'); }
+        enterPausedMode();
     }
     closeStopDialog();
     const d = document.createElement('div');
@@ -1991,6 +1994,7 @@ function setStopPickUI(on) {
     const banner = document.getElementById('stop-pick-banner');
     if (row) row.classList.toggle('hidden', on);
     if (banner) banner.classList.toggle('hidden', !on);
+    syncBottom();
 }
 
 function beginStopPick() {
@@ -2129,11 +2133,14 @@ function loadSpecialFullSectionExercise() {
     const endBtn = document.getElementById('end-session-btn');
     if (titleEl) titleEl.classList.add('hidden');
     if (endBtn) endBtn.classList.remove('hidden');
-    ayahBarWasPlaying = false;
+    pausedMode = false;
+    ayahBarOpen = false;
     ayahBarIndex = null;
     stumbledSet = new Set();
     const barEl = document.getElementById('ayah-actions-bar');
     if (barEl) barEl.classList.add('hidden');
+    const pbarEl = document.getElementById('pause-bar');
+    if (pbarEl) { pbarEl.classList.add('hidden'); pbarEl.classList.remove('replay-mode'); }
     if (showBtn) {
         showBtn.classList.add('hidden');   // لا معنى لإظهار الآيات قبل التسجيل
         showBtn.removeAttribute('disabled');
@@ -2212,8 +2219,38 @@ function loadSpecialFullSectionExercise() {
 }
 
 // الضغط على أي آية بعد الإظهار: تتوقف المراجعة الصوتية مؤقتاً وتحلّ الأزرار الأربعة مكان زر التسجيل في الأسفل
-let ayahBarWasPlaying = false;
+let pausedMode = false;      // المستخدم أوقف العرض: يظهر «إعادة | مواصلة» ويصبح الضغط على الآيات فعّالاً
+let ayahBarOpen = false;
 let ayahBarIndex = null;
+
+// يضبط ما يظهر في أسفل الصفحة بعد إظهار الآيات
+function syncBottom() {
+    if (!specialRevealed) return;
+    const bar = document.getElementById('ayah-actions-bar');
+    const pbar = document.getElementById('pause-bar');
+    const rec = document.getElementById('record-action-btn');
+    if (bar) bar.classList.toggle('hidden', !ayahBarOpen || stopPickMode);
+    if (pbar) pbar.classList.toggle('hidden', !pausedMode || ayahBarOpen || stopPickMode);
+    if (rec) rec.classList.toggle('hidden', pausedMode || ayahBarOpen);
+}
+
+function clearAyahHighlights() {
+    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
+        const el = document.getElementById(`special-ayah-item-${a}`);
+        if (el) el.style.backgroundColor = "transparent";
+    }
+}
+
+// الضغط على «إيقاف العرض»: نحفظ موضع التوقف ويحلّ «إعادة | مواصلة» محل الزر
+function enterPausedMode() {
+    const rec = document.getElementById('record-action-btn');
+    if (rec) { rec.classList.remove('playing-active'); rec.innerText = "▶️ مواصلة العرض"; }
+    pausedMode = true;
+    ayahBarOpen = false;
+    ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
+    closeReplayPanel();
+    syncBottom();
+}
 let stumbledSet = new Set();
 
 function refreshStumbleBtn() {
@@ -2320,16 +2357,12 @@ function stopMyClip() {
     myClipHandler = null;
 }
 
-// عدد الثواني التي تُعاد بزر «صوتي» (يختارها المستخدم وتُحفظ)
-const REPLAY_KEY = 'ibnbadis.replaySeconds';
-let replaySeconds = 3;
-try {
-    const rv = parseInt(localStorage.getItem(REPLAY_KEY), 10);
-    if (rv >= 1 && rv <= 30) replaySeconds = rv;
-} catch (e) {}
+// عدد الثواني التي تُعاد بزر «إعادة»: يبدأ دائماً بـ 5 ولا يُحفظ
+let replaySeconds = 5;
 
 function openReplayPanel() {
-    const bar = document.getElementById('ayah-actions-bar');
+    const bar = document.getElementById('pause-bar');
+    replaySeconds = 5;
     const el = document.getElementById('replay-sec');
     if (el) el.textContent = replaySeconds;
     if (bar) bar.classList.add('replay-mode');
@@ -2337,25 +2370,24 @@ function openReplayPanel() {
 
 function closeReplayPanel() {
     stopMyClip();
-    const bar = document.getElementById('ayah-actions-bar');
+    const bar = document.getElementById('pause-bar');
     if (bar) bar.classList.remove('replay-mode');
 }
 
 function changeReplaySeconds(delta) {
     replaySeconds = Math.max(1, Math.min(30, replaySeconds + delta));
-    try { localStorage.setItem(REPLAY_KEY, String(replaySeconds)); } catch (e) {}
     const el = document.getElementById('replay-sec');
     if (el) el.textContent = replaySeconds;
 }
 
 function replayMyVoice() { playMyLastFiveSeconds(); }
 
-// «إعادة الصوت»: يعيد آخر N ثوانٍ من تسجيلك قبل لحظة الضغط على الآية
+// «إعادة الصوت»: يعيد آخر N ثوانٍ من تسجيلك قبل لحظة التوقف
 function playMyLastFiveSeconds() {
     const a = playbackAudioElement;
     if (!a || !recordedAudioBlob) { showToast("لا يوجد تسجيل لك لسماعه."); return; }
     const end = ayahBarPausePos;
-    if (end < 0.5) { showToast("شغّل التسجيل أولاً، ثم اضغط على الآية عند موضع التعثر."); return; }
+    if (end < 0.5) { showToast("شغّل التسجيل أولاً ثم أوقفه عند موضع التعثر."); return; }
     stopSheikh();
     stopMyClip();
     try { a.currentTime = Math.max(0, end - replaySeconds); } catch (e) {}
@@ -2372,61 +2404,57 @@ function playMyLastFiveSeconds() {
 function handleSpecialAyahClick(ayahIndex) {
     if (!specialRevealed) return;
     if (stopPickMode) { openStopConfirm(ayahIndex); return; }
-    const bar = document.getElementById('ayah-actions-bar');
-    const recordBtn = document.getElementById('record-action-btn');
-    const barAlreadyOpen = bar && !bar.classList.contains('hidden');
+    // أثناء عرض التسجيل لا يفعل الضغط على الآيات شيئاً؛ يصبح فعّالاً بعد الإيقاف
+    if (isPlayingRecording) return;
 
-    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
-        const el = document.getElementById(`special-ayah-item-${a}`);
-        if (el) el.style.backgroundColor = "transparent";
+    // الضغط على الآية المحددة نفسها مرة ثانية يغلق أزرارها ويعيد ما كان في الأسفل
+    if (ayahBarOpen && ayahIndex === ayahBarIndex) {
+        clearAyahHighlights();
+        stopSheikh();
+        ayahBarOpen = false;
+        ayahBarIndex = null;
+        syncBottom();
+        return;
     }
+
+    clearAyahHighlights();
     const clicked = document.getElementById(`special-ayah-item-${ayahIndex}`);
     if (clicked) clicked.style.backgroundColor = "rgba(254, 240, 138, 0.6)";
     ayahBarIndex = ayahIndex;
     refreshStumbleBtn();
-
-    if (!barAlreadyOpen) {
-        ayahBarWasPlaying = !!isPlayingRecording;
-        if (isPlayingRecording && playbackAudioElement) {
-            playbackAudioElement.pause();
-            isPlayingRecording = false;
-        }
-        ayahBarPausePos = playbackAudioElement ? (playbackAudioElement.currentTime || 0) : 0;
+    if (!ayahBarOpen) {
         closeReplayPanel();
-        if (recordBtn) {
-            recordBtn.classList.add('hidden');
-            recordBtn.classList.remove('playing-active');
-            if (ayahBarWasPlaying) recordBtn.innerText = "▶️ مواصلة العرض";
-        }
-        if (bar) bar.classList.remove('hidden');
+        ayahBarOpen = true;
+        syncBottom();
     }
 }
 
-// زر المواصلة: تختفي الأزرار الأربعة ويعود العرض من حيث توقف
+// «مواصلة»: تختفي أزرار الآية/الإعادة ويعود العرض من حيث توقف
 function resumeNormalReading() {
-    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
-        const el = document.getElementById(`special-ayah-item-${a}`);
-        if (el) el.style.backgroundColor = "transparent";
-    }
-    const bar = document.getElementById('ayah-actions-bar');
-    const recordBtn = document.getElementById('record-action-btn');
-    if (bar) bar.classList.add('hidden');
-    if (recordBtn) recordBtn.classList.remove('hidden');
+    clearAyahHighlights();
     closeReplayPanel();
     stopSheikh();
-    if (playbackAudioElement) {
-        try { playbackAudioElement.currentTime = ayahBarPausePos; } catch (e) {}
+    ayahBarOpen = false;
+    ayahBarIndex = null;
+    const recordBtn = document.getElementById('record-action-btn');
+    const wasPaused = pausedMode;
+    pausedMode = false;
+    syncBottom();
+    if (!wasPaused || !playbackAudioElement || !recordBtn) {
+        if (recordBtn && !isPlayingRecording && /مواصلة/.test(recordBtn.innerText)) recordBtn.innerText = "▶️ عرض التسجيل";
+        return;
     }
-    const atEnd = playbackAudioElement && isFinite(playbackAudioElement.duration) && ayahBarPausePos >= playbackAudioElement.duration - 0.05;
-    if (ayahBarWasPlaying && playbackAudioElement && recordBtn && !atEnd) {
-        playbackAudioElement.play().catch(() => {});
-        isPlayingRecording = true;
-        recordBtn.innerText = "⏸️ إيقاف العرض";
-        recordBtn.classList.add('playing-active');
-    } else if (ayahBarWasPlaying && recordBtn) {
+    try { playbackAudioElement.currentTime = ayahBarPausePos; } catch (e) {}
+    const atEnd = isFinite(playbackAudioElement.duration) && ayahBarPausePos >= playbackAudioElement.duration - 0.05;
+    if (atEnd) {
         recordBtn.innerText = "▶️ عرض التسجيل";
+        return;
     }
-    ayahBarWasPlaying = false;
+    playbackAudioElement.play().catch(() => {});
+    isPlayingRecording = true;
+    recordBtn.innerText = "⏸️ إيقاف العرض";
+    recordBtn.classList.add('playing-active');
+    autoScrollHoldUntil = Date.now() + 3000;
 }
 
 // ----------------------------------------------------------
@@ -2456,8 +2484,7 @@ function autoScrollFrame(ts) {
     if (!autoScrollOn) return;
     const box = document.getElementById('exercise-container');
     if (!box || !specialRevealed) { stopAutoScroll(); return; }
-    const bar = document.getElementById('ayah-actions-bar');
-    const barOpen = bar && !bar.classList.contains('hidden');
+    const barOpen = ayahBarOpen;
     const dt = autoScrollLast ? Math.min(0.1, (ts - autoScrollLast) / 1000) : 0;
     autoScrollLast = ts;
     if (isPlayingRecording && !barOpen && Date.now() >= autoScrollHoldUntil) {
@@ -2591,6 +2618,7 @@ function handleSpecialRecordingToggle() {
         togglePlaybackRecordedAudio(recordBtn);
         // عند بدء العرض: يتوقف النزول التلقائي 3 ثوانٍ ليبدأ المستخدم القراءة ثم ينزل
         if (isPlayingRecording) autoScrollHoldUntil = Date.now() + 3000;
+        else if (recordedAudioBlob && playbackAudioElement) enterPausedMode();
     } else {
         clearAutoRecTimer();
         toggleRecordUserVoice(NOOP_BTN);
