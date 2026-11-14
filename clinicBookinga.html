@@ -210,6 +210,16 @@
     transition:background .15s, transform .1s;
   }
   .btn:active{background:var(--green-dark);transform:scale(.98)}
+  /* زر الحجز الرئيسي في الصفحة الأولى: أكبر وأبرز */
+  #bookBtn{
+    background:#f5a524;
+    color:#1d2b24;
+    padding:20px;
+    font-size:20px;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(245,165,36,.45);
+  }
+  #bookBtn:active{background:#e0961c}
   .btn.outline-danger{
     background:#fff;
     color:#6b7a72;
@@ -224,6 +234,24 @@
     justify-content:space-between;
     align-items:center;
     margin-bottom:14px;
+  }
+  .topbar.center{justify-content:center;text-align:center}
+  /* زر إلغاء الحجز: شريط سفلي بعرض الشاشة، ثابت في الأسفل في الخطوات الثلاث */
+  #step1,#step2,#step3{padding-bottom:0}
+  .step-foot{
+    margin:auto -16px 0;
+    position:sticky;
+    bottom:0;
+    background:#fff;
+    border-top:1px solid #dfe5e1;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  }
+  .step-foot .back.cancel{
+    display:block;
+    width:100%;
+    padding:13px;
+    font-size:16px;
+    border-radius:12px;
   }
   .back{
     border:1px solid var(--green);
@@ -372,11 +400,15 @@
     border:1px solid #dfe8e2;
     border-radius:14px;
     padding:16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     font-size:16px;
     font-weight:700;
     color:var(--green-dark);
     cursor:pointer;
-    text-align:start;
     transition:background .15s, border-color .15s;
   }
   .service-choice-card .s{
@@ -577,9 +609,8 @@
 <!-- الخطوة 1: الخدمة -->
 <div class="page" id="step1">
   <div class="page-content-padding inner">
-    <div class="topbar">
+    <div class="topbar center">
       <h2 class="page-title" data-i="bookClinicTitle"></h2>
-      <button class="back cancel" data-cancel data-i="cancelTop"></button>
     </div>
 
     <div class="steps-container">
@@ -590,15 +621,16 @@
 
     <p class="instruction" data-i="step1Note"></p>
     <div class="service-choice-list" id="serviceChoiceList"></div>
+
+    <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
   </div>
 </div>
 
 <!-- الخطوة 2: الموعد -->
 <div class="page" id="step2">
   <div class="page-content-padding inner">
-    <div class="topbar">
+    <div class="topbar center">
       <h2 class="page-title" data-i="bookClinicTitle"></h2>
-      <button class="back cancel" data-cancel data-i="cancelTop"></button>
     </div>
 
     <div class="steps-container">
@@ -621,15 +653,16 @@
       <p data-i="note"></p>
       <p class="hours" data-i="hours"></p>
     </div>
+
+    <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
   </div>
 </div>
 
 <!-- الخطوة 3: التأكيد -->
 <div class="page" id="step3">
   <div class="page-content-padding inner">
-    <div class="topbar">
+    <div class="topbar center">
       <h2 class="page-title" data-i="bookClinicTitle"></h2>
-      <button class="back cancel" data-cancel data-i="cancelTop"></button>
     </div>
 
     <div class="steps-container">
@@ -657,6 +690,8 @@
     <div class="cta cta-inline">
       <button class="btn" id="confirmBtn" data-i="confirm"></button>
     </div>
+
+    <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
   </div>
 </div>
 
@@ -679,8 +714,8 @@
       step1Label:"الخدمة",
       step2Label:"الموعد",
       step3Label:"التأكيد",
-      step1Note:"اضغط على الخدمة المطلوبة",
-      step2Note:"اضغط على التوقيت المناسب",
+      step1Note:"اختر الخدمة المطلوبة",
+      step2Note:"اختر اليوم والتوقيت المناسب",
       step3Note:"احتفظ بالرمز واضغط على زر التأكيد",
       note:"للحجز في المواعيد غير المتاحة يمكنكم التقدم إلى العيادة للحجز المباشر",
       hours:"مواعيد العمل من 9:00 إلى 16:00",
@@ -718,8 +753,8 @@
       step1Label:"Service",
       step2Label:"RDV",
       step3Label:"Confirmation",
-      step1Note:"Touchez le service souhaité",
-      step2Note:"Touchez l'horaire qui vous convient",
+      step1Note:"Choisissez le service souhaité",
+      step2Note:"Choisissez le jour et l'horaire qui vous conviennent",
       step3Note:"Conservez le code et appuyez sur le bouton de confirmation",
       note:"Pour réserver aux horaires indisponibles, présentez-vous à la clinique pour une réservation directe",
       hours:"Horaires de travail : de 9h00 à 16h00",
