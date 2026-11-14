@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>حجز موعد</title>
+<style>
+  :root{
+    --green:#1f8a4c;
+    --green-dark:#17703c;
+    --text:#1d2b24;
+    --muted:#6b7a72;
+    --primary-blue:#1976d2;
+    --light-blue:#e3f2fd;
+    --light-green:#e8f5ec;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%; overflow-x:hidden;}
+  body{
+    background:#ffffff;
+    color:var(--text);
+    font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Noto Sans Arabic",Arial,sans-serif;
+    line-height:1.7;
+  }
+  .page{
+    display:none;
+    width:100%;
+    max-width:480px;
+    margin:0 auto;
+    min-height:100%;
+    padding:0 0 32px;
+    flex-direction:column;
+  }
+  .page.active{display:flex}
+
+  /* غلاف المحتوى: يملأ الارتفاع ليبقى الزر الرئيسي في أسفل الشاشة */
+  .page-content-padding{
+    padding:0 16px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .inner{padding-top:16px}
+
+  /* بطاقة العيادة بعرض الشاشة */
+  .clinic-card{
+    position:relative;
+    width:100%;
+    background:var(--green);
+    color:#fff;
+    border-radius:0;
+    padding:18px 20px 12px;
+    text-align:center;
+    box-shadow:0 4px 14px rgba(31,138,76,.25);
+    margin-bottom:14px;
+  }
+  .clinic-card h1{font-size:24px;font-weight:700;margin-bottom:0;line-height:1.5}
+  .clinic-card p{font-size:13px;opacity:.92;margin-bottom:6px;line-height:1.5}
+
+  /* زر اللغة */
+  .lang-toggle-btn{
+    border:1px solid rgba(255,255,255,.5);
+    background:transparent;
+    color:rgba(255,255,255,.9);
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    padding:2px 16px;
+    border-radius:999px;
+    letter-spacing:1px;
+    transition:background .2s;
+  }
+  .lang-toggle-btn:active{background:rgba(255,255,255,.2)}
+
+  /* عنوانا خدماتنا / موقعنا */
+  .section-tabs{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-top:8px;
+  }
+  .stab{
+    border:none;
+    background:none;
+    font-family:inherit;
+    font-size:19px;
+    font-weight:700;
+    color:var(--muted);
+    padding:0 2px 4px;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+  }
+  .stab.active{
+    color:var(--green-dark);
+    border-bottom-color:var(--green);
+  }
+
+  .hint{font-size:12px;color:#a7b3ac;margin-top:8px}
+  .services ul{list-style:none; margin-top:12px;}
+  .services li{
+    position:relative;
+    padding:11px 28px 11px 0;
+    font-size:16px;
+    border-bottom:1px solid #eef2ef;
+    cursor:pointer;
+  }
+  html[dir="ltr"] .services li{padding:11px 0 11px 28px}
+  .services li:last-child{border-bottom:none}
+  .services li:active{background:#f3f8f5}
+  .services li::before{
+    content:"";
+    position:absolute;
+    right:4px;top:50%;
+    transform:translateY(-50%);
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--green);
+  }
+  html[dir="ltr"] .services li::before{right:auto;left:4px}
+  .services.hide{display:none}
+
+  /* موقعنا */
+  .contact{display:none;margin-top:16px}
+  .contact.show{display:block}
+  .phone-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#e8f5ec;
+    border-radius:12px;
+    padding:11px 14px;
+    margin-bottom:12px;
+    font-size:15px;
+  }
+  .phone-row a{
+    color:var(--green-dark);
+    font-weight:700;
+    text-decoration:none;
+    direction:ltr;
+    unicode-bidi:isolate;
+  }
+  .map-box{
+    position:relative;
+    width:100%;
+    border:1px solid #dfe8e2;
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .map{
+    width:100%;
+    height:clamp(300px,56vh,520px);
+    border:none;
+    display:block;
+  }
+  .map-zoom{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .map-zoom button{
+    width:38px;
+    height:38px;
+    border:1px solid var(--green);
+    background:#fff;
+    color:var(--green-dark);
+    font-family:inherit;
+    font-size:24px;
+    font-weight:700;
+    line-height:1;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.18);
+  }
+  .map-zoom button:active{background:#e8f5ec}
+
+  /* الزر الرئيسي */
+  .cta{
+    margin-top:auto;
+    padding-top:20px;
+    padding-bottom:12px;
+    position:sticky;
+    bottom:0;
+    background:#fff;
+  }
+  /* زر التأكيد تحت بطاقة الرمز مباشرة (وليس مثبتاً في الأسفل) */
+  .cta.cta-inline{
+    position:static;
+    margin-top:20px;
+    padding:0;
+    background:none;
+  }
+  .btn{
+    width:100%;
+    border:none;
+    background:var(--green);
+    color:#fff;
+    font-family:inherit;
+    font-size:18px;
+    font-weight:700;
+    padding:16px;
+    border-radius:14px;
+    cursor:pointer;
+    box-shadow:0 3px 10px rgba(31,138,76,.3);
+    transition:background .15s, transform .1s;
+  }
+  .btn:active{background:var(--green-dark);transform:scale(.98)}
+  .btn.outline-danger{
+    background:#fff;
+    color:#6b7a72;
+    border:1px solid #b8c2bc;
+    box-shadow:none;
+  }
+  .btn.outline-danger:active{background:#f1f3f2}
+
+  /* الصفحات الداخلية */
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .back{
+    border:1px solid var(--green);
+    background:#fff;
+    color:var(--green-dark);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    padding:7px 16px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .back:active{background:#f3f8f5}
+  .back.cancel{color:#6b7a72;border-color:#b8c2bc}
+  .back.cancel:active{background:#f1f3f2}
+  .page-title{font-size:19px;color:var(--green-dark);font-weight:700;}
+  .detail-text{font-size:16px;color:var(--text);line-height:1.9}
+
+  /* شريط الخطوات */
+  .steps-container{
+    display:flex;
+    background:var(--light-blue);
+    border-radius:12px;
+    margin-bottom:20px;
+    overflow:hidden;
+    border:1px solid #bbdefb;
+  }
+  .step-item{
+    flex:1;
+    text-align:center;
+    font-size:13px;
+    font-weight:600;
+    padding:12px 6px;
+    color:#555;
+    background:transparent;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .step-item + .step-item{border-right:1px solid #bbdefb}
+  html[dir="ltr"] .step-item + .step-item{border-right:none;border-left:1px solid #bbdefb}
+  .step-item.active{background:var(--primary-blue);color:#fff;font-weight:700;cursor:default}
+  .step-item.disabled{opacity:.5;cursor:default}
+
+  /* أزرار الأيام */
+  .tabs{
+    display:flex;
+    background:var(--light-green);
+    border-radius:12px;
+    margin-bottom:12px;
+    overflow:hidden;
+    border:1px solid #c8e6c9;
+  }
+  .tab{
+    flex:1;
+    text-align:center;
+    border:none;
+    background:transparent;
+    color:var(--green-dark);
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    padding:12px 4px;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .tab + .tab{border-right:1px solid #c8e6c9}
+  html[dir="ltr"] .tab + .tab{border-right:none;border-left:1px solid #c8e6c9}
+  .tab.active{background:var(--green);color:#fff}
+
+  .note{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:16px;
+    line-height:1.6;
+    text-align:center;
+  }
+  .note.start{text-align:start}
+  .info-card{
+    margin-top:16px;
+    padding:12px 14px;
+    background:#fff;
+    border:1px solid #d5dcd8;
+    border-radius:12px;
+    text-align:center;
+    font-size:14px;
+    line-height:1.7;
+    color:var(--muted);
+  }
+  .info-card .hours{
+    margin-top:4px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .slots-empty{
+    text-align:center;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.8;
+    padding:28px 12px;
+  }
+
+  /* تعليمات الخطوات بالأحمر */
+  .instruction{
+    color:#d32f2f;
+    font-size:15px;
+    font-weight:700;
+    text-align:center;
+    line-height:1.6;
+    margin-bottom:14px;
+  }
+
+  .slots{display:flex;flex-direction:column;gap:9px}
+  .slot{
+    border-radius:12px;
+    padding:11px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:15px;
+  }
+  .slot .time{font-weight:700}
+  .slot .state{font-size:13px}
+  .slot.free{
+    background:rgba(31,138,76,.14);
+    border:1px solid rgba(31,138,76,.35);
+    color:var(--green-dark);
+    cursor:pointer;
+  }
+  .slot.free:active{background:rgba(31,138,76,.24)}
+  .slot.free.selected{outline:2px solid var(--green);outline-offset:1px}
+  .slot.busy{
+    background:rgba(120,130,125,.14);
+    border:1px solid rgba(120,130,125,.3);
+    color:#7d8782;
+  }
+
+  /* اختيار الخدمة في الخطوة الأولى */
+  .service-choice-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:4px;
+  }
+  .service-choice-card{
+    background:#f8faf9;
+    border:1px solid #dfe8e2;
+    border-radius:14px;
+    padding:16px;
+    font-size:16px;
+    font-weight:700;
+    color:var(--green-dark);
+    cursor:pointer;
+    text-align:start;
+    transition:background .15s, border-color .15s;
+  }
+  .service-choice-card .s{
+    font-size:12px;
+    font-weight:400;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.5;
+  }
+  .service-choice-card:active{
+    background:#e8f5ec;
+    border-color:var(--green);
+  }
+
+  /* صفحة التأكيد */
+  .info-line{font-size:17px;margin-top:10px;text-align:center}
+  .confirm-notes{margin-top:18px;text-align:center;line-height:1.7}
+  .legal-note{color:#4a5750;font-size:13.5px;margin:0}
+  .info-line b{color:var(--green-dark)}
+  .code-box{
+    margin-top:22px;
+    background:rgba(31,138,76,.1);
+    border:1px solid rgba(31,138,76,.3);
+    border-radius:18px;
+    padding:18px 10px 14px;
+    text-align:center;
+  }
+  .code-label{font-size:15px;color:var(--green-dark);font-weight:700}
+  .code-num{
+    font-size:68px;
+    line-height:1.2;
+    font-weight:800;
+    letter-spacing:8px;
+    color:var(--green);
+    direction:ltr;
+  }
+  .code-hint{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* صفحة مواعيدي */
+  .mine{display:none;margin-top:16px}
+  .mine.show{display:block}
+  .mine .empty{
+    text-align:center;
+    color:var(--muted);
+    font-size:15px;
+    padding:48px 12px;
+  }
+  .mine .code-box{margin-top:12px;padding:8px 10px 8px;border-radius:14px}
+  .mine .code-num{font-size:44px;line-height:1.15;letter-spacing:6px}
+  .mine .code-hint{margin-top:2px}
+  .mine .info-line{margin-top:6px;font-size:16px;text-align:center}
+  .cancel-booking{
+    width:100%;
+    margin-top:8px;
+    border:1px solid #b8c2bc;
+    background:#fff;
+    color:#6b7a72;
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    padding:10px;
+    border-radius:12px;
+    cursor:pointer;
+  }
+  .cancel-booking:active{background:#f1f3f2}
+  .cancel-booking.small{
+    width:auto;
+    display:block;
+    margin:0 auto;
+    padding:7px 20px;
+    font-size:13px;
+    border-radius:10px;
+  }
+  .cancel-note{
+    text-align:center;
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.7;
+    margin:0 0 8px;
+  }
+  .cancel-choice{display:none;flex-direction:column;gap:8px}
+  .cancel-choice.show{display:flex}
+  .cancel-choice .btn{padding:13px;font-size:16px}
+  .ticket-title{
+    text-align:center;
+    color:#000;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:1px;
+    padding-bottom:8px;
+    border-bottom:1px solid #dfe8e2;
+  }
+  .ticket-bar{
+    display:block;
+    margin-top:10px;
+    padding:8px 12px 5px;
+    border:1px solid #dfe8e2;
+    border-radius:12px;
+    background:#fff;
+    text-align:center;
+  }
+  .ticket-bar svg{
+    display:block;
+    width:100%;
+    height:42px;
+    direction:ltr;
+    fill:#000;
+  }
+  .ticket-bar .digits{
+    margin-top:2px;
+    font-family:"Courier New",monospace;
+    font-size:12px;
+    line-height:1.4;
+    letter-spacing:6px;
+    color:var(--text);
+    direction:ltr;
+  }
+</style>
+</head>
+<body>
+
+<!-- الصفحة الرئيسية -->
+<div class="page active" id="home">
+  <div class="clinic-card">
+    <h1 data-i="clinic"></h1>
+    <p data-i="tag"></p>
+    <button class="lang-toggle-btn" id="langToggleBtn">FR</button>
+  </div>
+
+  <div class="page-content-padding">
+    <div class="section-tabs">
+      <button class="stab active" id="tabServices" data-i="tabServices"></button>
+      <button class="stab" id="tabContact" data-i="tabContact"></button>
+      <button class="stab" id="tabMine" data-i="tabMine"></button>
+    </div>
+
+    <section class="services" id="servicesBox">
+      <ul id="serviceList"></ul>
+    </section>
+
+    <section class="mine" id="mineBox">
+      <div class="empty" id="mineEmpty" data-i="noBooking"></div>
+      <div id="mineFull">
+        <div class="ticket-title" data-i="ticketTitle"></div>
+        <div class="info-line"><span data-i="chosenServiceLabel"></span>: <b id="mService"></b></div>
+        <div class="info-line"><span data-i="dayLabel"></span>: <b id="mDate"></b></div>
+        <div class="info-line"><span data-i="timeLabel"></span>: <b id="mTime"></b></div>
+
+        <div class="code-box">
+          <div class="code-label" data-i="codeLabel"></div>
+          <div class="code-num" id="mCode"></div>
+          <div class="code-hint" data-i="codeHint"></div>
+        </div>
+
+        <div class="ticket-bar" id="ticketBar">
+          <div id="mBar"></div>
+          <div class="digits" id="mDigits"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contactBox">
+      <div class="phone-row">
+        <span data-i="phone"></span>
+        <a href="tel:0661991263">0661 99 12 63</a>
+      </div>
+      <div class="map-box">
+        <iframe class="map" id="mapFrame" title="map" tabindex="-1"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-zoom">
+          <button id="zoomIn" aria-label="Zoom in">+</button>
+          <button id="zoomOut" aria-label="Zoom out">&minus;</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta" id="homeCta">
+      <p class="cancel-note" id="cancelNote" data-i="cancelNote" style="display:none"></p>
+      <button class="cancel-booking small" id="cancelBookBtn" data-i="cancelBooking" style="display:none"></button>
+      <div class="cancel-choice" id="cancelChoice">
+        <button class="btn" id="keepBtn" data-i="keepBooking"></button>
+        <button class="btn outline-danger" id="confirmCancelBtn" data-i="confirmCancel"></button>
+      </div>
+      <button class="btn" id="bookBtn" data-i="book"></button>
+    </div>
+  </div>
+</div>
+
+<!-- تفاصيل الخدمة -->
+<div class="page" id="service">
+  <div class="page-content-padding inner">
+    <div class="topbar"><button class="back" data-goto="home" data-i="back"></button></div>
+    <h2 class="page-title" id="serviceTitle" style="margin-bottom:14px"></h2>
+    <p class="detail-text" id="serviceText"></p>
+  </div>
+</div>
+
+<!-- الخطوة 1: الخدمة -->
+<div class="page" id="step1">
+  <div class="page-content-padding inner">
+    <div class="topbar">
+      <h2 class="page-title" data-i="bookClinicTitle"></h2>
+      <button class="back cancel" data-cancel data-i="cancelTop"></button>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-item active" data-step="1" data-i="step1Label"></div>
+      <div class="step-item" data-step="2" data-i="step2Label"></div>
+      <div class="step-item" data-step="3" data-i="step3Label"></div>
+    </div>
+
+    <p class="instruction" data-i="step1Note"></p>
+    <div class="service-choice-list" id="serviceChoiceList"></div>
+  </div>
+</div>
+
+<!-- الخطوة 2: الموعد -->
+<div class="page" id="step2">
+  <div class="page-content-padding inner">
+    <div class="topbar">
+      <h2 class="page-title" data-i="bookClinicTitle"></h2>
+      <button class="back cancel" data-cancel data-i="cancelTop"></button>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-item" data-step="1" data-i="step1Label"></div>
+      <div class="step-item active" data-step="2" data-i="step2Label"></div>
+      <div class="step-item" data-step="3" data-i="step3Label"></div>
+    </div>
+
+    <p class="instruction" data-i="step2Note"></p>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-day="0" data-i="d0"></button>
+      <button class="tab" data-day="1" data-i="d1"></button>
+      <button class="tab" data-day="2" data-i="d2"></button>
+    </div>
+
+    <div class="slots" id="slots"></div>
+
+    <div class="info-card">
+      <p data-i="note"></p>
+      <p class="hours" data-i="hours"></p>
+    </div>
+  </div>
+</div>
+
+<!-- الخطوة 3: التأكيد -->
+<div class="page" id="step3">
+  <div class="page-content-padding inner">
+    <div class="topbar">
+      <h2 class="page-title" data-i="bookClinicTitle"></h2>
+      <button class="back cancel" data-cancel data-i="cancelTop"></button>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-item" data-step="1" data-i="step1Label"></div>
+      <div class="step-item" data-step="2" data-i="step2Label"></div>
+      <div class="step-item active" data-step="3" data-i="step3Label"></div>
+    </div>
+
+    <p class="instruction" data-i="step3Note"></p>
+
+    <div class="info-line"><span data-i="chosenServiceLabel"></span>: <b id="cService"></b></div>
+    <div class="info-line"><span data-i="dayLabel"></span>: <b id="cDate"></b></div>
+    <div class="info-line"><span data-i="timeLabel"></span>: <b id="cTime"></b></div>
+
+    <div class="code-box">
+      <div class="code-label" data-i="codeLabel"></div>
+      <div class="code-num" id="cCode"></div>
+      <div class="code-hint" data-i="codeHint"></div>
+    </div>
+
+    <div class="confirm-notes">
+      <p class="legal-note" data-i="legalNote"></p>
+    </div>
+
+    <div class="cta cta-inline">
+      <button class="btn" id="confirmBtn" data-i="confirm"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var TR = {
+    ar: {
+      clinic:"عــيــادة الــغــيــث",
+      tag:"صحتكم أولويتنا، ووقتكم أمانة عندنا",
+      tabServices:"الخدمات",
+      tabContact:"الموقع",
+      tabMine:"مواعيدي",
+      ticketTitle:"تذكرة الحجز · عيادة الغيث",
+      noBooking:"لا يوجد لديكم موعد محجوز",
+      hint:"اضغط على الخدمة للتفاصيل",
+      phone:"هاتف العيادة",
+      book:"احجز موعداً لدى العيادة",
+      back:"رجوع",
+      cancelTop:"إلغاء الحجز",
+      bookClinicTitle:"حجز موعد لدى العيادة",
+      step1Label:"الخدمة",
+      step2Label:"الموعد",
+      step3Label:"التأكيد",
+      step1Note:"اضغط على الخدمة المطلوبة",
+      step2Note:"اضغط على التوقيت المناسب",
+      step3Note:"احتفظ بالرمز واضغط على زر التأكيد",
+      note:"للحجز في المواعيد غير المتاحة يمكنكم التقدم إلى العيادة للحجز المباشر",
+      hours:"مواعيد العمل من 9:00 إلى 16:00",
+      noSlots:"لا توجد مواعيد متاحة عبر الإنترنت في هذا اليوم، يمكنكم الحجز المباشر من العيادة",
+      d0:"اليوم", d1:"غداً", d2:"بعد غد",
+      from:"من", to:"إلى",
+      free:"الحجز متاح",
+      busy:"الحجز غير متاح",
+      chosenServiceLabel:"الخدمة المختارة",
+      dayLabel:"يوم",
+      timeLabel:"الوقت",
+      codeLabel:"رمز الحجز",
+      cancelBooking:"إلغاء الحجز",
+      cancelNote:"في حال تعذّر حضوركم، يرجى إلغاء الحجز ليستفيد منه مريض آخر.",
+      confirmCancel:"تأكيد الإلغاء",
+      keepBooking:"الاحتفاظ بالموعد",
+      legalNote:"تملك العيادة الحق في إلغاء هذا الموعد أو تعديله عند الضرورة.",
+      codeHint:"سيُطلب منكم هذا الرمز عند التقدم إلى العيادة",
+      confirm:"تأكيد الحجز"
+    },
+    fr: {
+      clinic:"Clinique El Ghaith",
+      tag:"Soigner mieux, attendre moins.",
+      tabServices:"Services",
+      tabContact:"Adresse",
+      tabMine:"Mes RDV",
+      ticketTitle:"Ticket de réservation · Clinique El Ghaith",
+      noBooking:"Aucun rendez-vous réservé",
+      hint:"Touchez un service pour voir les détails",
+      phone:"Téléphone de la clinique",
+      book:"Prendre rendez-vous",
+      back:"Retour",
+      cancelTop:"Annuler",
+      bookClinicTitle:"Prendre rendez-vous",
+      step1Label:"Service",
+      step2Label:"RDV",
+      step3Label:"Confirmation",
+      step1Note:"Touchez le service souhaité",
+      step2Note:"Touchez l'horaire qui vous convient",
+      step3Note:"Conservez le code et appuyez sur le bouton de confirmation",
+      note:"Pour réserver aux horaires indisponibles, présentez-vous à la clinique pour une réservation directe",
+      hours:"Horaires de travail : de 9h00 à 16h00",
+      noSlots:"Aucun rendez-vous disponible en ligne ce jour, vous pouvez réserver directement à la clinique",
+      d0:"Aujourd'hui", d1:"Demain", d2:"Après-demain",
+      from:"De", to:"à",
+      free:"Disponible",
+      busy:"Indisponible",
+      chosenServiceLabel:"Service choisi",
+      dayLabel:"Date",
+      timeLabel:"Horaire",
+      codeLabel:"Code de réservation",
+      cancelBooking:"Annuler la réservation",
+      cancelNote:"En cas d'empêchement, merci d'annuler votre réservation afin qu'un autre patient puisse en profiter.",
+      confirmCancel:"Confirmer l'annulation",
+      keepBooking:"Garder le rendez-vous",
+      legalNote:"La clinique peut annuler ou modifier ce rendez-vous en cas de nécessité.",
+      codeHint:"Ce code vous sera demandé à votre arrivée à la clinique",
+      confirm:"Confirmer la réservation"
+    }
+  };
+
+  var SERVICES = [
+    { ar:{t:"الفحص العام", d:"فحص شامل وتشخيص أولي لمختلف الشكاوى الصحية، مع توجيهك إلى التخصص المناسب عند الحاجة."},
+      fr:{t:"Consultation générale", d:"Examen complet et diagnostic initial pour différents problèmes de santé."} },
+    { ar:{t:"المتابعة بعد الجراحة", d:"مراقبة التئام الجرح وتعافيك بعد العملية، وتغيير الضمادات وإزالة الغرز."},
+      fr:{t:"Suivi post-opératoire", d:"Surveillance de la cicatrisation et changement des pansements."} },
+    { ar:{t:"الأمراض المزمنة", d:"متابعة دورية لحالات السكري وضغط الدم، ومراجعة العلاج وفق التحاليل."},
+      fr:{t:"Maladies chroniques", d:"Suivi régulier du diabète et de l'hypertension et révision du traitement."} },
+    { ar:{t:"الشهادات الطبية", d:"تسليم الشهادات الطبية اللازمة."},
+      fr:{t:"Certificats médicaux", d:"Délivrance des certificats médicaux nécessaires."} },
+    { ar:{t:"تخطيط القلب (ECG)", d:"إجراء تخطيط كهربائي للقلب داخل العيادة مع قراءة وشرح النتيجة فوراً."},
+      fr:{t:"Électrocardiogramme (ECG)", d:"Réalisation d'un électrocardiogramme à la clinique avec explication immédiate."} }
+  ];
+
+  /* خياران للحجز */
+  var BOOK_SERVICES = [
+    { ar:{t:"الفحص العام"},
+      fr:{t:"Consultation générale"} },
+    { ar:{t:"الرعاية الخاصة"},
+      fr:{t:"Soins particuliers"} }
+  ];
+
+  /* فترات متاحة قليلة وغير ثابتة بين الأيام:
+     اليوم: واحدة صباحاً + ثلاث مساءً (10:30، 13:00، 14:00، 15:00)
+     غداً: واحدة صباحاً + اثنتان مساءً (10:00، 13:30، 14:30)
+     بعد غد: أربع فترات مساءً فقط (13:00، 13:30، 14:30، 15:00) */
+  var AVAIL = [
+    [0,0,0,1,0,0,0,0,1,0,1,0,1,0],
+    [0,0,1,0,0,0,0,0,0,1,0,1,0,0],
+    [0,0,0,0,0,0,0,0,1,1,0,1,1,0]
+  ];
+
+  var lang = "ar", curDay = 0, curService = -1, curSlot = -1, curCode = "";
+
+  function $(id){return document.getElementById(id)}
+  function pad(n){return n<10?"0"+n:""+n}
+  function fmt(m){return pad(Math.floor(m/60))+":"+pad(m%60)}
+  function slotRange(i){
+    var a = 9*60 + i*30, b = a + 30;
+    return {a:fmt(a), b:fmt(b)};
+  }
+  function timeText(i){
+    var r = slotRange(i), T = TR[lang];
+    return T.from + " " + r.a + " " + T.to + " " + r.b;
+  }
+  function dateText(offset){
+    var d = new Date();
+    d.setDate(d.getDate() + offset);
+    return dateFmt(d);
+  }
+  function dateFmt(d){
+    var loc = (lang === "fr") ? "fr-FR-u-nu-latn" : "ar-DZ-u-nu-latn";
+    try{
+      return d.toLocaleDateString(loc, {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+    }catch(e){
+      return d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+    }
+  }
+
+  /* ---------- التنقل ---------- */
+  var pages = ["home","service","step1","step2","step3"];
+  function show(id){
+    /* لا تُعرض الخطوتان 2 و3 دون اختيارات سابقة (مثلاً عند الرجوع بعد الحجز) */
+    if((id === "step2" && !canGo(2)) || (id === "step3" && !canGo(3))) id = "home";
+    pages.forEach(function(p){
+      $(p).classList.toggle("active", p === id);
+    });
+    updateSteps();
+    window.scrollTo(0,0);
+  }
+  function goTo(id){
+    history.pushState({v:id}, "", "#" + id);
+    show(id);
+  }
+  document.querySelectorAll("[data-goto]").forEach(function(b){
+    b.addEventListener("click", function(){ goTo(b.getAttribute("data-goto")); });
+  });
+  document.querySelectorAll("[data-cancel]").forEach(function(b){
+    b.addEventListener("click", function(){
+      curService = -1;
+      curSlot = -1;
+      goTo("home");
+    });
+  });
+  window.addEventListener("popstate", function(e){
+    var v = e.state && e.state.v;
+    show(v && pages.indexOf(v) > -1 ? v : "home");
+  });
+
+  /* ---------- شريط الخطوات ---------- */
+  function canGo(n){
+    if(n === 1) return true;
+    if(n === 2) return curService >= 0;
+    if(n === 3) return curService >= 0 && curSlot >= 0;
+    return false;
+  }
+  function updateSteps(){
+    document.querySelectorAll(".step-item").forEach(function(el){
+      var n = parseInt(el.getAttribute("data-step"), 10);
+      el.classList.toggle("disabled", !el.classList.contains("active") && !canGo(n));
+    });
+  }
+  document.querySelectorAll(".step-item").forEach(function(el){
+    el.addEventListener("click", function(){
+      if(el.classList.contains("active")) return;
+      var n = parseInt(el.getAttribute("data-step"), 10);
+      if(canGo(n)) goTo("step" + n);
+    });
+  });
+
+  /* ---------- الخدمات في الصفحة الرئيسية ---------- */
+  function renderServices(){
+    var ul = $("serviceList");
+    ul.innerHTML = "";
+    SERVICES.forEach(function(s,i){
+      var li = document.createElement("li");
+      li.textContent = s[lang].t;
+      li.addEventListener("click", function(){
+        $("serviceTitle").textContent = SERVICES[i][lang].t;
+        $("serviceText").textContent = SERVICES[i][lang].d;
+        $("service").setAttribute("data-idx", i);
+        goTo("service");
+      });
+      ul.appendChild(li);
+    });
+  }
+  function renderServiceDetail(){
+    var idx = $("service").getAttribute("data-idx");
+    if(idx === null) return;
+    $("serviceTitle").textContent = SERVICES[idx][lang].t;
+    $("serviceText").textContent = SERVICES[idx][lang].d;
+  }
+
+  /* ---------- الخطوة 1: كل الخدمات ---------- */
+  function renderStep1Services(){
+    var box = $("serviceChoiceList");
+    box.innerHTML = "";
+    BOOK_SERVICES.forEach(function(s, i){
+      var card = document.createElement("div");
+      card.className = "service-choice-card";
+      var title = document.createElement("div");
+      title.textContent = s[lang].t;
+      card.appendChild(title);
+      if(s[lang].s){
+        var sub = document.createElement("div");
+        sub.className = "s";
+        sub.textContent = s[lang].s;
+        card.appendChild(sub);
+      }
+      card.addEventListener("click", function(){
+        curService = i;
+        curSlot = -1;
+        curDay = 0;
+        document.querySelectorAll(".tab").forEach(function(x, idx){x.classList.toggle("active", idx===0)});
+        renderSlots();
+        goTo("step2");
+      });
+      box.appendChild(card);
+    });
+  }
+
+  /* ---------- خدماتنا / موقعنا ---------- */
+  /* موقع العيادة (إحداثيات: خط العرض، خط الطول) */
+  var CLINIC_Q = "35.7192982,0.3454786";
+  var mapZoom = 15, mapLoaded = false;
+  function mapSrc(){
+    return "https://www.google.com/maps?q=" + encodeURIComponent(CLINIC_Q) +
+           "&z=" + mapZoom + "&output=embed";
+  }
+  function setMapZoom(z){
+    mapZoom = Math.max(13, Math.min(20, z));
+    $("mapFrame").src = mapSrc();
+  }
+
+  /* أسفل الصفحة الرئيسية:
+     - موقعنا: لا شيء
+     - مواعيدي مع موعد محجوز: الباركود بدل زر الحجز
+     - غير ذلك: زر الحجز */
+  var curSection = "services";
+  var cancelAsk = false;   // هل ظهر خياراً التأكيد والاحتفاظ؟
+  function syncCta(){
+    var showBar = (curSection === "mine" && !!booking);
+    if(!showBar) cancelAsk = false;
+    $("homeCta").style.display = (curSection === "contact") ? "none" : "";
+    $("cancelNote").style.display = showBar ? "" : "none";
+    $("cancelBookBtn").style.display = (showBar && !cancelAsk) ? "block" : "none";
+    $("cancelChoice").classList.toggle("show", showBar && cancelAsk);
+    $("bookBtn").style.display = showBar ? "none" : "";
+  }
+
+  /* الإلغاء: زر صغير ثم زرّان كبيران (تأكيد الإلغاء / الاحتفاظ بالموعد) */
+  $("cancelBookBtn").addEventListener("click", function(){
+    cancelAsk = true;
+    syncCta();
+  });
+  $("keepBtn").addEventListener("click", function(){
+    cancelAsk = false;
+    syncCta();
+  });
+  $("confirmCancelBtn").addEventListener("click", function(){
+    cancelAsk = false;
+    booking = null;
+    saveBooking();
+    renderMine();
+  });
+
+  /* name: "services" | "mine" | "contact" */
+  function setSection(name){
+    $("tabServices").classList.toggle("active", name === "services");
+    $("tabMine").classList.toggle("active", name === "mine");
+    $("tabContact").classList.toggle("active", name === "contact");
+    $("servicesBox").classList.toggle("hide", name !== "services");
+    $("mineBox").classList.toggle("show", name === "mine");
+    $("contactBox").classList.toggle("show", name === "contact");
+    curSection = name;
+    cancelAsk = false;
+    syncCta();
+    if(name === "contact" && !mapLoaded){
+      mapLoaded = true;
+      $("mapFrame").src = mapSrc();
+    }
+  }
+  $("zoomIn").addEventListener("click", function(){ setMapZoom(mapZoom + 1); });
+  $("zoomOut").addEventListener("click", function(){ setMapZoom(mapZoom - 1); });
+  $("tabServices").addEventListener("click", function(){ setSection("services"); });
+  $("tabMine").addEventListener("click", function(){ setSection("mine"); });
+  $("tabContact").addEventListener("click", function(){ setSection("contact"); });
+
+  /* ---------- الخطوة 2: الفترات ---------- */
+  function renderSlots(){
+    var T = TR[lang];
+    var box = $("slots");
+    box.innerHTML = "";
+    /* فترات اليوم التي بدأت أو انقضت لم تعد متاحة */
+    var nowMin = -1;
+    if(curDay === 0){
+      var n = new Date();
+      nowMin = n.getHours()*60 + n.getMinutes();
+    }
+    var shown = 0;
+    for(var i=0;i<14;i++){
+      (function(i){
+        /* تُعرض الفترات المتاحة فقط */
+        var free = AVAIL[curDay][i] === 1 && (9*60 + i*30) > nowMin;
+        if(!free) return;
+        var d = document.createElement("div");
+        d.className = "slot free" + (i === curSlot ? " selected" : "");
+        d.innerHTML = '<span class="time">' + timeText(i) + '</span>' +
+                      '<span class="state">' + T.free + '</span>';
+        d.addEventListener("click", function(){
+          curSlot = i;
+          curCode = String(Math.floor(100 + Math.random()*900));
+          renderConfirm();
+          goTo("step3");
+        });
+        box.appendChild(d);
+        shown++;
+      })(i);
+    }
+    if(shown === 0){
+      var e = document.createElement("div");
+      e.className = "slots-empty";
+      e.textContent = T.noSlots;
+      box.appendChild(e);
+    }
+  }
+  document.querySelectorAll(".tab").forEach(function(t){
+    t.addEventListener("click", function(){
+      document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});
+      t.classList.add("active");
+      curDay = parseInt(t.getAttribute("data-day"),10);
+      curSlot = -1;
+      renderSlots();
+      updateSteps();
+    });
+  });
+
+  $("bookBtn").addEventListener("click", function(){
+    renderStep1Services();
+    goTo("step1");
+  });
+
+  /* ---------- الخطوة 3: التأكيد ---------- */
+  function renderConfirm(){
+    if(curSlot < 0 || curService < 0) return;
+    $("cService").textContent = BOOK_SERVICES[curService][lang].t;
+    $("cDate").textContent = dateText(curDay);
+    $("cTime").textContent = timeText(curSlot);
+    $("cCode").textContent = curCode;
+  }
+  /* ---------- حفظ الموعد وصفحة مواعيدي ---------- */
+  var BOOKING_KEY = "clinic.booking";
+  var booking = null;   // {svc, ts, slot, code}
+  function saveBooking(){
+    try{
+      if(booking) localStorage.setItem(BOOKING_KEY, JSON.stringify(booking));
+      else localStorage.removeItem(BOOKING_KEY);
+    }catch(e){}
+  }
+  function loadBooking(){
+    try{
+      var s = localStorage.getItem(BOOKING_KEY);
+      if(s) booking = JSON.parse(s);
+    }catch(e){ booking = null; }
+    /* موعد يوم مضى لم يعد يظهر */
+    if(booking){
+      var today = new Date(); today.setHours(0,0,0,0);
+      if(typeof booking.ts !== "number" || booking.ts < today.getTime() ||
+         !BOOK_SERVICES[booking.svc]){
+        booking = null;
+        saveBooking();
+      }
+    }
+  }
+
+  /* رمز يشبه الباركود، يُولَّد من الرمز نفسه فيبقى ثابتاً لكل موعد */
+  function barcodeSVG(seed){
+    var h = 2166136261;
+    for(var i = 0; i < seed.length; i++){
+      h ^= seed.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    function rnd(){
+      h += 0x6D2B79F5;
+      var t = Math.imul(h ^ (h >>> 15), 1 | h);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    var x = 0, bars = "";
+    while(x < 190){
+      var w = 1 + Math.floor(rnd() * 3);
+      var gap = 1 + Math.floor(rnd() * 2);
+      bars += '<rect x="' + x + '" y="0" width="' + w + '" height="60"/>';
+      x += w + gap;
+    }
+    return '<svg viewBox="0 0 ' + x + ' 60" preserveAspectRatio="none" aria-hidden="true">' + bars + '</svg>';
+  }
+
+  function renderMine(){
+    var has = !!booking;
+    $("mineEmpty").style.display = has ? "none" : "";
+    $("mineFull").style.display  = has ? "" : "none";
+    syncCta();
+    if(!has) return;
+    var d = new Date(booking.ts);
+    $("mService").textContent = BOOK_SERVICES[booking.svc][lang].t;
+    $("mDate").textContent = dateFmt(d);
+    $("mTime").textContent = timeText(booking.slot);
+    $("mCode").textContent = booking.code;
+    $("mBar").innerHTML = barcodeSVG(booking.code + "-" + booking.ts + "-" + booking.slot);
+    $("mDigits").textContent = booking.code;
+  }
+
+  /* التأكيد: يُحفظ الموعد وتُعرض صفحة مواعيدي في الاستقبال */
+  $("confirmBtn").addEventListener("click", function(){
+    if(curService < 0 || curSlot < 0) return;
+    var d = new Date();
+    d.setDate(d.getDate() + curDay);
+    d.setHours(0,0,0,0);
+    booking = {svc:curService, ts:d.getTime(), slot:curSlot, code:curCode};
+    saveBooking();
+    curService = -1;
+    curSlot = -1;
+    renderMine();
+    setSection("mine");
+    goTo("home");
+  });
+
+  /* ---------- اللغة ---------- */
+  function applyLang(l){
+    lang = l;
+    var h = document.documentElement;
+    h.lang = (l === "fr") ? "fr" : "ar";
+    h.dir  = (l === "fr") ? "ltr" : "rtl";
+    document.querySelectorAll("[data-i]").forEach(function(el){
+      var key = el.getAttribute("data-i");
+      if(TR[l][key]) el.textContent = TR[l][key];
+    });
+    $("langToggleBtn").textContent = (l === "ar") ? "FR" : "ع";
+    renderServices();
+    renderServiceDetail();
+    renderStep1Services();
+    renderSlots();
+    renderConfirm();
+    renderMine();
+  }
+  $("langToggleBtn").addEventListener("click", function(){
+    applyLang(lang === "ar" ? "fr" : "ar");
+  });
+
+  loadBooking();
+  applyLang("ar");
+  updateSteps();
+</script>
+</body>
+</html>
