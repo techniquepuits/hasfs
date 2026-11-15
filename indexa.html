@@ -1424,22 +1424,6 @@ function showReviewScreen(onlyKeys, scope) {
     reviewOnlyKeys = (Array.isArray(onlyKeys) && onlyKeys.length) ? new Set(onlyKeys) : null;
     reviewScope = scope || (reviewOnlyKeys ? 'session' : 'all');
     const reviewScreenHTML = `
-        <div class="header-box hdr3">
-            <div class="hdr-start">
-                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
-            </div>
-            <div class="hdr-mid">
-<span class="stats-line" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
-                    <span id="due-forgot" class="due-num due-forgot">0</span>
-                    <span id="due-hard" class="due-num due-hard">0</span>
-                    <span id="due-good" class="due-num due-good">0</span>
-                    <span id="due-easy" class="due-num due-easy">0</span>
-                    <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
-                </span>
-            </div>
-            <div class="hdr-end"><button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button></div>
-        </div>
-
         <div class="exercise-box review-box" id="exercise-container">
             <button class="expand-arc-btn" onclick="expandContext()" title="إظهار الآية السابقة للمساعدة">&#8593;</button>
             <div id="surah-name" class="frame-surah">سورة: ---</div>
@@ -1470,6 +1454,22 @@ function showReviewScreen(onlyKeys, scope) {
             <button class="btn-rate btn-hard" onclick="nextDailyQuestion('hard')">صعب</button>
             <button class="btn-rate btn-good" onclick="nextDailyQuestion('good')">جيد</button>
             <button class="btn-rate btn-easy" onclick="nextDailyQuestion('easy')">سهل</button>
+        </div>
+
+        <div id="util-row" class="util-row">
+            <div class="u-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="u-mid">
+                <span class="stats-line" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
+                    <span id="due-forgot" class="due-num due-forgot">0</span>
+                    <span id="due-hard" class="due-num due-hard">0</span>
+                    <span id="due-good" class="due-num due-good">0</span>
+                    <span id="due-easy" class="due-num due-easy">0</span>
+                    <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
+                </span>
+            </div>
+            <div class="u-end"><button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button></div>
         </div>
     `;
 
