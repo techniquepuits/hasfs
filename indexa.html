@@ -1782,7 +1782,7 @@ function showSpecialSessionScreen() {
             </div>
             <div id="stop-pick-banner" class="stop-pick-banner hidden">
                 <span>👆 اضغط على آخر آية راجعتها اليوم</span>
-                <button type="button" onclick="cancelStopPick()">إلغاء</button>
+                <button type="button" onclick="endSessionWithoutSaving()">إلغاء</button>
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
@@ -1941,6 +1941,8 @@ function openStopSessionDialog() {
         enterPausedMode();
     }
     closeStopDialog();
+    // بعد إظهار الآيات: تظهر مباشرة النافذة الصفراء لاختيار آخر آية (بلا نافذة وسيطة)
+    if (specialRevealed) { beginStopPick(); return; }
     const d = document.createElement('div');
     d.id = 'stop-dialog';
     d.className = 'modal-overlay';
