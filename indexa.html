@@ -856,7 +856,56 @@ body.dark-mode .rec-indicator.paused { background: #1e293b; color: #cbd5e1; bord
 /* كانت داخل الكود مباشرة: دوران شاشة التحميل + ظهور القائمة المنبثقة */
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
+    
+/* ==========================================================
+   الحفظ مع الشيخ — مرحلة التحضير
+   ========================================================== */
+.hf-card { padding: 20px 12px; }
+.hf-card.hf-soon { opacity: 0.55; }
+.hf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; width: 100%; }
+.hf-btn { padding: 14px 6px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; line-height: 1.3; }
+.hf-hint { font-size: 12.5px; color: #64748b; text-align: center; margin: 0 0 8px 0; flex-shrink: 0; }
+body.dark-mode .hf-hint { color: #94a3b8; }
+.prep-ayah { cursor: pointer; padding: 2px 4px; border-radius: 6px; transition: background 0.2s; }
+.prep-ayah.prep-sel { background: #fde68a; }
+body.dark-mode .prep-ayah.prep-sel { background: rgba(251, 191, 36, 0.28); }
+
+.taf-ref { font-size: 14px; color: #64748b; text-align: center; }
+.taf-ayah { font-size: 20px; line-height: 2.4; text-align: right; color: #1b4d3e; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+.taf-body { font-size: 19px; line-height: 2.1; text-align: right; color: #1e293b; }
+.taf-text { white-space: pre-wrap; }
+.taf-sec + .taf-sec { margin-top: 14px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
+.taf-sec-title { font-size: 15px; font-weight: bold; color: #1b4d3e; margin-bottom: 4px; }
+body.dark-mode .taf-sec + .taf-sec { border-top-color: #334155; }
+body.dark-mode .taf-sec-title { color: #34d399; }
+.taf-note { font-size: 13px; color: #92400e; background: #fef3c7; border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; text-align: center; white-space: normal; }
+body.dark-mode .taf-ref { color: #94a3b8; }
+body.dark-mode .taf-ayah { color: #34d399; border-bottom-color: #334155; }
+body.dark-mode .taf-body { color: #e2e8f0; }
+body.dark-mode .taf-note { color: #fde68a; background: rgba(251, 191, 36, 0.15); }
+
+.numpad-display.pad-active { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25); }
+body.dark-mode .numpad-display.pad-active { border-color: #60a5fa !important; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); }
+
+/* شاشة التجزئة: دوائر الآيات ونص بخلفيات متناوبة */
+.split-sec { width: 100%; }
+.split-lbl { font-size: 14px; font-weight: bold; color: #1b4d3e; margin-bottom: 6px; text-align: right; }
+.split-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
+.pc { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #2d6a4f; background: #ffffff; color: #1b4d3e; font-family: inherit; font-size: 15px; font-weight: bold; cursor: pointer; padding: 0; touch-action: manipulation; }
+.pc.on { background: #2d6a4f; color: #ffffff; }
+.pc.half { background: #d97706; border-color: #d97706; color: #ffffff; }
+.pc.lock { cursor: default; }
+.pc.dim { opacity: 0.3; cursor: default; }
+.chunk { padding: 2px 4px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.chunk-a { background: #dcfce7; }
+.chunk-b { background: #fef3c7; }
+body.dark-mode .split-lbl { color: #34d399; }
+body.dark-mode .pc { background: #0f172a; color: #e2e8f0; border-color: #475569; }
+body.dark-mode .pc.on { background: #16a34a; border-color: #16a34a; color: #ffffff; }
+body.dark-mode .pc.half { background: #d97706; border-color: #d97706; color: #ffffff; }
+body.dark-mode .chunk-a { background: rgba(52, 211, 153, 0.2); }
+body.dark-mode .chunk-b { background: rgba(251, 191, 36, 0.2); }
+</style>
 </head>
 <body>
     <div id="main-container">
@@ -884,11 +933,24 @@ const STATIC_FILES = {
     "ayah_texts.json": GITHUB_BASE + "ayah_texts.json"
 };
 
+// التفسير آية بآية (مستودع spa5k/tafsir_api عبر CDN، وإن تعذّر فمن GitHub مباشرة)
+const TAFSIR_BASES = [
+    "https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/",
+    "https://raw.githubusercontent.com/spa5k/tafsir_api/main/tafsir/"
+];
+const TAFSIR_EDITIONS = {
+    muyassar: { slug: "ar-tafsir-muyassar", name: "التفسير الميسّر" },
+    saadi: { slug: "ar-tafseer-al-saddi", name: "تفسير السعدي" }
+};
+const TAFSIR_CACHE_PREFIX = "ibnbadis.taf.";
+const TAFSIR_IDX_KEY = "ibnbadis.taf.idx";
+
 // مفاتيح localStorage
 const LS_KEYS = {
     settings: "ibnbadis.settings",
     migrated: "ibnbadis.migrated",
     ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
+    prep: "ibnbadis.prep.v1",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[], half}
     lastStop: "ibnbadis.lastStop",   // آخر آية توقف عندها في المراجعة اليومية: {riwaya, surah (من 0), ayah (من 1)}
     texts: (riwaya) => "ibnbadis.texts.v1." + riwaya   // v1: ارفع الرقم لإجبار إعادة التنزيل
 };
@@ -1212,6 +1274,7 @@ async function handleStartAppProcess() {
 }
 
 function showMainButtons() {
+    try { prepStopAudio(); } catch (e) {}
     const MainButtonshtml = `
         <div id="settings-btn-icon" class="settings-icon" onclick="showSettings()" title="الإعدادات">☰</div>
         <div id="help-btn-icon" class="help-icon" onclick="showHelpScreen()" title="لماذا هذا التطبيق؟">؟</div>
@@ -1224,6 +1287,9 @@ function showMainButtons() {
             </div>
 
             <div class="menu-buttons">
+                <div class="menu-item">
+                    <button class="btn-main" onclick="showHifzHome()">الحفظ مع الشيخ</button>
+                </div>
                 <div class="menu-item">
                     <button class="btn-main" onclick="showSpecialSessionScreen()">المراجعة اليومية</button>
                 </div>
@@ -2930,6 +2996,606 @@ function handleSheikhAudioPlaceholder() {
 // ==========================================================
 // 10. التشغيل
 // ==========================================================
+
+// ==========================================================
+// 9. «الحفظ مع الشيخ» — مرحلة التحضير
+//    اختيار المقطع ← الاطلاع على النص والتفسير والاستماع للشيخ ← تجزئة المقطع
+//    (مرحلة «حفظ المقطع» ستُضاف لاحقاً)
+// ==========================================================
+
+let prep = null;              // المقطع الحالي: {riwaya, surah (من 0), start, end, cuts[], half}
+let prepSel = null;           // الآية المحدَّدة لعرض تفسيرها (رقم من 1)
+let prepScroll = 0;
+let prepAudio = null;
+let prepPlaying = false;
+let prepAudioToken = 0;
+let prepSurahSel = null;
+let prepField = 'start';
+let prepStartStr = "";
+let prepEndStr = "";
+let prepTafToken = 0;
+
+// ---------- أدوات مشتركة ----------
+
+function hfUtilRow(endLabel, endOnclick) {
+    return `
+        <div id="util-row" class="util-row">
+            <div class="u-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="u-mid"></div>
+            <div class="u-end">${endLabel ? `<button class="btn-home btn-end-session" onclick="${endOnclick}">${endLabel}</button>` : ''}</div>
+        </div>`;
+}
+
+// أول آيات كل جزء: كل ثلاث آيات جزء، وآخر آية في المقطع نهاية دائمة
+function prepDefaultCuts(start, end) {
+    const cuts = [];
+    for (let n = start + 2; n < end; n += 3) cuts.push(n);
+    cuts.push(end);
+    return cuts;
+}
+
+// نهاية النصف الأول الافتراضية: منتصف المقطع تقريباً (والنصف الأول هو الأكبر عند العدد الفردي)
+function prepDefaultHalf(start, end) {
+    const n = end - start + 1;
+    return start + Math.ceil(n / 2) - 1;
+}
+
+function prepNormalize(p) {
+    if (!p) return null;
+    const total = getAyatCount(p.surah, p.riwaya);
+    if (p.riwaya !== userRiwaya || !surahsNames[p.surah] || !(p.start >= 1) || !(p.end >= p.start) || p.end > total) return null;
+    let cuts = Array.isArray(p.cuts) ? p.cuts.filter((n) => Number.isInteger(n) && n >= p.start && n <= p.end) : null;
+    if (!cuts || !cuts.length) cuts = prepDefaultCuts(p.start, p.end);
+    if (!cuts.includes(p.end)) cuts.push(p.end);
+    cuts = Array.from(new Set(cuts)).sort((a, b) => a - b);
+    let half = p.half;
+    if (!Number.isInteger(half) || half < p.start || half >= p.end) half = prepDefaultHalf(p.start, p.end);
+    if (p.end === p.start) half = p.end;
+    return { riwaya: p.riwaya, surah: p.surah, start: p.start, end: p.end, cuts, half };
+}
+
+function loadPrep() { return prepNormalize(lsGet(LS_KEYS.prep, null)); }
+function savePrep() { if (prep) lsSet(LS_KEYS.prep, prep); }
+
+// ---------- الصفحة الأولى: تحضير المقطع / حفظ المقطع ----------
+
+function showHifzHome() {
+    prepStopAudio();
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title select-title">الحفظ مع الشيخ</div>
+            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+                <button type="button" id="hf-prep-btn" class="resume-btn hf-card" onclick="showPrepSelect()">
+                    <span class="rb-main">تحضير المقطع</span>
+                    <span class="rb-sub">اختيار المقطع، التفسير، الاستماع للشيخ، تجزئة المقطع</span>
+                </button>
+                <button type="button" id="hf-memo-btn" class="resume-btn hf-card hf-soon" onclick="showToast('مرحلة «حفظ المقطع» ستُضاف بعد الاتفاق على تفاصيلها.')">
+                    <span class="rb-main">حفظ المقطع</span>
+                    <span class="rb-sub">قريباً</span>
+                </button>
+            </div>
+        </div>
+        ${hfUtilRow('رجوع', 'showMainButtons()')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+}
+
+// ---------- اختيار المقطع ----------
+
+function showPrepSelect() {
+    prepStopAudio();
+    prepSurahSel = null;
+    let surahsHtml = '';
+    surahsNames.forEach((name, index) => {
+        surahsHtml += `
+            <div class="setting-row-box" style="margin-bottom: 6px; padding: 6px 12px; display: flex; align-items: center; justify-content: space-between;">
+                <label class="radio-label" style="cursor: pointer; display: flex; align-items: center; gap: 8px; flex: 1;">
+                    <input type="radio" name="prep-surah-radio" value="${index}" onchange="selectPrepSurah(${index})">
+                    <span>سورة ${name}</span>
+                </label>
+            </div>`;
+    });
+    const saved = loadPrep();
+    const resumeHtml = saved
+        ? `<button type="button" id="prep-resume-btn" class="resume-btn" onclick="resumePrep()"><span class="rb-main">متابعة المقطع السابق</span><span class="rb-sub">سورة ${surahsNames[saved.surah]} — من الآية ${saved.start} إلى الآية ${saved.end}</span></button>`
+        : '';
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title select-title">اختر السورة التي تريد تحضيرها</div>
+            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+                ${resumeHtml}
+                ${surahsHtml}
+            </div>
+        </div>
+        ${hfUtilRow('رجوع', 'showHifzHome()')}
+        <div id="prep-modal" class="modal-overlay hidden" onclick="if (event.target === this) cancelPrepModal()"></div>
+    `;
+    renderInContainer(html);
+    applyTheme();
+}
+
+function resumePrep() {
+    const saved = loadPrep();
+    if (!saved) { showPrepSelect(); return; }
+    prep = saved;
+    showPrepPage();
+}
+
+function selectPrepSurah(surahIndex) {
+    prepSurahSel = surahIndex;
+    prepStartStr = "";
+    prepEndStr = "";
+    prepField = 'start';
+    const max = getAyatCount(surahIndex) || 7;
+    const modal = document.getElementById('prep-modal');
+    if (!modal) return;
+    modal.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">سورة ${surahsNames[surahIndex]}</div>
+            <div class="numpad-display-row">
+                <span class="numpad-label">آية البداية:</span>
+                <input type="text" id="prep-start" class="numpad-display pad-active" readonly inputmode="none" placeholder="1" value="" onclick="prepSetField('start')">
+                <span class="numpad-max">من ${max}</span>
+            </div>
+            <div class="numpad-display-row">
+                <span class="numpad-label">آية النهاية:</span>
+                <input type="text" id="prep-end" class="numpad-display" readonly inputmode="none" placeholder="—" value="" onclick="prepSetField('end')">
+                <span class="numpad-max">من ${max}</span>
+            </div>
+            <div class="numpad">
+                <button type="button" onclick="prepNumpadPress('1')">1</button>
+                <button type="button" onclick="prepNumpadPress('2')">2</button>
+                <button type="button" onclick="prepNumpadPress('3')">3</button>
+                <button type="button" onclick="prepNumpadPress('4')">4</button>
+                <button type="button" onclick="prepNumpadPress('5')">5</button>
+                <button type="button" onclick="prepNumpadPress('6')">6</button>
+                <button type="button" class="np-del" onclick="prepNumpadPress('back')" title="حذف">⌫</button>
+                <button type="button" onclick="prepNumpadPress('7')">7</button>
+                <button type="button" onclick="prepNumpadPress('8')">8</button>
+                <button type="button" onclick="prepNumpadPress('9')">9</button>
+                <button type="button" onclick="prepNumpadPress('0')">0</button>
+                <button type="button" class="np-clear" onclick="prepNumpadPress('clear')" title="مسح الكل">مسح</button>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-start-review" onclick="confirmPrepSelection()">بدء التحضير</button>
+                <button type="button" class="btn-cancel" onclick="cancelPrepModal()">إلغاء</button>
+            </div>
+        </div>
+    `;
+    modal.classList.remove('hidden');
+}
+
+function prepSetField(which) {
+    prepField = which;
+    const a = document.getElementById('prep-start');
+    const b = document.getElementById('prep-end');
+    if (a) a.classList.toggle('pad-active', which === 'start');
+    if (b) b.classList.toggle('pad-active', which === 'end');
+}
+
+function prepNumpadPress(key) {
+    if (prepSurahSel === null) return;
+    const max = getAyatCount(prepSurahSel) || 7;
+    let s = prepField === 'start' ? prepStartStr : prepEndStr;
+    if (key === 'back') s = s.slice(0, -1);
+    else if (key === 'clear') s = "";
+    else {
+        if (s === "" && key === '0') return;
+        let c = s + key;
+        if (parseInt(c, 10) > max) c = String(max);
+        s = c;
+    }
+    if (prepField === 'start') prepStartStr = s; else prepEndStr = s;
+    const input = document.getElementById(prepField === 'start' ? 'prep-start' : 'prep-end');
+    if (input) input.value = s;
+}
+
+function closePrepModal() {
+    const modal = document.getElementById('prep-modal');
+    if (modal) { modal.classList.add('hidden'); modal.innerHTML = ""; }
+}
+
+function cancelPrepModal() {
+    closePrepModal();
+    prepSurahSel = null;
+    document.querySelectorAll('input[name="prep-surah-radio"]').forEach((r) => { r.checked = false; });
+}
+
+function confirmPrepSelection() {
+    if (prepSurahSel === null) return;
+    const max = getAyatCount(prepSurahSel) || 7;
+    const start = Math.min(Math.max(1, parseInt(prepStartStr, 10) || 1), max);
+    if (prepEndStr === "") { showToast("اكتب آية النهاية."); prepSetField('end'); return; }
+    const end = Math.min(parseInt(prepEndStr, 10), max);
+    if (end < start) { showToast("آية النهاية يجب ألا تسبق آية البداية."); return; }
+    prep = {
+        riwaya: userRiwaya, surah: prepSurahSel, start, end,
+        cuts: prepDefaultCuts(start, end), half: prepDefaultHalf(start, end)
+    };
+    prep = prepNormalize(prep);
+    savePrep();
+    closePrepModal();
+    showPrepPage();
+}
+
+// ---------- صفحة المقطع ----------
+
+function showPrepPage(keepSelection) {
+    if (!prep) { showPrepSelect(); return; }
+    prepStopAudio();
+    if (!keepSelection) prepSel = null;
+    let textHtml = '';
+    for (let n = prep.start; n <= prep.end; n++) {
+        const t = getAyahText(userRiwaya, prep.surah, n - 1) || '';
+        textHtml += `<span class="prep-ayah" id="pa-${n}" onclick="prepSelectAyah(${n})">${t} <span class="circle-num">${n}</span></span> `;
+    }
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title" style="font-size: 16px;">سورة ${surahsNames[prep.surah]} — الآيات ${prep.start} إلى ${prep.end}</div>
+            <div class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;">${textHtml}</div>
+        </div>
+        <div id="prep-hint" class="hf-hint">اضغط على آية ثم اختر التفسير</div>
+        <div class="hf-grid">
+            <button type="button" id="prep-taf-muyassar" class="btn-secondary hf-btn" onclick="prepOpenTafsir('muyassar')">التفسير الميسّر</button>
+            <button type="button" id="prep-taf-saadi" class="btn-secondary hf-btn" onclick="prepOpenTafsir('saadi')">تفسير السعدي</button>
+            <button type="button" id="prep-sheikh-btn" class="btn-secondary hf-btn" onclick="prepToggleSheikh()">الشيخ</button>
+            <button type="button" id="prep-split-btn" class="btn-secondary hf-btn" onclick="showPrepSplit()">تجزئة المقطع</button>
+        </div>
+        ${hfUtilRow('رجوع', 'showPrepSelect()')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+    const box = document.getElementById('exercise-container');
+    if (box && keepSelection) box.scrollTop = prepScroll;
+    if (keepSelection && prepSel !== null) prepSelectAyah(prepSel, true);
+}
+
+function prepSelectAyah(n, force) {
+    const prev = prepSel;
+    if (!force && prev === n) prepSel = null; else prepSel = n;
+    document.querySelectorAll('.prep-ayah.prep-sel').forEach((el) => el.classList.remove('prep-sel'));
+    if (prepSel !== null) {
+        const el = document.getElementById('pa-' + prepSel);
+        if (el) el.classList.add('prep-sel');
+    }
+    const hint = document.getElementById('prep-hint');
+    if (hint) hint.textContent = prepSel === null ? 'اضغط على آية ثم اختر التفسير' : 'الآية المحدّدة: ' + prepSel + ' — اختر التفسير الذي تريده';
+}
+
+// ---------- صوت الشيخ: المقطع كله متصلاً ----------
+
+function refreshPrepSheikhBtn() {
+    const b = document.getElementById('prep-sheikh-btn');
+    if (b) b.textContent = prepPlaying ? 'إيقاف الشيخ' : 'الشيخ';
+}
+
+function prepStopAudio() {
+    prepAudioToken++;
+    if (prepAudio) {
+        prepAudio.onended = null;
+        prepAudio.onerror = null;
+        try { prepAudio.pause(); } catch (e) {}
+        prepAudio = null;
+    }
+    if (prepPlaying) releaseWakeLock();
+    prepPlaying = false;
+    refreshPrepSheikhBtn();
+}
+
+function prepToggleSheikh() {
+    if (prepPlaying) { prepStopAudio(); return; }
+    if (!prep) return;
+    if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    stopSheikh();
+    const urls = [];
+    for (let n = prep.start; n <= prep.end; n++) {
+        const u = ayahAudioUrls(userRiwaya, prep.surah, n - 1);
+        if (u) urls.push(...u);
+    }
+    if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    prepPlayQueue(urls);
+}
+
+function prepPlayQueue(urls) {
+    const token = ++prepAudioToken;
+    prepPlaying = true;
+    acquireWakeLock();
+    refreshPrepSheikhBtn();
+    const cache = [];
+    const make = (i) => {
+        if (!cache[i]) { const a = new Audio(urls[i]); a.preload = 'auto'; cache[i] = a; }
+        return cache[i];
+    };
+    const fail = () => {
+        if (token !== prepAudioToken) return;
+        prepStopAudio();
+        showToast("تعذر تشغيل صوت الشيخ. تحقق من الاتصال بالإنترنت.");
+    };
+    const go = (i) => {
+        if (token !== prepAudioToken) return;
+        if (i >= urls.length) { prepStopAudio(); return; }
+        const a = make(i);
+        prepAudio = a;
+        a.onended = () => go(i + 1);
+        a.onerror = fail;
+        const p = a.play();
+        if (p && p.catch) p.catch(fail);
+        if (i + 1 < urls.length) make(i + 1);   // تحميل مسبق للمقطع التالي لتقليل الفراغ بين الآيات
+    };
+    go(0);
+}
+
+// ---------- التفسير ----------
+
+// كتب التفسير مرقّمة بعدّ حفص. في ورش يختلف عدّ الآيات في نحو نصف السور، فنطابق الآيتين بالكلمات:
+// نقارن كلمات السورة في الروايتين (بلا تشكيل) ونعرف أي آيات حفص تقابل كل آية في ورش.
+const tafsirAlignCache = {};
+
+function tafsirNormWord(w) {
+    return w.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640\uFEFF\u200C\u200D\u08D3-\u08FF]/g, '')
+            .replace(/[\u0671\u0622\u0623\u0625]/g, '\u0627').replace(/\u0649/g, '\u064A').replace(/\u0629/g, '\u0647');
+}
+
+function tafsirWordsOf(ayahs) {
+    const words = [], owner = [];
+    ayahs.forEach((t, i) => {
+        String(t || '').split(/\s+/).filter(Boolean).forEach((w) => {
+            const n = tafsirNormWord(w);
+            if (n) { words.push(n); owner.push(i + 1); }
+        });
+    });
+    return { words, owner };
+}
+
+// يعيد {رقم آية ورش: [أرقام آيات حفص المقابلة]} للسورة
+function warshToHafsMap(surah) {
+    if (tafsirAlignCache[surah]) return tafsirAlignCache[surah];
+    const W = tafsirWordsOf(quranTexts[0][surah]);
+    const H = tafsirWordsOf(quranTexts[1][surah]);
+    const m = new Array(W.words.length).fill(-1);
+    let i = 0, j = 0;
+    while (i < W.words.length && j < H.words.length) {
+        if (W.words[i] === H.words[j]) { m[i] = j; i++; j++; continue; }
+        let found = false;
+        for (let d = 1; d <= 8 && !found; d++) {
+            for (let a = 0; a <= d && !found; a++) {
+                const b = d - a;
+                if (i + a < W.words.length && j + b < H.words.length && W.words[i + a] === H.words[j + b] &&
+                    (i + a + 1 >= W.words.length || j + b + 1 >= H.words.length || W.words[i + a + 1] === H.words[j + b + 1])) {
+                    for (let k = 0; k < a; k++) m[i + k] = Math.min(j + Math.min(k, b), H.words.length - 1);
+                    i += a; j += b; found = true;
+                }
+            }
+        }
+        if (!found) { m[i] = j; i++; j++; }
+    }
+    for (; i < W.words.length; i++) m[i] = H.words.length - 1;
+    const res = {};
+    W.owner.forEach((wa, idx) => {
+        const ha = H.owner[m[idx]];
+        if (!res[wa]) res[wa] = [];
+        if (!res[wa].includes(ha)) res[wa].push(ha);
+    });
+    tafsirAlignCache[surah] = res;
+    return res;
+}
+
+// أرقام آيات حفص التي نعرض تفسيرها للآية المحددة (آية واحدة في حفص، وقد تكون أكثر في ورش)
+async function tafsirTargets(surah, ayah1) {
+    if (userRiwaya === 1) return [ayah1];
+    await ensureTextsForRiwaya(1);
+    if (!quranTexts[0]?.[surah] || !quranTexts[1]?.[surah]) return null;
+    const r = warshToHafsMap(surah)[ayah1];
+    return (r && r.length) ? r.slice().sort((a, b) => a - b) : null;
+}
+
+// يستخرج نص التفسير من استجابة JSON بصرف النظر عن شكلها الدقيق
+function extractTafsirText(j, ayah) {
+    if (j === null || j === undefined) return '';
+    if (typeof j === 'string') return j;
+    if (Array.isArray(j)) return extractTafsirText(j.find((x) => x && Number(x.ayah) === ayah) || j[0], ayah);
+    if (typeof j !== 'object') return '';
+    if (typeof j.text === 'string') return j.text;
+    for (const k of ['tafsir', 'tafseer', 'content', 'body']) {
+        if (typeof j[k] === 'string') return j[k];
+        if (j[k] && typeof j[k] === 'object') { const r = extractTafsirText(j[k], ayah); if (r) return r; }
+    }
+    if (Array.isArray(j.ayahs)) return extractTafsirText(j.ayahs, ayah);
+    return '';
+}
+
+// ذاكرة محلية صغيرة للتفاسير التي جلبها المستخدم (لا تتجاوز 300 آية)
+function tafsirCacheGet(key) {
+    const v = lsGet(key, null);
+    return (v && typeof v.t === 'string') ? v.t : null;
+}
+
+function tafsirCachePut(key, text) {
+    const idx = lsGet(TAFSIR_IDX_KEY, []) || [];
+    if (!idx.includes(key)) idx.push(key);
+    while (idx.length > 300) { try { localStorage.removeItem(idx.shift()); } catch (e) {} }
+    lsSet(key, { t: text });
+    lsSet(TAFSIR_IDX_KEY, idx);
+}
+
+async function fetchTafsirOne(ed, surah1, ayah1) {
+    const ck = TAFSIR_CACHE_PREFIX + ed.slug + '.' + surah1 + '.' + ayah1;
+    const cached = tafsirCacheGet(ck);
+    if (cached !== null) return cached;
+    let lastErr = null;
+    for (const base of TAFSIR_BASES) {
+        try {
+            const res = await fetch(base + ed.slug + '/' + surah1 + '/' + ayah1 + '.json');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const j = await res.json();
+            const t = String(extractTafsirText(j, ayah1) || '').trim();
+            tafsirCachePut(ck, t);
+            return t;
+        } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('تعذر جلب التفسير');
+}
+
+// بعض الكتب (كالسعدي) تجمع تفسير عدة آيات عند أولاها: إن كانت الآية بلا نص نرجع للآيات السابقة
+async function loadTafsirText(edKey, surah1, ayah1) {
+    const ed = TAFSIR_EDITIONS[edKey];
+    for (let k = ayah1; k >= Math.max(1, ayah1 - 15); k--) {
+        const t = await fetchTafsirOne(ed, surah1, k);
+        if (t) return { text: t, from: k };
+    }
+    return { text: '', from: ayah1 };
+}
+
+async function prepOpenTafsir(edKey) {
+    if (!prep) return;
+    if (prepSel === null) { showToast("اضغط على آية أولاً، ثم اختر التفسير."); return; }
+    prepStopAudio();
+    let targets = null;
+    try { targets = await tafsirTargets(prep.surah, prepSel); } catch (e) { targets = null; }
+    if (!targets) { showToast("تعذر ضبط ترقيم الآية على رواية حفص. تحقق من الاتصال بالإنترنت ثم أعد المحاولة."); return; }
+    const box = document.getElementById('exercise-container');
+    prepScroll = box ? box.scrollTop : 0;
+    prepShowTafsirView(edKey, prepSel, targets);
+}
+
+function prepShowTafsirView(edKey, n, targets) {
+    const ed = TAFSIR_EDITIONS[edKey];
+    const myToken = ++prepTafToken;
+    const ayahText = getAyahText(userRiwaya, prep.surah, n - 1) || '';
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title" style="font-size: 17px;">${ed.name}</div>
+            <div class="taf-ref">سورة ${surahsNames[prep.surah]} — الآية ${n}</div>
+            <div class="taf-ayah">${ayahText} <span class="circle-num">${n}</span></div>
+            <div id="tafsir-body" class="taf-body">جارٍ تحميل التفسير…</div>
+        </div>
+        <button type="button" id="taf-back-btn" class="btn-main" style="margin: 0 auto;" onclick="prepBackFromTafsir()">رجوع</button>
+        ${hfUtilRow('', '')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+    const showHafsNo = userRiwaya !== 1 && !(targets.length === 1 && targets[0] === n);
+    Promise.all(targets.map((h) => loadTafsirText(edKey, prep.surah + 1, h).then((r) => ({ h, r })))).then((list) => {
+        if (myToken !== prepTafToken) return;
+        const el = document.getElementById('tafsir-body');
+        if (!el) return;
+        el.textContent = '';
+        list.forEach(({ h, r }) => {
+            const sec = document.createElement('div');
+            sec.className = 'taf-sec';
+            if (showHafsNo) {
+                const t = document.createElement('div');
+                t.className = 'taf-sec-title';
+                t.textContent = 'تفسير الآية ' + h + ' (ترقيم حفص)';
+                sec.appendChild(t);
+            }
+            if (!r.text) {
+                const e = document.createElement('div');
+                e.className = 'taf-text';
+                e.textContent = 'لا يوجد تفسير لهذه الآية في هذا الكتاب.';
+                sec.appendChild(e);
+            } else {
+                if (r.from !== h) {
+                    const note = document.createElement('div');
+                    note.className = 'taf-note';
+                    note.textContent = 'هذا التفسير مذكور عند الآية ' + r.from + ' لأنه يشمل عدة آيات.';
+                    sec.appendChild(note);
+                }
+                const e = document.createElement('div');
+                e.className = 'taf-text';
+                e.textContent = r.text;
+                sec.appendChild(e);
+            }
+            el.appendChild(sec);
+        });
+    }).catch(() => {
+        if (myToken !== prepTafToken) return;
+        const el = document.getElementById('tafsir-body');
+        if (!el) return;
+        el.innerHTML = `<div>تعذر تحميل التفسير. تحقق من الاتصال بالإنترنت.</div><button type="button" class="btn-secondary hf-btn" style="margin-top: 10px;" onclick="prepShowTafsirView('${edKey}', ${n}, [${targets.join(',')}])">إعادة المحاولة</button>`;
+    });
+}
+
+function prepBackFromTafsir() {
+    prepTafToken++;
+    showPrepPage(true);
+}
+
+// ---------- تجزئة المقطع ----------
+
+function showPrepSplit() {
+    if (!prep) { showPrepSelect(); return; }
+    prepStopAudio();
+    const single = prep.start === prep.end;
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title" style="font-size: 16px;">تجزئة المقطع — سورة ${surahsNames[prep.surah]}</div>
+            <div class="split-sec">
+                <div class="split-lbl">التجزئة الأولى</div>
+                <div id="split-row-1" class="split-row"></div>
+            </div>
+            <div class="split-sec ${single ? 'hidden' : ''}" id="split-sec-2">
+                <div class="split-lbl">التجزئة الثانية</div>
+                <div id="split-row-2" class="split-row"></div>
+            </div>
+            ${single ? '<div class="hf-hint">المقطع آية واحدة، فلا حاجة لتجزئته.</div>' : ''}
+            <div id="split-text" class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;"></div>
+        </div>
+        ${hfUtilRow('تم', 'showPrepPage()')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+    prepRenderSplit();
+}
+
+function prepRenderSplit() {
+    if (!prep) return;
+    const { start, end, cuts, half } = prep;
+    const cutSet = new Set(cuts);
+    let r1 = '', r2 = '';
+    for (let n = start; n <= end; n++) {
+        const isEnd = cutSet.has(n);
+        r1 += `<button type="button" class="pc${isEnd ? ' on' : ''}${n === end ? ' lock' : ''}" data-n="${n}" onclick="prepToggleCut(${n})">${n}</button>`;
+        r2 += `<button type="button" class="pc${n === half ? ' half' : ''}${n === end ? ' dim' : ''}" data-n="${n}" onclick="prepSetHalf(${n})">${n}</button>`;
+    }
+    const e1 = document.getElementById('split-row-1');
+    const e2 = document.getElementById('split-row-2');
+    if (e1) e1.innerHTML = r1;
+    if (e2) e2.innerHTML = r2;
+
+    // نص المقطع بخلفيات متناوبة لكل جزء من التجزئة الأولى
+    let html = '', chunkIdx = 0, buf = '';
+    for (let n = start; n <= end; n++) {
+        const t = getAyahText(userRiwaya, prep.surah, n - 1) || '';
+        buf += `${t} <span class="circle-num">${n}</span> `;
+        if (cutSet.has(n)) {
+            html += `<span class="chunk ${chunkIdx % 2 === 0 ? 'chunk-a' : 'chunk-b'}">${buf}</span> `;
+            buf = '';
+            chunkIdx++;
+        }
+    }
+    if (buf) html += `<span class="chunk ${chunkIdx % 2 === 0 ? 'chunk-a' : 'chunk-b'}">${buf}</span>`;
+    const te = document.getElementById('split-text');
+    if (te) te.innerHTML = html;
+}
+
+function prepToggleCut(n) {
+    if (!prep || n === prep.end) return;
+    const i = prep.cuts.indexOf(n);
+    if (i >= 0) prep.cuts.splice(i, 1); else { prep.cuts.push(n); prep.cuts.sort((a, b) => a - b); }
+    savePrep();
+    prepRenderSplit();
+}
+
+function prepSetHalf(n) {
+    if (!prep || n >= prep.end) return;
+    prep.half = n;
+    savePrep();
+    prepRenderSplit();
+}
 
 async function initApp() {
     loadSettings();
