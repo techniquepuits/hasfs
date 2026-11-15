@@ -719,7 +719,7 @@ body.dark-mode .frame-surah { color: #34d399; }
 .btn-recording.rec-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 10px; border-radius: 16px; width: 100%; }
 .rc-main { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
 .rc-hint { font-size: 13px; font-weight: normal; opacity: 0.55; }
-.resume-btn { width: 100%; padding: 10px 10px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
 .resume-btn .rb-sub { font-size: 12.5px; font-weight: normal; color: #475569; }
 body.dark-mode .resume-btn { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
@@ -769,6 +769,10 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 .mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: mic-pulse 1s ease-in-out infinite; }
 .btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
 .speed-ctl { display: inline-flex; align-items: center; }
+.util-row { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 6px; margin-top: 8px; }
+.util-row .u-start { display: flex; justify-content: flex-start; }
+.util-row .u-mid { display: flex; justify-content: center; }
+.util-row .u-end { display: flex; justify-content: flex-end; }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
@@ -1133,6 +1137,11 @@ function fitDarkBtn() {
     if (!btn) return;
     const full = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
     btn.title = full;
+    if (btn.closest('#util-row')) {   // في الصف السفلي: أيقونة فقط لتوفير المكان
+        btn.textContent = isDarkMode ? '☀️' : '🌙';
+        btn.classList.add('icon-only');
+        return;
+    }
     btn.classList.remove('icon-only');
     btn.textContent = full;
     const cell = btn.parentElement;
@@ -1767,9 +1776,9 @@ function showSpecialSessionScreen() {
         </div>
 
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            ${resumeBtnHtml}
             <div style="font-weight: bold; font-size: 15px; color: #1b4d3e; text-align: right;">اختر السورة التي تريد مراجعتها:</div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+                ${resumeBtnHtml}
                 ${surahsHtml}
             </div>
         </div>
@@ -1801,6 +1810,9 @@ function showSpecialSessionScreen() {
                     </span>
                     <button type="button" class="rp-btn rp-cancel" onclick="closeReplayPanel()">إلغاء</button>
                 </div>
+            </div>
+            <div id="util-row" class="util-row">
+                <div class="u-start"></div><div class="u-mid"></div><div class="u-end"></div>
             </div>
         </div>
 
@@ -2138,6 +2150,7 @@ function loadSpecialFullSectionExercise() {
     const endBtn = document.getElementById('end-session-btn');
     if (titleEl) titleEl.classList.add('hidden');
     if (endBtn) endBtn.classList.remove('hidden');
+    moveControlsToBottom();
     pausedMode = false;
     ayahBarOpen = false;
     ayahBarIndex = null;
@@ -2196,7 +2209,6 @@ function loadSpecialFullSectionExercise() {
 
     const customLayoutHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-            <span style="font-size: 14px; font-weight: bold; color: #2d6a4f;">البدء من الآية ${specialStartAyah}</span>
             <span class="surah-title" style="font-size: 16px;">سورة: ${surahsNames[selectedSpecialSurah]}</span>
         </div>
         <div class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.5;">
@@ -2228,7 +2240,29 @@ let ayahBarOpen = false;
 let ayahBarIndex = null;
 
 // يضبط ما يظهر في أسفل الصفحة بعد إظهار الآيات
+// أثناء الجلسة تنتقل كل الأزرار (الوضع الليلي، السرعة، إنهاء الجلسة) إلى الأسفل ويختفي الشريط العلوي
+function moveControlsToBottom() {
+    const slot = (cls) => document.querySelector('#util-row .' + cls);
+    const dark = document.getElementById('dark-mode-btn');
+    const speed = document.getElementById('speed-ctl');
+    const end = document.getElementById('end-session-btn');
+    if (dark && slot('u-start')) slot('u-start').appendChild(dark);
+    if (speed && slot('u-mid')) slot('u-mid').appendChild(speed);
+    if (end && slot('u-end')) slot('u-end').appendChild(end);
+    const header = document.querySelector('.header-box');
+    if (header) header.classList.add('hidden');
+    fitDarkBtn();
+    syncUtil();
+}
+
+// الصف السفلي يظهر فقط عند الحاجة: يختفي أثناء اختيار آخر آية وأثناء أزرار الآية
+function syncUtil() {
+    const u = document.getElementById('util-row');
+    if (u) u.classList.toggle('hidden', stopPickMode || ayahBarOpen);
+}
+
 function syncBottom() {
+    syncUtil();
     if (!specialRevealed) return;
     const bar = document.getElementById('ayah-actions-bar');
     const pbar = document.getElementById('pause-bar');
