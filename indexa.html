@@ -719,6 +719,15 @@ body.dark-mode .frame-surah { color: #34d399; }
 .btn-recording.rec-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 10px; border-radius: 16px; width: 100%; }
 .rc-main { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
 .rc-hint { font-size: 13px; font-weight: normal; opacity: 0.55; }
+.rv-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 13px 15px; margin-bottom: 6px; border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: bold; color: #1b4d3e; cursor: pointer; flex: none; }
+.rv-all { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rv-all .rb-main { font-size: 16px; font-weight: bold; }
+.rv-nums { display: inline-flex; gap: 12px; align-items: center; }
+.rv-nums-big .due-num { font-size: 20px; }
+.rv-nums .due-num.zero { opacity: 0.3; }
+.rv-empty { text-align: center; color: #64748b; font-size: 14px; padding: 10px 6px; }
+body.dark-mode .rv-row, body.dark-mode .rv-all { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+body.dark-mode .rv-empty { color: #cbd5e1; }
 .resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
 .resume-btn .rb-sub { font-size: 12.5px; font-weight: normal; color: #475569; }
@@ -1219,7 +1228,7 @@ function showMainButtons() {
                     <button class="btn-main" onclick="showSpecialSessionScreen()">المراجعة اليومية</button>
                 </div>
                 <div class="menu-item">
-                    <button class="btn-secondary" onclick="showReviewScreen()" style="width: 100%;">عقال الآيات</button>
+                    <button class="btn-secondary" onclick="showReviewSelect()" style="width: 100%;">عقال الآيات</button>
                     <div class="menu-sub">التكرار المتباعد لضبط الصعوبات</div>
                 </div>
             </div>
@@ -1334,9 +1343,86 @@ async function saveSettingsAndReturn() {
 
 // عند القدوم من نهاية الجلسة: نعرض فقط آيات التعثر في تلك الجلسة (مجموعة مفاتيح «سورة:آية»)؛ null = كل الآيات
 let reviewOnlyKeys = null;
+let reviewScope = 'all';        // 'all' كل القرآن | 'surah' سورة واحدة | 'session' آيات تعثرت فيها هذه الجلسة
+let reviewSurahIdx = null;
 
-function showReviewScreen(onlyKeys) {
+// إحصاء الآيات المستحقة الآن: لكل القرآن ولكل سورة، مصنفةً حسب آخر تقييم
+function computeDueStats() {
+    const riwaya = userRiwaya;
+    const store = loadAyahStore(riwaya);
+    const now = Date.now();
+    const blank = () => ({ forgot: 0, hard: 0, good: 0, easy: 0, total: 0, keys: [] });
+    const all = blank(), per = {};
+    for (const k in store) {
+        const rec = store[k];
+        if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
+        const parts = k.split(":");
+        const sIdx = Number(parts[0]), a = Number(parts[1]);
+        if (!Number.isInteger(sIdx) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(sIdx, riwaya)) continue;
+        if (!isDue(rec, now)) continue;
+        const lr = lastRatingOf(rec);
+        all[lr]++; all.total++;
+        const ps = per[sIdx] || (per[sIdx] = blank());
+        ps[lr]++; ps.total++; ps.keys.push(k);
+    }
+    return { all, per };
+}
+
+function dueNumsHtml(c) {
+    return ['forgot', 'hard', 'good', 'easy'].map(k =>
+        `<span class="due-num due-${k}${c[k] ? '' : ' zero'}">${c[k]}</span>`).join('');
+}
+
+// صفحة بداية عقال الآيات: كل القرآن + السور التي فيها آيات مستحقة
+function showReviewSelect() {
+    reviewOnlyKeys = null;
+    reviewScope = 'all';
+    const st = computeDueStats();
+    const rows = Object.keys(st.per).map(Number).sort((a, b) => a - b).map(sIdx =>
+        `<button type="button" class="rv-row" onclick="startReviewSurah(${sIdx})">
+            <span>سورة ${surahsNames[sIdx]}</span>
+            <span class="rv-nums">${dueNumsHtml(st.per[sIdx])}</span>
+        </button>`).join('');
+    const emptyNote = st.all.total === 0
+        ? `<div class="rv-empty">لا توجد آيات مستحقة للمراجعة الآن.</div>` : '';
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title select-title">اختر ما تريد مراجعته</div>
+            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+                <button type="button" class="rv-all" onclick="startReviewAll()">
+                    <span class="rb-main">مراجعة آيات التعثر في كل القرآن</span>
+                    <span class="rv-nums rv-nums-big">${dueNumsHtml(st.all)}</span>
+                </button>
+                ${rows}
+                ${emptyNote}
+            </div>
+        </div>
+
+        <div id="util-row" class="util-row">
+            <div class="u-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="u-mid"></div>
+            <div class="u-end"><button class="btn-home btn-end-session" onclick="showMainButtons()">إنهاء الجلسة</button></div>
+        </div>
+    `;
+    renderInContainer(html);
+    applyTheme();
+}
+
+function startReviewAll() { showReviewScreen(null, 'all'); }
+
+function startReviewSurah(sIdx) {
+    const st = computeDueStats();
+    const ps = st.per[sIdx];
+    if (!ps || !ps.keys.length) { showReviewSelect(); return; }
+    reviewSurahIdx = sIdx;
+    showReviewScreen(ps.keys, 'surah');
+}
+
+function showReviewScreen(onlyKeys, scope) {
     reviewOnlyKeys = (Array.isArray(onlyKeys) && onlyKeys.length) ? new Set(onlyKeys) : null;
+    reviewScope = scope || (reviewOnlyKeys ? 'session' : 'all');
     const reviewScreenHTML = `
         <div class="header-box hdr3">
             <div class="hdr-start">
@@ -1528,7 +1614,8 @@ function loadNextAyahToReview() {
     // القائمة فارغة: لا شيء يُراجَع بعد
     if (!item) {
         const hasAny = Object.keys(loadAyahStore(userRiwaya)).length > 0;
-        if (reviewOnlyKeys) { if (promptAyahEl) promptAyahEl.innerText = "أنهيتَ مراجعة الآيات التي تعثرت فيها في هذه الجلسة.\nيمكنك العودة إلى القائمة الرئيسية."; }
+        if (reviewScope === 'surah') { if (promptAyahEl) promptAyahEl.innerText = `أنهيتَ مراجعة آيات التعثر في سورة ${surahsNames[reviewSurahIdx]}.\nيمكنك العودة إلى القائمة الرئيسية.`; }
+        else if (reviewOnlyKeys) { if (promptAyahEl) promptAyahEl.innerText = "أنهيتَ مراجعة الآيات التي تعثرت فيها في هذه الجلسة.\nيمكنك العودة إلى القائمة الرئيسية."; }
         else if (promptAyahEl) promptAyahEl.innerText = hasAny
             ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
             : "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
@@ -1625,6 +1712,7 @@ function onReviewMicClick() {
 
 function leaveReviewScreen() {
     reviewOnlyKeys = null;
+    reviewScope = 'all';
     resetRecordingStates();
     showMainButtons();
 }
