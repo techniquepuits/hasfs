@@ -719,9 +719,26 @@ body.dark-mode .frame-surah { color: #34d399; }
 .btn-recording.rec-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 10px; border-radius: 16px; width: 100%; }
 .rc-main { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
 .rc-hint { font-size: 13px; font-weight: normal; opacity: 0.55; }
+.resume-btn { width: 100%; padding: 12px 10px; font-size: 16px; font-weight: bold; font-family: inherit; border-radius: 12px; flex: none; background: linear-gradient(135deg, #2d6a4f 0%, #1b4d3e 100%); color: #fff; border: none; cursor: pointer; }
+.rc-hint.rc-hint-strong { font-size: 15px; font-weight: 700; opacity: 1; }
 .rc-timer { font-size: 22px; font-weight: bold; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
-.rc-dot { width: 14px; height: 14px; border-radius: 50%; background: #94a3b8; display: inline-block; }
-.rc-dot.live { background: #dc2626; animation: pulse-red 1.2s infinite; }
+.rc-dot { width: 16px; height: 16px; border-radius: 50%; background: #94a3b8; display: inline-block; }
+.rc-dot.live { background: #dc2626; animation: rec-dot-pulse 1s ease-in-out infinite; }
+.btn-recording.rec-card.rc-live { border-color: #dc2626 !important; animation: rec-card-pulse 1.4s ease-in-out infinite; }
+@keyframes rec-dot-pulse {
+    0%   { transform: scale(0.9);  box-shadow: 0 0 0 0 rgba(220,38,38,0.75); }
+    60%  { transform: scale(1.25); box-shadow: 0 0 0 12px rgba(220,38,38,0); }
+    100% { transform: scale(0.9);  box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+}
+@keyframes rec-card-pulse {
+    0%, 100% { box-shadow: inset 0 0 0 rgba(220,38,38,0), 0 0 0 0 rgba(220,38,38,0.45); }
+    50%      { box-shadow: inset 0 0 26px rgba(220,38,38,0.40), 0 0 0 6px rgba(220,38,38,0); }
+}
+@keyframes mic-pulse {
+    0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(220,38,38,0.7); }
+    60%  { transform: scale(1.22); box-shadow: 0 0 0 9px rgba(220,38,38,0); }
+    100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+}
 .ayah-actions-bar .replay-panel { display: none; width: 100%; align-items: center; justify-content: space-between; gap: 6px; }
 .ayah-actions-bar.replay-mode > .btn-rate { display: none; }
 .ayah-actions-bar.replay-mode > .replay-panel { display: flex; }
@@ -745,7 +762,7 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 .mic-btn.voice-mode { width: auto; height: 30px; border-radius: 15px; padding: 0 14px; font-size: 14px; font-weight: bold; font-family: inherit; }
 .sheikh-icon { bottom: 4px; right: 4px; left: auto; width: auto; height: 30px; border-radius: 15px; padding: 0 14px; font-size: 14px; font-weight: bold; font-family: inherit; }
 .mic-btn { width: 28px; height: 28px; font-size: 15px; bottom: 4px; left: 4px; }
-.mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: pulse-red 1.2s infinite; }
+.mic-btn.mic-live { background: #fee2e2 !important; border-color: #dc2626 !important; animation: mic-pulse 1s ease-in-out infinite; }
 .btn-review-act { flex: 1; padding: 11px 6px; font-size: 15px; border-radius: 10px; font-weight: 700; }
 .speed-ctl { display: inline-flex; align-items: center; }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
@@ -1719,6 +1736,13 @@ function showSpecialSessionScreen() {
         `;
     });
 
+    // زر المواصلة من آخر آية توقفنا عندها (لا يظهر إن لم يوجد موضع محفوظ)
+    let resumeBtnHtml = '';
+    const lastRec = lsGet(LS_KEYS.lastStop, null);
+    if (lastRec && lastRec.riwaya === userRiwaya && lastRec.surah >= 0 && lastRec.ayah >= 1 && surahsNames[lastRec.surah]) {
+        resumeBtnHtml = `<button type="button" id="resume-btn" class="btn-start-review resume-btn" onclick="resumeFromLastStop()">المواصلة من سورة ${surahsNames[lastRec.surah]} — الآية ${lastRec.ayah}</button>`;
+    }
+
     // هذه الصفحة للاختيار فقط: زرّا التسجيل وعرض الإجابة مخفيان حتى يؤكّد المستخدم السورة والآية
     const specialScreenHTML = `
         <div class="header-box hdr3">
@@ -1739,6 +1763,7 @@ function showSpecialSessionScreen() {
         </div>
 
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            ${resumeBtnHtml}
             <div style="font-weight: bold; font-size: 15px; color: #1b4d3e; text-align: right;">اختر السورة التي تريد مراجعتها:</div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
                 ${surahsHtml}
@@ -1787,7 +1812,6 @@ function showSpecialSessionScreen() {
 
     renderInContainer(specialScreenHTML);
     applyTheme();
-    maybeShowResumePrompt();
 }
 
 // اختيار السورة (راديو، سورة واحدة فقط) يفتح نافذة منبثقة لاختيار آية البداية.
@@ -2065,32 +2089,6 @@ function finishStopPick(ayahIndex) {
     leaveSession();
 }
 
-// عند فتح صفحة اختيار السورة: تذكير بآخر موضع توقف
-function maybeShowResumePrompt() {
-    const rec = lsGet(LS_KEYS.lastStop, null);
-    if (!rec || rec.riwaya !== userRiwaya || !(rec.surah >= 0) || !(rec.ayah >= 1)) return;
-    if (!surahsNames[rec.surah]) return;
-    const modal = document.getElementById('special-ayah-modal');
-    if (!modal) return;
-    const nx = resolveResumePoint(rec);
-    const note = nx.surah !== rec.surah ? `كانت آخر آية في السورة، فستبدأ من سورة ${surahsNames[nx.surah]}` : "";
-    modal.innerHTML = `
-        <div class="modal-box">
-            <div class="modal-title">آخر موضع توقفت عنده</div>
-            <div class="resume-info">
-                <div class="resume-surah">سورة ${surahsNames[rec.surah]}</div>
-                <div class="resume-ayah">الآية ${rec.ayah}</div>
-                ${note ? `<div class="resume-note">${note}</div>` : ""}
-            </div>
-            <div class="modal-actions stack">
-                <button type="button" class="btn-start-review" onclick="resumeFromLastStop()">مواصلة من حيث توقفت</button>
-                <button type="button" class="btn-cancel" onclick="closeSpecialModal()">اختيار آية بداية أخرى</button>
-            </div>
-        </div>
-    `;
-    modal.classList.remove('hidden');
-}
-
 // الآية التي توقف عندها المستخدم قد سبق استحضارها، فتصبح هي المطلع الأزرق ويبدأ المطلوب من التي بعدها؛
 // وإن كانت آخر آية في السورة نبدأ من أول السورة التالية
 function resolveResumePoint(rec) {
@@ -2216,7 +2214,6 @@ function loadSpecialFullSectionExercise() {
     }
     recTimerReset();
     renderRecCard('idle');
-    scheduleAutoRecord();
 }
 
 // الضغط على أي آية بعد الإظهار: تتوقف المراجعة الصوتية مؤقتاً وتحلّ الأزرار الأربعة مكان زر التسجيل في الأسفل
@@ -2572,16 +2569,6 @@ function clearAutoRecTimer() {
     if (autoRecTimer) { clearTimeout(autoRecTimer); autoRecTimer = null; }
 }
 
-function scheduleAutoRecord() {
-    clearAutoRecTimer();
-    autoRecTimer = setTimeout(() => {
-        autoRecTimer = null;
-        if (!specialRevealed && !isRecording && !isRecordingPaused && document.getElementById('rec-inline')) {
-            handleSpecialRecordingToggle();
-        }
-    }, 2000);
-}
-
 function recElapsedMs() {
     return recAccumMs + (recLiveSince ? Date.now() - recLiveSince : 0);
 }
@@ -2603,13 +2590,14 @@ function recTimerReset() {
 function renderRecCard(state) {
     const btn = document.getElementById('record-action-btn');
     if (!btn || specialRevealed) return;
+    btn.classList.toggle('rc-live', state === 'live');
     const timer = `<span id="rec-timer" class="rc-timer" dir="ltr">${formatHMS(recElapsedMs())}</span>`;
     if (state === 'live') {
         btn.innerHTML = `<span class="rc-main"><span class="rc-dot live"></span>جارٍ التسجيل</span><span class="rc-hint">اضغط لإيقاف التسجيل</span>${timer}`;
     } else if (state === 'paused') {
         btn.innerHTML = `<span class="rc-main"><span class="rc-dot"></span>التسجيل متوقف</span><span class="rc-hint">اضغط لمواصلة التسجيل</span>${timer}`;
     } else {
-        btn.innerHTML = `<span class="rc-main">🎙️ بداية التسجيل</span><span class="rc-hint">يبدأ التسجيل تلقائياً بعد ثانيتين، أو اضغط للبدء الآن</span>`;
+        btn.innerHTML = `<span class="rc-main">🎙️ بداية التسجيل</span><span class="rc-hint rc-hint-strong">اضغط لبداية التسجيل</span>`;
     }
 }
 
@@ -2639,7 +2627,32 @@ function nextSpecialQuestion(ratingType) {
 let recMediaStream = null;
 let recToken = 0;
 
+// إبقاء الشاشة مضاءة أثناء التسجيل حتى لا يقطعه المتصفح عند انطفائها
+let wakeLockSentinel = null;
+let wantWakeLock = false;
+async function acquireWakeLock() {
+    wantWakeLock = true;
+    try {
+        if ('wakeLock' in navigator && !wakeLockSentinel && document.visibilityState === 'visible') {
+            const sentinel = await navigator.wakeLock.request('screen');
+            wakeLockSentinel = sentinel;
+            sentinel.addEventListener('release', () => { if (wakeLockSentinel === sentinel) wakeLockSentinel = null; });
+        }
+    } catch (e) { /* غير مدعوم أو مرفوض: نكمل بدونه */ }
+}
+function releaseWakeLock() {
+    wantWakeLock = false;
+    const sentinel = wakeLockSentinel;
+    wakeLockSentinel = null;
+    if (sentinel) { try { sentinel.release().catch(() => {}); } catch (e) {} }
+}
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && wantWakeLock) acquireWakeLock();
+});
+
 function updateRecIndicator(state) {
+    if (state === 'live' || state === 'paused') acquireWakeLock();
+    else if (state === null) releaseWakeLock();
     if (state === 'live') {
         recLiveSince = Date.now();
         if (recTick) clearInterval(recTick);
