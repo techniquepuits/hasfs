@@ -74,27 +74,15 @@
   }
   .lang-toggle-btn:active{background:rgba(255,255,255,.2)}
 
-  /* عنوانا خدماتنا / موقعنا */
-  .section-tabs{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    margin-top:8px;
-  }
-  .stab{
-    border:none;
-    background:none;
-    font-family:inherit;
+  /* عنوانا القسمين: الخدمات / الموقع */
+  .sec-title{
+    display:inline-block;
     font-size:19px;
     font-weight:700;
-    color:var(--muted);
-    padding:0 2px 4px;
-    cursor:pointer;
-    border-bottom:3px solid transparent;
-  }
-  .stab.active{
     color:var(--green-dark);
-    border-bottom-color:var(--green);
+    padding:0 2px 4px;
+    border-bottom:3px solid var(--green);
+    margin-top:8px;
   }
 
   .hint{font-size:12px;color:#a7b3ac;margin-top:8px}
@@ -119,11 +107,10 @@
     background:var(--green);
   }
   html[dir="ltr"] .services li::before{right:auto;left:4px}
-  .services.hide{display:none}
 
   /* موقعنا */
-  .contact{display:none;margin-top:16px}
-  .contact.show{display:block}
+  .contact{margin-top:26px;margin-bottom:8px;text-align:center}
+  .contact .phone-row{margin-top:14px}
   .phone-row{
     display:flex;
     justify-content:space-between;
@@ -237,7 +224,7 @@
   }
   .topbar.center{justify-content:center;text-align:center}
   /* زر إلغاء الحجز: شريط سفلي بعرض الشاشة، ثابت في الأسفل في الخطوات الثلاث */
-  #step1,#step2,#step3{padding-bottom:0}
+  #book,#confirm,#ticket{padding-bottom:0}
   .step-foot{
     margin:auto -16px 0;
     position:sticky;
@@ -340,11 +327,11 @@
     line-height:1.7;
     color:var(--muted);
   }
-  .info-card .hours{
-    margin-top:4px;
-    font-weight:700;
-    color:var(--text);
-  }
+  .info-card .hours{margin-top:0}
+  .pick-confirm{display:none;margin-top:22px;text-align:center}
+  .pick-confirm.show{display:block}
+  .pick-line{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+  .loc-wrap{margin-top:18px;text-align:center}
   .slots-empty{
     text-align:center;
     color:var(--muted);
@@ -489,15 +476,24 @@
     line-height:1.7;
     margin:0 0 8px;
   }
-  .cancel-choice{display:none;flex-direction:column;gap:8px}
-  .cancel-choice.show{display:flex}
-  .cancel-choice .btn{padding:13px;font-size:16px}
+  #cancelView{display:none;margin-top:40px;text-align:center}
+  #ticket.cancelling #cancelView{display:block}
+  #ticket.cancelling .mine,#ticket.cancelling .confirm-notes,#ticket.cancelling .loc-wrap,#ticket.cancelling .ticket-foot{display:none}
+  .cancel-explain{font-size:17px;line-height:1.9;color:var(--text);margin-bottom:4px;font-weight:700}
+  .cancel-explain.second{margin-bottom:28px}
+  #cancelView .btn{box-shadow:none;color:var(--green-dark);padding:15px;font-size:17px}
+  #cancelView .btn + .btn{margin-top:12px}
+  #keepBtn{background:rgba(31,138,76,.14);border:1px solid rgba(31,138,76,.3)}
+  #confirmCancelBtn{background:rgba(31,138,76,.45);border:1px solid rgba(31,138,76,.6)}
+  .foot-row{display:flex;justify-content:center;gap:10px}
+  .foot-row .cancel-booking.small{margin:0}
+  .foot-row .back{padding:7px 22px;font-size:13px;border-radius:10px}
+  .ticket-foot .cancel-note{margin-bottom:8px}
   .ticket-title{
     text-align:center;
-    color:#000;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:1px;
+    color:var(--green-dark);
+    font-size:21px;
+    font-weight:800;
     padding-bottom:8px;
     border-bottom:1px solid #dfe8e2;
   }
@@ -535,63 +531,20 @@
   <div class="clinic-card">
     <h1 data-i="clinic"></h1>
     <p data-i="tag"></p>
-    <button class="lang-toggle-btn" id="langToggleBtn">FR</button>
+    <button class="lang-toggle-btn">FR</button>
   </div>
 
   <div class="page-content-padding">
-    <div class="section-tabs">
-      <button class="stab active" id="tabServices" data-i="tabServices"></button>
-      <button class="stab" id="tabContact" data-i="tabContact"></button>
-      <button class="stab" id="tabMine" data-i="tabMine"></button>
-    </div>
-
     <section class="services" id="servicesBox">
+      <h2 class="sec-title" data-i="tabServices"></h2>
       <ul id="serviceList"></ul>
     </section>
 
-    <section class="mine" id="mineBox">
-      <div class="empty" id="mineEmpty" data-i="noBooking"></div>
-      <div id="mineFull">
-        <div class="ticket-title" data-i="ticketTitle"></div>
-        <div class="info-line"><span data-i="chosenServiceLabel"></span>: <b id="mService"></b></div>
-        <div class="info-line"><span data-i="dayLabel"></span>: <b id="mDate"></b></div>
-        <div class="info-line"><span data-i="timeLabel"></span>: <b id="mTime"></b></div>
-
-        <div class="code-box">
-          <div class="code-label" data-i="codeLabel"></div>
-          <div class="code-num" id="mCode"></div>
-          <div class="code-hint" data-i="codeHint"></div>
-        </div>
-
-        <div class="ticket-bar" id="ticketBar">
-          <div id="mBar"></div>
-          <div class="digits" id="mDigits"></div>
-        </div>
-      </div>
-    </section>
-
     <section class="contact" id="contactBox">
-      <div class="phone-row">
-        <span data-i="phone"></span>
-        <a href="tel:0661991263">0661 99 12 63</a>
-      </div>
-      <div class="map-box">
-        <iframe class="map" id="mapFrame" title="map" tabindex="-1"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <div class="map-zoom">
-          <button id="zoomIn" aria-label="Zoom in">+</button>
-          <button id="zoomOut" aria-label="Zoom out">&minus;</button>
-        </div>
-      </div>
+      <button class="back" data-goto="loc" data-i="locBtn"></button>
     </section>
 
     <div class="cta" id="homeCta">
-      <p class="cancel-note" id="cancelNote" data-i="cancelNote" style="display:none"></p>
-      <button class="cancel-booking small" id="cancelBookBtn" data-i="cancelBooking" style="display:none"></button>
-      <div class="cancel-choice" id="cancelChoice">
-        <button class="btn" id="keepBtn" data-i="keepBooking"></button>
-        <button class="btn outline-danger" id="confirmCancelBtn" data-i="confirmCancel"></button>
-      </div>
       <button class="btn" id="bookBtn" data-i="book"></button>
     </div>
   </div>
@@ -606,40 +559,12 @@
   </div>
 </div>
 
-<!-- الخطوة 1: الخدمة -->
-<div class="page" id="step1">
+<!-- حجز: اختيار اليوم والتوقيت -->
+<div class="page" id="book">
   <div class="page-content-padding inner">
-    <div class="topbar center">
-      <h2 class="page-title" data-i="bookClinicTitle"></h2>
+    <div class="topbar center" style="margin-bottom:30px">
+      <h2 class="page-title" data-i="step2Note"></h2>
     </div>
-
-    <div class="steps-container">
-      <div class="step-item active" data-step="1" data-i="step1Label"></div>
-      <div class="step-item" data-step="2" data-i="step2Label"></div>
-      <div class="step-item" data-step="3" data-i="step3Label"></div>
-    </div>
-
-    <p class="instruction" data-i="step1Note"></p>
-    <div class="service-choice-list" id="serviceChoiceList"></div>
-
-    <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
-  </div>
-</div>
-
-<!-- الخطوة 2: الموعد -->
-<div class="page" id="step2">
-  <div class="page-content-padding inner">
-    <div class="topbar center">
-      <h2 class="page-title" data-i="bookClinicTitle"></h2>
-    </div>
-
-    <div class="steps-container">
-      <div class="step-item" data-step="1" data-i="step1Label"></div>
-      <div class="step-item active" data-step="2" data-i="step2Label"></div>
-      <div class="step-item" data-step="3" data-i="step3Label"></div>
-    </div>
-
-    <p class="instruction" data-i="step2Note"></p>
 
     <div class="tabs" id="tabs">
       <button class="tab active" data-day="0" data-i="d0"></button>
@@ -649,49 +574,75 @@
 
     <div class="slots" id="slots"></div>
 
-    <div class="info-card">
+    <div class="info-card" id="infoCard">
       <p data-i="note"></p>
       <p class="hours" data-i="hours"></p>
+    </div>
+
+    <div class="pick-confirm" id="pickBox">
+      <p class="pick-line" id="pickLine"></p>
+      <button class="btn" id="confirmBtn" data-i="confirm"></button>
     </div>
 
     <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
   </div>
 </div>
 
-<!-- الخطوة 3: التأكيد -->
-<div class="page" id="step3">
-  <div class="page-content-padding inner">
-    <div class="topbar center">
-      <h2 class="page-title" data-i="bookClinicTitle"></h2>
-    </div>
+<!-- تذكرة الحجز (تُفتح مباشرة متى وُجد موعد) -->
+<div class="page" id="ticket">
+  <div class="clinic-card">
+    <h1 data-i="clinic"></h1>
+    <p data-i="tag"></p>
+    <button class="lang-toggle-btn">FR</button>
+  </div>
 
-    <div class="steps-container">
-      <div class="step-item" data-step="1" data-i="step1Label"></div>
-      <div class="step-item" data-step="2" data-i="step2Label"></div>
-      <div class="step-item active" data-step="3" data-i="step3Label"></div>
-    </div>
+  <div class="page-content-padding">
+    <div class="mine show" id="mineBox">
+      <div class="ticket-title" data-i="ticketTitle"></div>
+      <div class="info-line"><b id="mDate"></b></div>
+      <div class="info-line"><b id="mTime"></b></div>
 
-    <p class="instruction" data-i="step3Note"></p>
+      <div class="code-box">
+        <div class="code-label" data-i="codeLabel"></div>
+        <div class="code-num" id="mCode"></div>
+        <div class="code-hint" data-i="codeHint"></div>
+      </div>
 
-    <div class="info-line"><span data-i="chosenServiceLabel"></span>: <b id="cService"></b></div>
-    <div class="info-line"><span data-i="dayLabel"></span>: <b id="cDate"></b></div>
-    <div class="info-line"><span data-i="timeLabel"></span>: <b id="cTime"></b></div>
-
-    <div class="code-box">
-      <div class="code-label" data-i="codeLabel"></div>
-      <div class="code-num" id="cCode"></div>
-      <div class="code-hint" data-i="codeHint"></div>
+      <div class="ticket-bar" id="ticketBar">
+        <div id="mBar"></div>
+        <div class="digits" id="mDigits"></div>
+      </div>
     </div>
 
     <div class="confirm-notes">
       <p class="legal-note" data-i="legalNote"></p>
     </div>
-
-    <div class="cta cta-inline">
-      <button class="btn" id="confirmBtn" data-i="confirm"></button>
+    <div class="loc-wrap">
+      <button class="back" data-goto="loc" data-i="locBtn"></button>
     </div>
 
-    <div class="step-foot"><button class="back cancel" data-cancel data-i="cancelTop"></button></div>
+    <div class="step-foot ticket-foot">
+      <p class="cancel-note" data-i="cancelNote"></p>
+      <div class="foot-row" id="footRow">
+        <button class="cancel-booking small" id="cancelBookBtn" data-i="cancelBooking"></button>
+      </div>
+    </div>
+
+    <div id="cancelView">
+      <p class="cancel-explain" data-i="cancelExplain1"></p>
+      <p class="cancel-explain second" data-i="cancelExplain2"></p>
+      <button class="btn" id="keepBtn" data-i="keepBooking"></button>
+      <button class="btn" id="confirmCancelBtn" data-i="confirmCancel"></button>
+    </div>
+  </div>
+</div>
+
+<!-- الموقع (من التذكرة) -->
+<div class="page" id="loc">
+  <div class="page-content-padding inner">
+    <div class="topbar"><button class="back" id="locBack" data-i="back"></button></div>
+    <h2 class="page-title" data-i="tabContact" style="margin-bottom:14px"></h2>
+    <div class="loc-block" id="pageLoc"></div>
   </div>
 </div>
 
@@ -703,7 +654,7 @@
       tabServices:"الخدمات",
       tabContact:"الموقع",
       tabMine:"مواعيدي",
-      ticketTitle:"تذكرة الحجز · عيادة الغيث",
+      ticketTitle:"تذكرة الحجز",
       noBooking:"لا يوجد لديكم موعد محجوز",
       hint:"اضغط على الخدمة للتفاصيل",
       phone:"هاتف العيادة",
@@ -717,7 +668,8 @@
       step1Note:"اختر الخدمة المطلوبة",
       step2Note:"اختر اليوم والتوقيت المناسب",
       step3Note:"احتفظ بالرمز واضغط على زر التأكيد",
-      note:"للحجز في المواعيد غير المتاحة يمكنكم التقدم إلى العيادة للحجز المباشر",
+      note:"للحجز في المواقيت غير المتاحة يمكنكم التقدم إلى العيادة",
+      locBtn:"الموقع",
       hours:"مواعيد العمل من 9:00 إلى 16:00",
       noSlots:"لا توجد مواعيد متاحة عبر الإنترنت في هذا اليوم، يمكنكم الحجز المباشر من العيادة",
       d0:"اليوم", d1:"غداً", d2:"بعد غد",
@@ -731,6 +683,8 @@
       cancelBooking:"إلغاء الحجز",
       cancelNote:"في حال تعذّر حضوركم، يرجى إلغاء الحجز ليستفيد منه مريض آخر.",
       confirmCancel:"تأكيد الإلغاء",
+      cancelExplain1:"بإلغائكم هذا الحجز ستفقدون دوركم.",
+      cancelExplain2:"سيُمنح هذا الدور لمريض آخر.",
       keepBooking:"الاحتفاظ بالموعد",
       legalNote:"تملك العيادة الحق في إلغاء هذا الموعد أو تعديله عند الضرورة.",
       codeHint:"سيُطلب منكم هذا الرمز عند التقدم إلى العيادة",
@@ -742,7 +696,7 @@
       tabServices:"Services",
       tabContact:"Adresse",
       tabMine:"Mes RDV",
-      ticketTitle:"Ticket de réservation · Clinique El Ghaith",
+      ticketTitle:"Ticket de réservation",
       noBooking:"Aucun rendez-vous réservé",
       hint:"Touchez un service pour voir les détails",
       phone:"Téléphone de la clinique",
@@ -756,7 +710,8 @@
       step1Note:"Choisissez le service souhaité",
       step2Note:"Choisissez le jour et l'horaire qui vous conviennent",
       step3Note:"Conservez le code et appuyez sur le bouton de confirmation",
-      note:"Pour réserver aux horaires indisponibles, présentez-vous à la clinique pour une réservation directe",
+      note:"Pour les horaires indisponibles, vous pouvez vous présenter à la clinique",
+      locBtn:"Adresse",
       hours:"Horaires de travail : de 9h00 à 16h00",
       noSlots:"Aucun rendez-vous disponible en ligne ce jour, vous pouvez réserver directement à la clinique",
       d0:"Aujourd'hui", d1:"Demain", d2:"Après-demain",
@@ -770,6 +725,8 @@
       cancelBooking:"Annuler la réservation",
       cancelNote:"En cas d'empêchement, merci d'annuler votre réservation afin qu'un autre patient puisse en profiter.",
       confirmCancel:"Confirmer l'annulation",
+      cancelExplain1:"En annulant cette réservation, vous perdez votre tour.",
+      cancelExplain2:"Ce tour sera attribué à un autre patient.",
       keepBooking:"Garder le rendez-vous",
       legalNote:"La clinique peut annuler ou modifier ce rendez-vous en cas de nécessité.",
       codeHint:"Ce code vous sera demandé à votre arrivée à la clinique",
@@ -790,14 +747,6 @@
       fr:{t:"Électrocardiogramme (ECG)", d:"Réalisation d'un électrocardiogramme à la clinique avec explication immédiate."} }
   ];
 
-  /* خياران للحجز */
-  var BOOK_SERVICES = [
-    { ar:{t:"الفحص العام"},
-      fr:{t:"Consultation générale"} },
-    { ar:{t:"الرعاية الخاصة"},
-      fr:{t:"Soins particuliers"} }
-  ];
-
   /* فترات متاحة قليلة وغير ثابتة بين الأيام:
      اليوم: واحدة صباحاً + ثلاث مساءً (10:30، 13:00، 14:00، 15:00)
      غداً: واحدة صباحاً + اثنتان مساءً (10:00، 13:30، 14:30)
@@ -808,7 +757,7 @@
     [0,0,0,0,0,0,0,0,1,1,0,1,1,0]
   ];
 
-  var lang = "ar", curDay = 0, curService = -1, curSlot = -1, curCode = "";
+  var lang = "ar", curDay = 0, curSlot = -1, curCode = "";
 
   function $(id){return document.getElementById(id)}
   function pad(n){return n<10?"0"+n:""+n}
@@ -836,14 +785,19 @@
   }
 
   /* ---------- التنقل ---------- */
-  var pages = ["home","service","step1","step2","step3"];
+  var pages = ["home","service","book","ticket","loc"];
   function show(id){
-    /* لا تُعرض الخطوتان 2 و3 دون اختيارات سابقة (مثلاً عند الرجوع بعد الحجز) */
-    if((id === "step2" && !canGo(2)) || (id === "step3" && !canGo(3))) id = "home";
+    /* متى وُجد موعد لا يُرى إلا التذكرة (ومنها صفحة الموقع)، ولا يُعاد الحجز قبل الإلغاء */
+    if(booking){
+      if(id !== "loc") id = "ticket";
+    }else{
+      if(id === "ticket") id = "home";
+    }
     pages.forEach(function(p){
       $(p).classList.toggle("active", p === id);
     });
-    updateSteps();
+    if(id === "loc") ensureMap($("pageLoc"));
+    if(id === "ticket"){ cancelAsk = false; syncTicket(); }
     window.scrollTo(0,0);
   }
   function goTo(id){
@@ -855,7 +809,6 @@
   });
   document.querySelectorAll("[data-cancel]").forEach(function(b){
     b.addEventListener("click", function(){
-      curService = -1;
       curSlot = -1;
       goTo("home");
     });
@@ -863,27 +816,6 @@
   window.addEventListener("popstate", function(e){
     var v = e.state && e.state.v;
     show(v && pages.indexOf(v) > -1 ? v : "home");
-  });
-
-  /* ---------- شريط الخطوات ---------- */
-  function canGo(n){
-    if(n === 1) return true;
-    if(n === 2) return curService >= 0;
-    if(n === 3) return curService >= 0 && curSlot >= 0;
-    return false;
-  }
-  function updateSteps(){
-    document.querySelectorAll(".step-item").forEach(function(el){
-      var n = parseInt(el.getAttribute("data-step"), 10);
-      el.classList.toggle("disabled", !el.classList.contains("active") && !canGo(n));
-    });
-  }
-  document.querySelectorAll(".step-item").forEach(function(el){
-    el.addEventListener("click", function(){
-      if(el.classList.contains("active")) return;
-      var n = parseInt(el.getAttribute("data-step"), 10);
-      if(canGo(n)) goTo("step" + n);
-    });
   });
 
   /* ---------- الخدمات في الصفحة الرئيسية ---------- */
@@ -909,100 +841,60 @@
     $("serviceText").textContent = SERVICES[idx][lang].d;
   }
 
-  /* ---------- الخطوة 1: كل الخدمات ---------- */
-  function renderStep1Services(){
-    var box = $("serviceChoiceList");
-    box.innerHTML = "";
-    BOOK_SERVICES.forEach(function(s, i){
-      var card = document.createElement("div");
-      card.className = "service-choice-card";
-      var title = document.createElement("div");
-      title.textContent = s[lang].t;
-      card.appendChild(title);
-      if(s[lang].s){
-        var sub = document.createElement("div");
-        sub.className = "s";
-        sub.textContent = s[lang].s;
-        card.appendChild(sub);
-      }
-      card.addEventListener("click", function(){
-        curService = i;
-        curSlot = -1;
-        curDay = 0;
-        document.querySelectorAll(".tab").forEach(function(x, idx){x.classList.toggle("active", idx===0)});
-        renderSlots();
-        goTo("step2");
-      });
-      box.appendChild(card);
-    });
-  }
-
-  /* ---------- خدماتنا / موقعنا ---------- */
+  /* ---------- الموقع ---------- */
   /* موقع العيادة (إحداثيات: خط العرض، خط الطول) */
   var CLINIC_Q = "35.7192982,0.3454786";
-  var mapZoom = 15, mapLoaded = false;
+  var mapZoom = 15;
   function mapSrc(){
     return "https://www.google.com/maps?q=" + encodeURIComponent(CLINIC_Q) +
            "&z=" + mapZoom + "&output=embed";
   }
+  /* الخريطة لا تُحمَّل إلا عند عرض الصفحة التي تحتويها */
+  function ensureMap(box){
+    var f = box.querySelector("iframe");
+    if(f && !f.getAttribute("src")) f.src = mapSrc();
+  }
   function setMapZoom(z){
     mapZoom = Math.max(13, Math.min(20, z));
-    $("mapFrame").src = mapSrc();
+    document.querySelectorAll(".loc-block iframe").forEach(function(f){
+      if(f.getAttribute("src")) f.src = mapSrc();
+    });
   }
+  function buildLoc(box){
+    box.innerHTML =
+      '<div class="phone-row"><span data-i="phone"></span>' +
+      '<a href="tel:0661991263">0661 99 12 63</a></div>' +
+      '<div class="map-box">' +
+      '<iframe class="map" title="map" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>' +
+      '<div class="map-zoom"><button class="zi" aria-label="Zoom in">+</button>' +
+      '<button class="zo" aria-label="Zoom out">&minus;</button></div></div>';
+    box.querySelector(".zi").addEventListener("click", function(){ setMapZoom(mapZoom + 1); });
+    box.querySelector(".zo").addEventListener("click", function(){ setMapZoom(mapZoom - 1); });
+  }
+  buildLoc($("pageLoc"));
+  $("locBack").addEventListener("click", function(){ goTo(booking ? "ticket" : "home"); });
 
-  /* أسفل الصفحة الرئيسية:
-     - موقعنا: لا شيء
-     - مواعيدي مع موعد محجوز: الباركود بدل زر الحجز
-     - غير ذلك: زر الحجز */
-  var curSection = "services";
+  /* ---------- إلغاء الموعد من التذكرة ---------- */
   var cancelAsk = false;   // هل ظهر خياراً التأكيد والاحتفاظ؟
-  function syncCta(){
-    var showBar = (curSection === "mine" && !!booking);
-    if(!showBar) cancelAsk = false;
-    $("homeCta").style.display = (curSection === "contact") ? "none" : "";
-    $("cancelNote").style.display = showBar ? "" : "none";
-    $("cancelBookBtn").style.display = (showBar && !cancelAsk) ? "block" : "none";
-    $("cancelChoice").classList.toggle("show", showBar && cancelAsk);
-    $("bookBtn").style.display = showBar ? "none" : "";
+  function syncTicket(){
+    $("ticket").classList.toggle("cancelling", cancelAsk);
+    window.scrollTo(0,0);
   }
-
-  /* الإلغاء: زر صغير ثم زرّان كبيران (تأكيد الإلغاء / الاحتفاظ بالموعد) */
   $("cancelBookBtn").addEventListener("click", function(){
     cancelAsk = true;
-    syncCta();
+    syncTicket();
   });
   $("keepBtn").addEventListener("click", function(){
     cancelAsk = false;
-    syncCta();
+    syncTicket();
   });
   $("confirmCancelBtn").addEventListener("click", function(){
     cancelAsk = false;
     booking = null;
     saveBooking();
-    renderMine();
+    curSlot = -1;
+    goTo("home");
   });
-
-  /* name: "services" | "mine" | "contact" */
-  function setSection(name){
-    $("tabServices").classList.toggle("active", name === "services");
-    $("tabMine").classList.toggle("active", name === "mine");
-    $("tabContact").classList.toggle("active", name === "contact");
-    $("servicesBox").classList.toggle("hide", name !== "services");
-    $("mineBox").classList.toggle("show", name === "mine");
-    $("contactBox").classList.toggle("show", name === "contact");
-    curSection = name;
-    cancelAsk = false;
-    syncCta();
-    if(name === "contact" && !mapLoaded){
-      mapLoaded = true;
-      $("mapFrame").src = mapSrc();
-    }
-  }
-  $("zoomIn").addEventListener("click", function(){ setMapZoom(mapZoom + 1); });
-  $("zoomOut").addEventListener("click", function(){ setMapZoom(mapZoom - 1); });
-  $("tabServices").addEventListener("click", function(){ setSection("services"); });
-  $("tabMine").addEventListener("click", function(){ setSection("mine"); });
-  $("tabContact").addEventListener("click", function(){ setSection("contact"); });
 
   /* ---------- الخطوة 2: الفترات ---------- */
   function renderSlots(){
@@ -1027,9 +919,10 @@
                       '<span class="state">' + T.free + '</span>';
         d.addEventListener("click", function(){
           curSlot = i;
-          curCode = String(Math.floor(100 + Math.random()*900));
+          renderSlots();
           renderConfirm();
-          goTo("step3");
+          var cb = $("confirmBtn");
+          if(cb.scrollIntoView) cb.scrollIntoView({block:"nearest"});
         });
         box.appendChild(d);
         shown++;
@@ -1049,26 +942,30 @@
       curDay = parseInt(t.getAttribute("data-day"),10);
       curSlot = -1;
       renderSlots();
-      updateSteps();
+      renderConfirm();
     });
   });
 
+  /* فتح الحجز: يُحدَّد "اليوم" تلقائياً */
   $("bookBtn").addEventListener("click", function(){
-    renderStep1Services();
-    goTo("step1");
+    curDay = 0;
+    curSlot = -1;
+    document.querySelectorAll(".tab").forEach(function(x, idx){x.classList.toggle("active", idx === 0)});
+    renderSlots();
+    renderConfirm();
+    goTo("book");
   });
 
-  /* ---------- الخطوة 3: التأكيد ---------- */
+  /* ---------- التأكيد ---------- */
   function renderConfirm(){
-    if(curSlot < 0 || curService < 0) return;
-    $("cService").textContent = BOOK_SERVICES[curService][lang].t;
-    $("cDate").textContent = dateText(curDay);
-    $("cTime").textContent = timeText(curSlot);
-    $("cCode").textContent = curCode;
+    var on = curSlot >= 0;
+    $("pickBox").classList.toggle("show", on);
+    $("infoCard").style.display = on ? "none" : "";
+    if(on) $("pickLine").textContent = dateText(curDay) + " · " + timeText(curSlot);
   }
   /* ---------- حفظ الموعد وصفحة مواعيدي ---------- */
   var BOOKING_KEY = "clinic.booking";
-  var booking = null;   // {svc, ts, slot, code}
+  var booking = null;   // {ts, slot, code}
   function saveBooking(){
     try{
       if(booking) localStorage.setItem(BOOKING_KEY, JSON.stringify(booking));
@@ -1083,8 +980,7 @@
     /* موعد يوم مضى لم يعد يظهر */
     if(booking){
       var today = new Date(); today.setHours(0,0,0,0);
-      if(typeof booking.ts !== "number" || booking.ts < today.getTime() ||
-         !BOOK_SERVICES[booking.svc]){
+      if(typeof booking.ts !== "number" || booking.ts < today.getTime()){
         booking = null;
         saveBooking();
       }
@@ -1114,14 +1010,9 @@
     return '<svg viewBox="0 0 ' + x + ' 60" preserveAspectRatio="none" aria-hidden="true">' + bars + '</svg>';
   }
 
-  function renderMine(){
-    var has = !!booking;
-    $("mineEmpty").style.display = has ? "none" : "";
-    $("mineFull").style.display  = has ? "" : "none";
-    syncCta();
-    if(!has) return;
+  function renderTicket(){
+    if(!booking) return;
     var d = new Date(booking.ts);
-    $("mService").textContent = BOOK_SERVICES[booking.svc][lang].t;
     $("mDate").textContent = dateFmt(d);
     $("mTime").textContent = timeText(booking.slot);
     $("mCode").textContent = booking.code;
@@ -1129,19 +1020,18 @@
     $("mDigits").textContent = booking.code;
   }
 
-  /* التأكيد: يُحفظ الموعد وتُعرض صفحة مواعيدي في الاستقبال */
+  /* التأكيد: يُحفظ الموعد وتُعرض التذكرة */
   $("confirmBtn").addEventListener("click", function(){
-    if(curService < 0 || curSlot < 0) return;
+    if(curSlot < 0) return;
+    curCode = String(Math.floor(100 + Math.random()*900));
     var d = new Date();
     d.setDate(d.getDate() + curDay);
     d.setHours(0,0,0,0);
-    booking = {svc:curService, ts:d.getTime(), slot:curSlot, code:curCode};
+    booking = {ts:d.getTime(), slot:curSlot, code:curCode};
     saveBooking();
-    curService = -1;
     curSlot = -1;
-    renderMine();
-    setSection("mine");
-    goTo("home");
+    renderTicket();
+    goTo("ticket");
   });
 
   /* ---------- اللغة ---------- */
@@ -1154,21 +1044,26 @@
       var key = el.getAttribute("data-i");
       if(TR[l][key]) el.textContent = TR[l][key];
     });
-    $("langToggleBtn").textContent = (l === "ar") ? "FR" : "ع";
+    document.querySelectorAll(".lang-toggle-btn").forEach(function(b){
+      b.textContent = (l === "ar") ? "FR" : "ع";
+    });
     renderServices();
     renderServiceDetail();
-    renderStep1Services();
     renderSlots();
     renderConfirm();
-    renderMine();
+    renderTicket();
   }
-  $("langToggleBtn").addEventListener("click", function(){
-    applyLang(lang === "ar" ? "fr" : "ar");
+  document.querySelectorAll(".lang-toggle-btn").forEach(function(b){
+    b.addEventListener("click", function(){
+      applyLang(lang === "ar" ? "fr" : "ar");
+    });
   });
 
   loadBooking();
   applyLang("ar");
-  updateSteps();
+  /* صفحة الافتتاح: التذكرة إن وُجد موعد، وإلا الصفحة الرئيسية */
+  history.replaceState({v: booking ? "ticket" : "home"}, "", "#" + (booking ? "ticket" : "home"));
+  show(booking ? "ticket" : "home");
 </script>
 </body>
 </html>
