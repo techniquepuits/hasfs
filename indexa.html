@@ -278,11 +278,12 @@ body.dark-mode .blank-space-gray {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 36px;
-    padding-top: 36px;     /* = gap: نفس المسافة بين الشعار والزر الأول وبين الزرين */
+    gap: clamp(6px, 1.7vh, 18px);
+    padding-top: clamp(6px, 1.7vh, 18px);     /* = gap: نفس المسافة بين الشعار والزر الأول وبين الأزرار */
+    overflow-y: auto;
 }
 .menu-item { width: 100%; max-width: 420px; text-align: center; }
-.menu-item .btn-main, .menu-item .btn-secondary { margin: 0; max-width: 100%; }
+.menu-item .btn-main, .menu-item .btn-secondary { margin: 0; max-width: 100%; padding-top: 11px; padding-bottom: 11px; font-size: 16px; }
 .menu-sub { font-size: 11px; color: #64748b; margin-top: 3px; font-weight: normal; }
 body.dark-mode .menu-sub { color: #94a3b8; }
 
@@ -730,6 +731,15 @@ body.dark-mode .rv-row, body.dark-mode .rv-all { background: #0f172a !important;
 body.dark-mode .rv-empty { color: #cbd5e1; }
 .resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
+.resume-btn.ps-btn { padding: 9px 12px; margin-bottom: 5px; }
+.resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
+.resume-btn.cm-r2 { background: #bfdbfe; border-color: #60a5fa; color: #1e3a8a; }
+.resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
+.resume-btn.cm-r4 { background: #fecdd3; border-color: #fb7185; color: #881337; }
+body.dark-mode .resume-btn.cm-r1 { background: #5b21b6 !important; border-color: #8b5cf6 !important; color: #fff !important; }
+body.dark-mode .resume-btn.cm-r2 { background: #1d4ed8 !important; border-color: #3b82f6 !important; color: #fff !important; }
+body.dark-mode .resume-btn.cm-r3 { background: #166534 !important; border-color: #22c55e !important; color: #fff !important; }
+body.dark-mode .resume-btn.cm-r4 { background: #9f1239 !important; border-color: #f43f5e !important; color: #fff !important; }
 .resume-btn .rb-sub { font-size: 12.5px; font-weight: normal; color: #475569; }
 body.dark-mode .resume-btn { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
 body.dark-mode .resume-btn .rb-sub { color: #cbd5e1 !important; }
@@ -783,7 +793,7 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 .select-title { text-align: center; font-size: 17px; padding: 2px 0 4px; }
 .util-row .u-mid { display: flex; justify-content: center; }
 .util-row .u-end { display: flex; justify-content: flex-end; }
-.toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+.toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 60; pointer-events: none; max-width: 90%; font-size: 14px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .circle-num:empty { display: none; }
 .ayah-actions-bar {
     display: flex;
@@ -858,53 +868,114 @@ body.dark-mode .rec-indicator.paused { background: #1e293b; color: #cbd5e1; bord
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     
 /* ==========================================================
-   الحفظ مع الشيخ — مرحلة التحضير
+   الحفظ مع الشيخ
    ========================================================== */
-.hf-card { padding: 20px 12px; }
-.hf-card.hf-soon { opacity: 0.55; }
-.hf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; width: 100%; }
-.hf-btn { padding: 14px 6px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; line-height: 1.3; }
+.rv-surah-sep { display: block; font-weight: bold; font-size: 15px; color: #1b4d3e; margin: 6px 0 0; }
+body.dark-mode .rv-surah-sep { color: #6ee7b7; }
+.cls-open-btn { margin-top: 14px; width: 100%; }
+.cls-sub { text-align: center; font-size: 14px; line-height: 1.8; color: #64748b; }
+.cls-cur { text-align: center; font-size: 13px; color: #64748b; margin: -4px 0 8px; line-height: 1.7; }
+body.dark-mode .cls-sub, body.dark-mode .cls-cur { color: #94a3b8; }
+.cm-legend { display: flex; justify-content: center; gap: 4px; flex-wrap: nowrap; }
+.cm-legend span { display: inline-flex; align-items: center; gap: 4px; }
+.cm-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid #94a3b8; }
+.cm-status { text-align: center; font-size: 12px; color: #475569; min-height: 20px; }
+.cm-map { padding: 4px 2px; }
+.cm-surah { margin-bottom: 12px; }
+.cm-name { font-size: 15px; font-weight: bold; color: #1b4d3e; margin: 6px 4px 4px; }
+.cm-ayahs { display: flex; flex-wrap: wrap; gap: 4px; }
+.cm-a { flex: 0 0 auto; min-width: 36px; height: 34px; padding: 0 4px; font-family: inherit; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer; }
+.cm-r0 { background: #fff; }
+.cm-r1 { background: #e9d5ff; border-color: #c084fc; }
+.cm-r2 { background: #bfdbfe; border-color: #60a5fa; }
+.cm-r3 { background: #bbf7d0; border-color: #4ade80; }
+.cm-r4 { background: #fecdd3; border-color: #fb7185; }
+.cm-a.cut { color: #fff; font-weight: bold; border-width: 2px; }
+.cm-a.cut.cm-r1 { background: #4c1d95; border-color: #4c1d95; }
+.cm-a.cut.cm-r2 { background: #1e3a8a; border-color: #1e3a8a; }
+.cm-a.cut.cm-r3 { background: #14532d; border-color: #14532d; }
+.cm-a.cut.cm-r4 { background: #881337; border-color: #881337; }
+body.dark-mode .cm-a.cut { background: #020617; color: #fff; }
+body.dark-mode .cm-a.cut.cm-r1 { background: #020617; border-color: #a78bfa; }
+body.dark-mode .cm-a.cut.cm-r2 { background: #020617; border-color: #60a5fa; }
+body.dark-mode .cm-a.cut.cm-r3 { background: #020617; border-color: #4ade80; }
+body.dark-mode .cm-a.cut.cm-r4 { background: #020617; border-color: #fb7185; }
+.cm-a.cut.sel, body.dark-mode .cm-a.cut.sel { background: #fde047 !important; border-color: #eab308 !important; color: #422006 !important; }
+.cm-a.sel { background: #fde047; border-color: #eab308; color: #422006; }
+.cm-pick { flex: 1 1 0; min-width: 0; height: 38px; padding: 0 2px; font-family: inherit; font-size: clamp(11px, 3.2vw, 14px); font-weight: bold; border-radius: 10px; border: 1.5px solid #94a3b8; color: #1e293b; cursor: pointer; white-space: nowrap; }
+.cm-mkbtn { flex: 1 1 0; min-width: 0; height: 32px; padding: 0 2px; font-family: inherit; font-size: clamp(12px, 3.4vw, 14px); font-weight: bold; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; white-space: nowrap; }
+.cm-mkbtn.on { border-color: #dc2626; color: #dc2626; background: #fef2f2; }
+.cm-a.mk, .cm-a.mk.cut, .cm-a.mk.sel { border: 2px solid #dc2626 !important; }
+body.dark-mode .cm-mkbtn { background: #1e293b; border-color: #475569; color: #cbd5e1; }
+body.dark-mode .cm-mkbtn.on { border-color: #f87171; color: #f87171; background: #2a1215; }
+body.dark-mode .cm-a.mk, body.dark-mode .cm-a.mk.cut, body.dark-mode .cm-a.mk.sel { border: 2px solid #f87171 !important; }
+.cm-pick.cm-r1 { border-color: #c084fc; }.cm-pick.cm-r2 { border-color: #60a5fa; }.cm-pick.cm-r3 { border-color: #4ade80; }.cm-pick.cm-r4 { border-color: #fb7185; }
+.cm-legend, .cm-status { flex: none; }
+body.dark-mode .cm-legend, body.dark-mode .cm-status, body.dark-mode .cm-name { color: #cbd5e1; }
+body.dark-mode .cm-a { background: #1e293b; border-color: #475569; color: #e2e8f0; }
+body.dark-mode .cm-r1 { background: #5b21b6; border-color: #8b5cf6; }
+body.dark-mode .cm-r2 { background: #1d4ed8; border-color: #3b82f6; }
+body.dark-mode .cm-r3 { background: #166534; border-color: #22c55e; }
+body.dark-mode .cm-r4 { background: #9f1239; border-color: #f43f5e; }
+body.dark-mode .cm-r0 { background: #1e293b; }
+body.dark-mode .cm-a.sel { background: #facc15; border-color: #eab308; color: #422006; }
+body.dark-mode .cm-pick { color: #f1f5f9; }
+body.dark-mode .cm-pick.cm-r0 { background: #1e293b; }
+.nr-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+.nr-row .nr-main { flex: 1; min-width: 0; margin: 0; }
+.nr-chk { flex: 0 0 52px; border-radius: 12px; border: 1.5px solid #94a3b8; background: #fff; color: transparent; font-size: 24px; font-weight: bold; font-family: inherit; cursor: pointer; }
+.nr-chk.on { background: #1b4d3e; border-color: #1b4d3e; color: #fff; }
+body.dark-mode .nr-chk { background: #1e293b; border-color: #64748b; }
+body.dark-mode .nr-chk.on { background: #10b981; border-color: #10b981; color: #052e24; }
+.nr-go { margin: 0 auto; width: 100%; flex-shrink: 0; }
+.nr-go:disabled { opacity: 0.45; cursor: default; }
+.rasikh-all-btn { align-self: center; padding: 6px 16px; font-family: inherit; font-size: 13px; border-radius: 999px; border: 1px solid #94a3b8; background: transparent; color: #475569; cursor: pointer; }
+body.dark-mode .rasikh-all-btn { color: #94a3b8; border-color: #64748b; }
+.nr-empty { text-align: center; color: #64748b; line-height: 2; padding: 24px 8px; font-size: 15px; }
+body.dark-mode .nr-empty { color: #94a3b8; }
+.hf-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex-shrink: 0; width: 100%; }
+.hf-grid3 .hf-btn { font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.hf-btn { padding: 14px 4px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; line-height: 1.3; }
 .hf-hint { font-size: 12.5px; color: #64748b; text-align: center; margin: 0 0 8px 0; flex-shrink: 0; }
 body.dark-mode .hf-hint { color: #94a3b8; }
-.prep-ayah { cursor: pointer; padding: 2px 4px; border-radius: 6px; transition: background 0.2s; }
-.prep-ayah.prep-sel { background: #fde68a; }
-body.dark-mode .prep-ayah.prep-sel { background: rgba(251, 191, 36, 0.28); }
 
-.taf-ref { font-size: 14px; color: #64748b; text-align: center; }
-.taf-ayah { font-size: 20px; line-height: 2.4; text-align: right; color: #1b4d3e; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+/* النص: التحديد بتغيير لون الكتابة، والأجزاء بخلفيتين متناوبتين */
+.prep-ayah { cursor: pointer; padding: 2px 0; border-radius: 6px; transition: background 0.15s; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.prep-ayah.prep-sel { background: rgba(250, 204, 21, 0.28); }
+.chunk-sel.chunk-a, .chunk-sel.chunk-b, body.dark-mode .chunk-sel.chunk-a, body.dark-mode .chunk-sel.chunk-b { background: transparent; }
+body.dark-mode .prep-ayah.prep-sel { background: rgba(251, 191, 36, 0.2); }
+.prep-hide { visibility: hidden; }
+.rec-pulse { width: 12px; height: 12px; border-radius: 50%; background: #dc2626; display: inline-block; animation: rec-dot-pulse 1.2s ease-in-out infinite; }
+.hf-btn.rec-live { color: #dc2626; }
+.circle-num.prep-cn { width: 30px; height: 30px; font-size: 14px; cursor: pointer; }
+.chunk { padding: 2px 4px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.chunk-a { background: rgba(74, 222, 128, 0.25); }
+.chunk-b { background: rgba(96, 165, 250, 0.22); }
+body.dark-mode .chunk-a { background: rgba(52, 211, 153, 0.2); }
+body.dark-mode .chunk-b { background: rgba(96, 165, 250, 0.22); }
+
+/* صفحة التفسير */
+.taf-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; width: 100%; margin-bottom: 8px; }
+.taf-tab { padding: 12px 6px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; }
+.taf-tab.active { background: linear-gradient(135deg, #2d6a4f 0%, #1b4d3e 100%) !important; color: #ffffff !important; border-color: transparent !important; }
+body.dark-mode .taf-tab.active { background: #16a34a !important; color: #ffffff !important; border-color: #16a34a !important; }
+.taf-ayah { font-size: 20px; line-height: 2.4; text-align: right; color: #1b4d3e; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 6px; }
 .taf-body { font-size: 19px; line-height: 2.1; text-align: right; color: #1e293b; }
 .taf-text { white-space: pre-wrap; }
-.taf-sec + .taf-sec { margin-top: 14px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
+.taf-sec + .taf-sec { margin-top: 16px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
 .taf-sec-title { font-size: 15px; font-weight: bold; color: #1b4d3e; margin-bottom: 4px; }
-body.dark-mode .taf-sec + .taf-sec { border-top-color: #334155; }
-body.dark-mode .taf-sec-title { color: #34d399; }
+.taf-blk + .taf-blk { margin-top: 10px; }
 .taf-note { font-size: 13px; color: #92400e; background: #fef3c7; border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; text-align: center; white-space: normal; }
-body.dark-mode .taf-ref { color: #94a3b8; }
+.taf-retry { margin-top: 10px; width: 100%; }
 body.dark-mode .taf-ayah { color: #34d399; border-bottom-color: #334155; }
 body.dark-mode .taf-body { color: #e2e8f0; }
+body.dark-mode .taf-sec + .taf-sec { border-top-color: #334155; }
+body.dark-mode .taf-sec-title { color: #34d399; }
 body.dark-mode .taf-note { color: #fde68a; background: rgba(251, 191, 36, 0.15); }
 
+/* نافذة اختيار البداية والنهاية: الحقل النشط */
 .numpad-display.pad-active { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25); }
 body.dark-mode .numpad-display.pad-active { border-color: #60a5fa !important; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); }
-
-/* شاشة التجزئة: دوائر الآيات ونص بخلفيات متناوبة */
-.split-sec { width: 100%; }
-.split-lbl { font-size: 14px; font-weight: bold; color: #1b4d3e; margin-bottom: 6px; text-align: right; }
-.split-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
-.pc { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #2d6a4f; background: #ffffff; color: #1b4d3e; font-family: inherit; font-size: 15px; font-weight: bold; cursor: pointer; padding: 0; touch-action: manipulation; }
-.pc.on { background: #2d6a4f; color: #ffffff; }
-.pc.half { background: #d97706; border-color: #d97706; color: #ffffff; }
-.pc.lock { cursor: default; }
-.pc.dim { opacity: 0.3; cursor: default; }
-.chunk { padding: 2px 4px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.chunk-a { background: #dcfce7; }
-.chunk-b { background: #fef3c7; }
-body.dark-mode .split-lbl { color: #34d399; }
-body.dark-mode .pc { background: #0f172a; color: #e2e8f0; border-color: #475569; }
-body.dark-mode .pc.on { background: #16a34a; border-color: #16a34a; color: #ffffff; }
-body.dark-mode .pc.half { background: #d97706; border-color: #d97706; color: #ffffff; }
-body.dark-mode .chunk-a { background: rgba(52, 211, 153, 0.2); }
-body.dark-mode .chunk-b { background: rgba(251, 191, 36, 0.2); }
 </style>
 </head>
 <body>
@@ -950,7 +1021,13 @@ const LS_KEYS = {
     settings: "ibnbadis.settings",
     migrated: "ibnbadis.migrated",
     ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
-    prep: "ibnbadis.prep.v1",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[], half}
+    midrev: "ibnbadis.midrev.v1",     // «المراجعة المتوسطة»: [{riwaya, segs:[{surah,start,end}]}]
+    active: (riwaya) => "ibnbadis.active.v1." + riwaya,   // الآيات المفعَّلة في المراجعة اليومية: {"سورة": [[بداية,نهاية],...]}
+    newrev: "ibnbadis.newrev.v1",     // قائمة «مراجعة الحفظ الجديد»: [{riwaya, surah, start, end, t}] الأحدث أخيراً
+    cuts: (riwaya) => "ibnbadis.cuts.v1." + riwaya,   // فواصل الأجزاء داخل المقطع الواحد: {"سورة": [آخر آية في الجزء,...]}
+    prog: "ibnbadis.prog.v1",         // مقاطع «قيد الحفظ» (يحفظها الآن ولم تدخل «الجديد» بعد): [{riwaya, surah, start, end}]
+    prep: "ibnbadis.prep.v2",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[]}
+    prepOld: "ibnbadis.prep.v1",     // إصدار سابق: نأخذ منه السورة والآيتين فقط
     lastStop: "ibnbadis.lastStop",   // آخر آية توقف عندها في المراجعة اليومية: {riwaya, surah (من 0), ayah (من 1)}
     texts: (riwaya) => "ibnbadis.texts.v1." + riwaya   // v1: ارفع الرقم لإجبار إعادة التنزيل
 };
@@ -987,6 +1064,8 @@ let currentContextOffset = 0;
 
 // متغيرات الجلسة الخاصة (المقطع الكامل)
 let selectedSpecialSurah = null;
+let reviewSeq = [];              // تسلسل الآيات المطلوبة في الشاشة: [{s: سورة من 0, a: آية من 0}]
+let reviewPlan = null;           // خطة جاهزة {seq, prompt} (للحفظ الجديد والمتوسط)؛ وإلا تُحسب من الآيات المفعَّلة
 let sessionActive = false;
 let specialStartAyah = 1;
 let specialEndAyah = 1;
@@ -1036,19 +1115,23 @@ const SHEIKH_RECITERS = [
     { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب" }
 ];
 let userSheikh = SHEIKH_RECITERS[0].id;
+const SHEIKH_RATES = [1, 1.15, 1.3, 1.5, 1.75];
+let userRate = 1;
 
 function loadSettings() {
     const s = lsGet(LS_KEYS.settings, {}) || {};
     if (s.riwaya === 0 || s.riwaya === 1) userRiwaya = s.riwaya;
     isDarkMode = s.darkMode === true;
     if (SHEIKH_RECITERS.some((r) => r.id === s.sheikh)) userSheikh = s.sheikh;
+    if (SHEIKH_RATES.includes(s.rate)) userRate = s.rate;
 }
 
 function saveSettings() {
     lsSet(LS_KEYS.settings, {
         riwaya: userRiwaya,
         darkMode: isDarkMode,
-        sheikh: userSheikh
+        sheikh: userSheikh,
+        rate: userRate
     });
 }
 
@@ -1274,7 +1357,8 @@ async function handleStartAppProcess() {
 }
 
 function showMainButtons() {
-    try { prepStopAudio(); } catch (e) {}
+    newReviewMode = false;
+    try { prepStopAudio(); prepRecDiscard(); } catch (e) {}
     const MainButtonshtml = `
         <div id="settings-btn-icon" class="settings-icon" onclick="showSettings()" title="الإعدادات">☰</div>
         <div id="help-btn-icon" class="help-icon" onclick="showHelpScreen()" title="لماذا هذا التطبيق؟">؟</div>
@@ -1288,14 +1372,26 @@ function showMainButtons() {
 
             <div class="menu-buttons">
                 <div class="menu-item">
-                    <button class="btn-main" onclick="showHifzHome()">الحفظ مع الشيخ</button>
+                    <button class="btn-main" onclick="showClassifyPage()">تصنيف القرآن</button>
                 </div>
                 <div class="menu-item">
-                    <button class="btn-main" onclick="showSpecialSessionScreen()">المراجعة اليومية</button>
+                    <button class="btn-main" onclick="showProgList()">الحفظ مع الشيخ</button>
+                </div>
+                <div class="menu-item">
+                    <button class="btn-main" onclick="showNewReviewList()">مراجعة الجديد</button>
+                </div>
+                <div class="menu-item">
+                    <button class="btn-main" onclick="showMidReviewList()">مراجعة المتوسط</button>
+                </div>
+                <div class="menu-item">
+                    <button class="btn-main" onclick="showRasikhList()">مراجعة الراسخ</button>
                 </div>
                 <div class="menu-item">
                     <button class="btn-secondary" onclick="showReviewSelect()" style="width: 100%;">عقال الآيات</button>
                     <div class="menu-sub">التكرار المتباعد لضبط الصعوبات</div>
+                </div>
+                <div class="menu-item">
+                    <button class="btn-secondary" onclick="showSpecialSessionScreen()" style="width: 100%;">المراجعة الحرة</button>
                 </div>
             </div>
         </div>
@@ -1362,6 +1458,13 @@ function showSettings() {
             </select>
         </div>
 
+        <div class="setting-row-box" style="flex-direction: column; align-items: stretch; gap: 4px;">
+            <span class="setting-row-label">سرعة صوت الشيخ:</span>
+            <select id="rate-select" class="sheikh-select" onchange="changeRateSetting(+this.value)">
+                ${SHEIKH_RATES.map((r) => `<option value="${r}" ${r === userRate ? 'selected' : ''}>${r === 1 ? 'عادية (×1)' : '×' + r}</option>`).join('')}
+            </select>
+        </div>
+
         <button class="btn-main" style="margin-top: 20px;" onclick="saveSettingsAndReturn()">العودة للقائمة</button>
     `;
 
@@ -1372,6 +1475,13 @@ function changeSheikhSetting(id) {
     if (!SHEIKH_RECITERS.some((r) => r.id === id)) return;
     userSheikh = id;
     saveSettings();
+}
+
+function changeRateSetting(r) {
+    if (!SHEIKH_RATES.includes(r)) return;
+    userRate = r;
+    saveSettings();
+    if (prepAudio && prepAudioKind === 'sheikh') { try { prepAudio.defaultPlaybackRate = r; prepAudio.playbackRate = r; } catch (e) {} }
 }
 
 async function changeRiwayaSetting(riwayaIndex) {
@@ -1684,7 +1794,7 @@ function loadNextAyahToReview() {
         else if (reviewOnlyKeys) { if (promptAyahEl) promptAyahEl.innerText = "أنهيتَ مراجعة الآيات التي تعثرت فيها في هذه الجلسة.\nيمكنك العودة إلى القائمة الرئيسية."; }
         else if (promptAyahEl) promptAyahEl.innerText = hasAny
             ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
-            : "لا توجد آيات في عقال الآيات بعد.\nابدأ بالمراجعة اليومية، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
+            : "لا توجد آيات في عقال الآيات بعد.\nابدأ بمراجعة الراسخ، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
         if (surahNameEl) surahNameEl.innerText = "سورة: ---";
         if (actionArea) actionArea.classList.add('hidden');
         if (expandBtn) expandBtn.style.display = 'none';
@@ -1886,23 +1996,17 @@ function playCurrentTargetAyahAudio() { console.log("تشغيل الصوت"); }
 // 8. الجلسة الخاصة (مقطع كامل من سورة)
 // ==========================================================
 
+function freeRowsHtml() {
+    return surahsNames.map((name, i) => `<button type="button" id="rs-main-${i}" class="resume-btn ps-btn" onclick="selectSpecialSurah(${i})"><span class="rb-main">${name}</span></button>`).join('');
+}
+
 function showSpecialSessionScreen() {
+    newReviewMode = false;
     selectedSpecialSurah = null;
     sessionActive = false;
     specialStartStr = "";
 
-    let surahsHtml = '';
-    surahsNames.forEach((name, index) => {
-        surahsHtml += `
-            <div class="setting-row-box" style="margin-bottom: 6px; padding: 6px 12px; display: flex; align-items: center; justify-content: space-between;">
-                <label class="radio-label" style="cursor: pointer; display: flex; align-items: center; gap: 8px; flex: 1;">
-                    <input type="radio" name="special-surah-radio" value="${index}" onchange="selectSpecialSurah(${index})">
-                    <span>سورة ${name}</span>
-                </label>
-            </div>
-        `;
-    });
-
+    reviewPlan = null;
     // زر المواصلة من آخر آية توقفنا عندها (لا يظهر إن لم يوجد موضع محفوظ)
     let resumeBtnHtml = '';
     const lastRec = lsGet(LS_KEYS.lastStop, null);
@@ -1914,9 +2018,9 @@ function showSpecialSessionScreen() {
     const specialScreenHTML = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div id="special-title" class="surah-title select-title">اختر السورة التي تريد مراجعتها</div>
-            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+            <div class="surah-list-container" id="rasikh-list" style="flex: 1; min-height: 0; max-height: none;">
                 ${resumeBtnHtml}
-                ${surahsHtml}
+                ${freeRowsHtml()}
             </div>
         </div>
 
@@ -1932,7 +2036,7 @@ function showSpecialSessionScreen() {
             </div>
             <div id="ayah-actions-bar" class="ayah-actions-bar hidden">
                 <button id="stumble-btn" class="btn-rate btn-forgot" onclick="markStumbled()">تعثر</button>
-                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playSheikhAyah(selectedSpecialSurah, ayahBarIndex)">الشيخ</button>
+                <button id="sheikh-bar-btn" class="btn-rate btn-good" onclick="playBarSheikh()">الشيخ</button>
                 <button class="btn-rate btn-easy" onclick="resumeNormalReading()">مواصلة</button>
             </div>
             <div id="pause-bar" class="ayah-actions-bar pause-bar hidden">
@@ -2100,6 +2204,7 @@ function openStopSessionDialog() {
         isPlayingRecording = false;
         enterPausedMode();
     }
+    if (newReviewMode) { leaveNewReview(); return; }   // لا حفظ لموضع التوقف ولا نافذة تعثر
     closeStopDialog();
     // بعد إظهار الآيات: تظهر مباشرة النافذة الصفراء لاختيار آخر آية (بلا نافذة وسيطة)
     if (specialRevealed) { beginStopPick(); return; }
@@ -2152,7 +2257,9 @@ function lastWordsOf(text, n) {
 
 function openStopConfirm(ayahIndex) {
     closeStopConfirm();
-    const text = getAyahText(userRiwaya, selectedSpecialSurah, ayahIndex) || "";
+    const it = reviewSeq[ayahIndex];
+    if (!it) return;
+    const text = getAyahText(userRiwaya, it.s, it.a) || "";
     const d = document.createElement('div');
     d.id = 'stop-confirm';
     d.className = 'modal-overlay';
@@ -2161,7 +2268,7 @@ function openStopConfirm(ayahIndex) {
         <div class="modal-box">
             <div class="modal-title">آخر آية توقفت عندها</div>
             <div class="resume-info">
-                <div class="resume-surah">سورة ${surahsNames[selectedSpecialSurah]} — الآية ${ayahIndex + 1}</div>
+                <div class="resume-surah">سورة ${surahsNames[it.s]} — الآية ${it.a + 1}</div>
                 <div class="confirm-words">${lastWordsOf(text, 5)}</div>
             </div>
             <div class="modal-actions stack">
@@ -2201,7 +2308,7 @@ function cancelStopPick() {
 
 // نهاية الجلسة (بحفظ آخر آية أو بدونه): نعود للقائمة، ثم نعرض سؤال مراجعة آيات التعثر إن وُجدت
 function leaveSession() {
-    const keys = selectedSpecialSurah === null ? [] : [...stumbledSet].map((a) => ayahKey(selectedSpecialSurah, a));
+    const keys = [...stumbledSet].filter((k) => reviewSeq[k]).map((k) => ayahKey(reviewSeq[k].s, reviewSeq[k].a));
     stopPickMode = false;
     resetRecordingStates();
     showMainButtons();
@@ -2250,32 +2357,58 @@ function endSessionWithoutSaving() {
 
 // الضغط على آية أثناء وضع الاختيار: نحفظها كآخر آية راجعها المستخدم ونخرج
 function finishStopPick(ayahIndex) {
-    if (selectedSpecialSurah === null) return;
-    lsSet(LS_KEYS.lastStop, { riwaya: userRiwaya, surah: selectedSpecialSurah, ayah: ayahIndex + 1 });
+    const it = reviewSeq[ayahIndex];
+    if (!it) return;
+    lsSet(LS_KEYS.lastStop, { riwaya: userRiwaya, surah: it.s, ayah: it.a + 1 });
     leaveSession();
 }
 
-// الآية التي توقف عندها المستخدم قد سبق استحضارها، فتصبح هي المطلع الأزرق ويبدأ المطلوب من التي بعدها؛
-// وإن كانت آخر آية في السورة نبدأ من أول السورة التالية
+// الآية التي توقف عندها المستخدم قد سبق استحضارها، فتصبح هي المطلع الأزرق ويبدأ المطلوب من أول آية مفعَّلة بعدها
+// (وإن لم يبقَ شيء بعدها نعود إلى أول آية مفعَّلة)
 function resolveResumePoint(rec) {
-    const total = getAyatCount(rec.surah) || 7;
-    if (rec.ayah < total) return { surah: rec.surah, start: rec.ayah + 1 };
-    return { surah: (rec.surah + 1) % surahsNames.length, start: 1 };
+    const N = getAyatCount(rec.surah) || 0;
+    if (rec.ayah < N) return { surah: rec.surah, start: rec.ayah + 1 };
+    return rec.surah + 1 < surahsNames.length ? { surah: rec.surah + 1, start: 1 } : { surah: 0, start: 1 };
 }
 
 function resumeFromLastStop() {
     const rec = lsGet(LS_KEYS.lastStop, null);
     if (!rec) { closeSpecialModal(); return; }
     const nx = resolveResumePoint(rec);
-    const maxAyats = getAyatCount(nx.surah) || 7;
+    if (!nx) return;
     selectedSpecialSurah = nx.surah;
-    specialStartAyah = Math.min(Math.max(1, nx.start), maxAyats);
-    specialEndAyah = maxAyats;
+    specialStartAyah = nx.start;
+    specialEndAyah = getAyatCount(nx.surah) || 7;
     closeSpecialModal();
     loadSpecialFullSectionExercise();
 }
 
+// خطة الآيات: المطلوبة (تسلسل) والمطلع الأزرق (آية صريحة، أو الآية التي قبل أول مطلوب، أو البسملة)
+function reviewPlanForDaily(surah, start1) {
+    const N = getAyatCount(surah) || 0, seq = [];
+    for (let n = Math.max(1, start1); n <= N; n++) seq.push({ s: surah, a: n - 1 });
+    return { seq };
+}
+
+function reviewPromptOf(plan) {
+    if (plan.prompt) return { id: 'special-prev-prompt', text: getAyahText(userRiwaya, plan.prompt.s, plan.prompt.a) || "", num: plan.prompt.a + 1, s: plan.prompt.s };
+    const f = plan.seq[0];
+    if (f.a === 0) {
+        // في حفص البسملة جزء من نص الآية الأولى (وسورة التوبة بلا بسملة): لا نكتبها كمطلع.
+        // في ورش تُكتب بالأزرق ثم تُمحى عند إظهار الآيات.
+        const firstText = getAyahText(userRiwaya, f.s, 0) || "";
+        const norm = firstText.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640\uFEFF]/g, "").replace(/[\u0671\u0622\u0623\u0625]/g, "ا").trim();
+        const hasBasmalaInside = norm.startsWith("بسم الله الرحمن الرحيم");
+        if (!hasBasmalaInside && f.s !== 8) return { id: 'special-basmala-prompt', text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", num: "", s: f.s };
+        return { id: '', text: "", num: "", s: f.s };
+    }
+    return { id: 'special-prev-prompt', text: getAyahText(userRiwaya, f.s, f.a - 1) || "", num: f.a, s: f.s };
+}
+
 function loadSpecialFullSectionExercise() {
+    const plan = reviewPlan || reviewPlanForDaily(selectedSpecialSurah, specialStartAyah);
+    if (!plan.seq.length) { showToast("لا توجد آيات في الراسخ بعد هذه الآية."); return; }
+    reviewSeq = plan.seq;
     resetRecordingStates();
 
     const currentRiwaya = userRiwaya;
@@ -2320,43 +2453,28 @@ function loadSpecialFullSectionExercise() {
 
     const exerciseContainer = document.getElementById('exercise-container');
 
-    let promptText = "";
-    let promptNumDisplay = "";
-
-    if (specialStartAyah === 1) {
-        // في حفص البسملة جزء من نص الآية الأولى (وسورة التوبة بلا بسملة): لا نكتبها كمطلع.
-        // في ورش تُكتب بالأزرق ثم تُمحى عند إظهار الآيات.
-        const firstText = getAyahText(currentRiwaya, selectedSpecialSurah, 0) || "";
-        const norm = firstText.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640\uFEFF]/g, "").replace(/[\u0671\u0622\u0623\u0625]/g, "ا").trim();
-        const hasBasmalaInside = norm.startsWith("بسم الله الرحمن الرحيم");
-        if (!hasBasmalaInside && selectedSpecialSurah !== 8) {
-            promptText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
-        }
-        promptNumDisplay = "";
-    } else {
-        const prevIdx = specialStartAyah - 2;
-        promptText = getAyahText(currentRiwaya, selectedSpecialSurah, prevIdx) || "";
-        promptNumDisplay = prevIdx + 1;
-    }
+    const pr = reviewPromptOf(plan);
+    const promptText = pr.text, promptNumDisplay = pr.num;
 
     let fullTargetHTML = "";
-    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
-        const text = getAyahText(currentRiwaya, selectedSpecialSurah, a) || "";
-        const num = a + 1;
+    let prevS = pr.s;
+    reviewSeq.forEach((it, k) => {
+        if (it.s !== prevS) { fullTargetHTML += `<span class="rv-surah-sep">سورة ${surahsNames[it.s]}</span>`; prevS = it.s; }
+        const text = getAyahText(currentRiwaya, it.s, it.a) || "";
         fullTargetHTML += `
-            <span id="special-ayah-item-${a}"
-                  onclick="handleSpecialAyahClick(${a})"
+            <span id="special-ayah-item-${k}"
+                  onclick="handleSpecialAyahClick(${k})"
                   style="cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: background 0.2s;">
-                ${text} <span class="circle-num">${num}</span>
+                ${text} <span class="circle-num">${it.a + 1}</span>
             </span> `;
-    }
+    });
 
     const customLayoutHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-            <span class="surah-title" style="font-size: 16px;">سورة: ${surahsNames[selectedSpecialSurah]}</span>
+            <span class="surah-title" style="font-size: 16px;">سورة: ${surahsNames[pr.s]}</span>
         </div>
         <div class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.5;">
-            ${promptText ? `<span id="${specialStartAyah === 1 ? 'special-basmala-prompt' : 'special-prev-prompt'}" class="ayah-blue">${promptText}</span>` : ""}
+            ${promptText ? `<span id="${pr.id}" class="ayah-blue">${promptText}</span>` : ""}
             ${promptNumDisplay !== "" ? `<span class="circle-num">${promptNumDisplay}</span>` : ""}
             <div id="rec-indicator" class="rec-indicator"><span class="rec-dot"></span><span id="rec-indicator-text">جارٍ التسجيل...</span></div>
             <div id="rec-inline" class="rec-inline"></div>
@@ -2402,8 +2520,8 @@ function syncBottom() {
 }
 
 function clearAyahHighlights() {
-    for (let a = specialStartAyah - 1; a < specialEndAyah; a++) {
-        const el = document.getElementById(`special-ayah-item-${a}`);
+    for (let k = 0; k < reviewSeq.length; k++) {
+        const el = document.getElementById(`special-ayah-item-${k}`);
         if (el) el.style.backgroundColor = "transparent";
     }
 }
@@ -2423,13 +2541,22 @@ let stumbledSet = new Set();
 function refreshStumbleBtn() {
     const btn = document.getElementById('stumble-btn');
     if (!btn) return;
+    btn.style.display = newReviewMode ? 'none' : '';   // لا تعثّر (ولا عقال آيات) في مراجعة الحفظ الجديد
     btn.innerText = stumbledSet.has(ayahBarIndex) ? "✓ أُدرجت" : "تعثر";
+}
+
+// الشيخ على الآية المحدَّدة في شريط الآية
+function playBarSheikh() {
+    const it = reviewSeq[ayahBarIndex];
+    if (it) playSheikhAyah(it.s, it.a);
 }
 
 // «تعثر»: تُدرج الآية المحددة في عقال الآيات بصعوبة 10
 function markStumbled() {
-    if (ayahBarIndex === null || selectedSpecialSurah === null) return;
-    addStumbledAyah(selectedSpecialSurah, ayahBarIndex);
+    if (newReviewMode) return;
+    const it = reviewSeq[ayahBarIndex];
+    if (ayahBarIndex === null || !it) return;
+    addStumbledAyah(it.s, it.a);
     stumbledSet.add(ayahBarIndex);
     const el = document.getElementById(`special-ayah-item-${ayahBarIndex}`);
     if (el) el.classList.add('ayah-stumbled');
@@ -2506,6 +2633,7 @@ function playSheikhAyah(surah, ayah) {
     const next = () => {
         if (i >= urls.length) { stopSheikh(); return; }
         const a = new Audio(urls[i++]);
+        try { a.defaultPlaybackRate = userRate; a.playbackRate = userRate; } catch (e) {}
         sheikhAudio = a;
         a.onended = next;
         a.onerror = fail;
@@ -2994,88 +3122,440 @@ function handleSheikhAudioPlaceholder() {
 
 
 // ==========================================================
-// 10. التشغيل
+// 9ج. الآيات المفعَّلة للمراجعة اليومية (تُخزَّن مدمجةً لكل سورة)
 // ==========================================================
+function mergeRanges(r) {
+    const a = r.filter((x) => Array.isArray(x) && x[0] >= 1 && x[1] >= x[0]).sort((p, q) => p[0] - q[0]);
+    const out = [];
+    a.forEach((x) => {
+        const last = out[out.length - 1];
+        if (last && x[0] <= last[1] + 1) last[1] = Math.max(last[1], x[1]);
+        else out.push([x[0], x[1]]);
+    });
+    return out;
+}
+
+function activeLoad(riwaya) {
+    const o = lsGet(LS_KEYS.active(riwaya), {});
+    return (o && typeof o === 'object' && !Array.isArray(o)) ? o : {};
+}
+
+function activeAdd(riwaya, segs) {
+    const o = activeLoad(riwaya);
+    segs.forEach((g) => { const k = String(g.surah); o[k] = (o[k] || []).concat([[g.start, g.end]]); });
+    Object.keys(o).forEach((k) => { o[k] = mergeRanges(o[k]); });
+    lsSet(LS_KEYS.active(riwaya), o);
+}
+
+// أرقام الآيات (من 1) المفعَّلة في سورة، تصاعدياً
+function activeAyahsOf(surah) {
+    const max = getAyatCount(surah) || 0;
+    const out = [];
+    mergeRanges(activeLoad(userRiwaya)[String(surah)] || []).forEach(([a, b]) => { for (let n = a; n <= Math.min(b, max); n++) out.push(n); });
+    return out;
+}
+
+function activeSurahs() {
+    const o = activeLoad(userRiwaya);
+    return Object.keys(o).map(Number).filter((i) => Number.isInteger(i) && surahsNames[i] && activeAyahsOf(i).length).sort((a, b) => a - b);
+}
+
+// أول آية مفعَّلة بعد (surah, ayah1) بترتيب المصحف، وإلا أول آية مفعَّلة في كل المصحف (دوران)، وإلا null
+function activeNextAfter(surah, ayah1) {
+    const list = activeSurahs();
+    if (!list.length) return null;
+    for (const s of list) {
+        if (s < surah) continue;
+        const n = activeAyahsOf(s).find((x) => s > surah || x > ayah1);
+        if (n) return { surah: s, start: n };
+    }
+    return { surah: list[0], start: activeAyahsOf(list[0])[0] };
+}
 
 // ==========================================================
-// 9. «الحفظ مع الشيخ» — مرحلة التحضير
-//    اختيار المقطع ← الاطلاع على النص والتفسير والاستماع للشيخ ← تجزئة المقطع
-//    (مرحلة «حفظ المقطع» ستُضاف لاحقاً)
+// 9د. تصنيف القرآن حسب درجة الحفظ (من الإعدادات)
+// لكل آية حالة واحدة: الراسخ (المفعَّل في «مراجعة الراسخ»)، المتوسط (وحدات «مراجعة المتوسط»)،
+// الجديد (مقاطع «مراجعة الجديد»)، وإلا غير محفوظ. التصنيف الجديد يقتطع الآيات من درجتها السابقة.
 // ==========================================================
+const CLS_CATS = {
+    rasikh: { name: 'الراسخ', rank: 3 },
+    mid: { name: 'المتوسط', rank: 2 },
+    new: { name: 'الجديد', rank: 1 },
+    prog: { name: 'قيد الحفظ', rank: 4 },
+    none: { name: 'غير محفوظ', rank: 0 }
+};
+const CLS_RANK_NAME = ['غير محفوظ', 'الجديد', 'المتوسط', 'الراسخ', 'قيد الحفظ'];
+function progLoad() { const l = lsGet(LS_KEYS.prog, []); return Array.isArray(l) ? l : []; }
+let clsA = null, clsB = null, clsScroll = 0;   // clsA/clsB: بداية ونهاية التحديد الحالي {s, a}
 
-let prep = null;              // المقطع الحالي: {riwaya, surah (من 0), start, end, cuts[], half}
-let prepSel = null;           // الآية المحدَّدة لعرض تفسيرها (رقم من 1)
-let prepScroll = 0;
-let prepAudio = null;
-let prepPlaying = false;
-let prepAudioToken = 0;
-let prepSurahSel = null;
-let prepField = 'start';
-let prepStartStr = "";
-let prepEndStr = "";
-let prepTafToken = 0;
-
-// ---------- أدوات مشتركة ----------
-
-function hfUtilRow(endLabel, endOnclick) {
-    return `
-        <div id="util-row" class="util-row">
-            <div class="u-start">
-                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
-            </div>
-            <div class="u-mid"></div>
-            <div class="u-end">${endLabel ? `<button class="btn-home btn-end-session" onclick="${endOnclick}">${endLabel}</button>` : ''}</div>
-        </div>`;
+// [a,b] ناقص [s,e]
+function subRange(a, b, s, e) {
+    if (e < a || s > b) return [[a, b]];
+    const out = [];
+    if (s > a) out.push([a, s - 1]);
+    if (e < b) out.push([e + 1, b]);
+    return out;
 }
 
-// أول آيات كل جزء: كل ثلاث آيات جزء، وآخر آية في المقطع نهاية دائمة
-function prepDefaultCuts(start, end) {
-    const cuts = [];
-    for (let n = start + 2; n < end; n += 3) cuts.push(n);
-    cuts.push(end);
-    return cuts;
+// إزالة مدى من الراسخ والمتوسط والجديد (للرواية الحالية)
+function clsRemove(surah, start, end) {
+    const rw = userRiwaya;
+    const act = activeLoad(rw), k = String(surah);
+    if (act[k]) {
+        let r = [];
+        act[k].forEach(([a, b]) => { r = r.concat(subRange(a, b, start, end)); });
+        if (r.length) act[k] = mergeRanges(r); else delete act[k];
+        lsSet(LS_KEYS.active(rw), act);
+    }
+    const nl = [];
+    newReviewLoad().forEach((e) => {
+        if (e.riwaya !== rw || e.surah !== surah) { nl.push(e); return; }
+        subRange(e.start, e.end, start, end).forEach(([a, b]) => nl.push(Object.assign({}, e, { start: a, end: b })));
+    });
+    lsSet(LS_KEYS.newrev, nl);
+    const pl = [];
+    progLoad().forEach((e) => {
+        if (e.riwaya !== rw || e.surah !== surah) { pl.push(e); return; }
+        subRange(e.start, e.end, start, end).forEach(([a, b]) => pl.push(Object.assign({}, e, { start: a, end: b })));
+    });
+    lsSet(LS_KEYS.prog, pl);
+    const ct = lsGet(LS_KEYS.cuts(rw), {});
+    if (ct && ct[String(surah)]) {
+        const keep = ct[String(surah)].filter((a) => a < start || a > end);
+        if (keep.length) ct[String(surah)] = keep; else delete ct[String(surah)];
+        lsSet(LS_KEYS.cuts(rw), ct);
+    }
+    const ml = [];
+    midLoad().forEach((u) => {
+        if (u.riwaya !== rw) { ml.push(u); return; }
+        const segs = [];
+        (u.segs || []).forEach((g) => {
+            if (g.surah !== surah) segs.push(g);
+            else subRange(g.start, g.end, start, end).forEach(([a, b]) => segs.push({ surah, start: a, end: b }));
+        });
+        if (segs.length) ml.push(Object.assign({}, u, { segs }));
+    });
+    lsSet(LS_KEYS.midrev, ml);
 }
 
-// نهاية النصف الأول الافتراضية: منتصف المقطع تقريباً (والنصف الأول هو الأكبر عند العدد الفردي)
-function prepDefaultHalf(start, end) {
-    const n = end - start + 1;
-    return start + Math.ceil(n / 2) - 1;
+function clsAssign(cat, surah, start, end) {
+    clsRemove(surah, start, end);
+    const rw = userRiwaya;
+    if (cat === 'rasikh') activeAdd(rw, [{ surah, start, end }]);
+    else if (cat === 'mid') { const m = midLoad(); m.push({ riwaya: rw, segs: [{ surah, start, end }] }); lsSet(LS_KEYS.midrev, m); }
+    else if (cat === 'new') { const l = newReviewLoad(); l.push({ riwaya: rw, surah, start, end }); lsSet(LS_KEYS.newrev, l); }
 }
 
-function prepNormalize(p) {
-    if (!p) return null;
-    const total = getAyatCount(p.surah, p.riwaya);
-    if (p.riwaya !== userRiwaya || !surahsNames[p.surah] || !(p.start >= 1) || !(p.end >= p.start) || p.end > total) return null;
-    let cuts = Array.isArray(p.cuts) ? p.cuts.filter((n) => Number.isInteger(n) && n >= p.start && n <= p.end) : null;
-    if (!cuts || !cuts.length) cuts = prepDefaultCuts(p.start, p.end);
-    if (!cuts.includes(p.end)) cuts.push(p.end);
-    cuts = Array.from(new Set(cuts)).sort((a, b) => a - b);
-    let half = p.half;
-    if (!Number.isInteger(half) || half < p.start || half >= p.end) half = prepDefaultHalf(p.start, p.end);
-    if (p.end === p.start) half = p.end;
-    return { riwaya: p.riwaya, surah: p.surah, start: p.start, end: p.end, cuts, half };
+// رتبة كل آية (0 غير محفوظ، 1 جديد، 2 متوسط، 3 راسخ) لكل السور
+function clsRanks() {
+    const rw = userRiwaya, arr = {};
+    const get = (s) => arr[s] || (arr[s] = new Uint8Array((getAyatCount(s) || 0) + 2));
+    const mark = (s, a, b, v) => { const x = get(s); for (let n = Math.max(1, a); n <= Math.min(b, x.length - 2); n++) if (x[n] < v) x[n] = v; };
+    const act = activeLoad(rw);
+    Object.keys(act).forEach((k) => (act[k] || []).forEach(([a, b]) => mark(Number(k), a, b, 3)));
+    midLoad().forEach((u) => { if (u.riwaya === rw) (u.segs || []).forEach((g) => mark(g.surah, g.start, g.end, 2)); });
+    newReviewLoad().forEach((e) => { if (e.riwaya === rw) mark(e.surah, e.start, e.end, 1); });
+    // «قيد الحفظ» أضعف الدرجات عند التداخل: لا يظهر إلا حيث لا درجة أخرى (مثلاً بعد انتقال المقطع إلى «الجديد»)
+    progLoad().forEach((e) => {
+        if (e.riwaya !== rw) return;
+        const x = get(e.surah);
+        for (let n = Math.max(1, e.start); n <= Math.min(e.end, x.length - 2); n++) if (x[n] === 0) x[n] = 4;
+    });
+    return { get, n: (s) => getAyatCount(s) || 0 };
 }
 
-function loadPrep() { return prepNormalize(lsGet(LS_KEYS.prep, null)); }
-function savePrep() { if (prep) lsSet(LS_KEYS.prep, prep); }
+function clsRuns(R, s) {
+    const x = R.get(s), N = R.n(s), runs = [];
+    for (let n = 1; n <= N; n++) {
+        const last = runs[runs.length - 1];
+        if (last && last.v === x[n]) last.b = n; else runs.push({ a: n, b: n, v: x[n] });
+    }
+    return runs;
+}
 
-// ---------- الصفحة الأولى: تحضير المقطع / حفظ المقطع ----------
+function clsSummary(R, s) {
+    const runs = clsRuns(R, s);
+    if (!runs.length) return '';
+    if (runs.length === 1) return runs[0].v === 0 ? 'غير محفوظ' : CLS_RANK_NAME[runs[0].v] + ' (كل الآيات)';
+    return runs.map((r) => (r.a === r.b ? r.a : r.a + '–' + r.b) + ' ' + CLS_RANK_NAME[r.v]).join(' · ');
+}
 
-function showHifzHome() {
-    prepStopAudio();
+// ---------- شاشة التصنيف: القرآن كله في نافذة واحدة، أرقام الآيات تحت اسم كل سورة ----------
+const clsCmp = (s1, a1, s2, a2) => (s1 - s2) || (a1 - a2);
+function clsInSel(s, a) {
+    return !!(clsA && clsB && clsCmp(s, a, clsA.s, clsA.a) >= 0 && clsCmp(s, a, clsB.s, clsB.a) <= 0);
+}
+
+// تصنيف مدى قد يمتد عبر سور: من (s1,a1) إلى (s2,b2)
+function clsAssignRange(cat, s1, a1, s2, b2) {
+    const rw = userRiwaya, segs = [];
+    for (let s = s1; s <= s2; s++) {
+        const N = getAyatCount(s) || 0;
+        const start = s === s1 ? a1 : 1, end = s === s2 ? b2 : N;
+        if (N && end >= start) segs.push({ surah: s, start, end });
+    }
+    segs.forEach((g) => clsRemove(g.surah, g.start, g.end));
+    if (cat === 'rasikh') activeAdd(rw, segs);
+    else if (cat === 'mid') { const m = midLoad(); m.push({ riwaya: rw, segs }); lsSet(LS_KEYS.midrev, m); }
+    else if (cat === 'new') { const l = newReviewLoad(); segs.forEach((g) => l.push({ riwaya: rw, surah: g.surah, start: g.start, end: g.end })); lsSet(LS_KEYS.newrev, l); }
+    else if (cat === 'prog') { const l = progLoad(); segs.forEach((g) => l.push({ riwaya: rw, surah: g.surah, start: g.start, end: g.end })); lsSet(LS_KEYS.prog, l); }
+}
+
+// رتبة الآية التالية بترتيب المصحف (-1 بعد آخر آية)
+function clsNextRank(R, s, a) {
+    if (a < R.n(s)) return R.get(s)[a + 1];
+    return s + 1 < surahsNames.length ? R.get(s + 1)[1] : -1;
+}
+// الآية «فاصل» إن سُجّل فاصل عندها وكانت التالية من الدرجة نفسها (وإلا لا معنى له فلا يظهر)
+function clsIsCut(R, cuts, s, a) {
+    const x = R.get(s)[a];
+    return !!x && (cuts[String(s)] || []).includes(a) && clsNextRank(R, s, a) === x;
+}
+function clsToggleCut(s, a) {
+    const rw = userRiwaya, ct = lsGet(LS_KEYS.cuts(rw), {}) || {}, k = String(s);
+    const list = ct[k] || [];
+    if (list.includes(a)) ct[k] = list.filter((v) => v !== a);
+    else ct[k] = list.concat([a]).sort((p, q) => p - q);
+    if (!ct[k].length) delete ct[k];
+    lsSet(LS_KEYS.cuts(rw), ct);
+}
+
+// نهايات الصفحات والأثمان والأرباع والأنصاف والأحزاب: أرقام تسلسلية للآية (1 = أول آية في المصحف) لكل رواية
+// حفص: المصحف المدني (604 صفحة، 240 ربعاً). ورش: الصفحات من قائمة ورش، والأثمان (480) من قائمة المغاربة (قالون) ذات الترقيم نفسه (6214 آية)؛
+// ولا أثمان في حفص (المصحف المدني لا يضع علامات للأثمان).
+const CLS_MARKS = {"0":{"page":[7,11,22,30,35,43,54,63,67,75,82,89,94,99,107,111,118,125,132,140,147,151,159,169,175,182,187,192,196,202,207,215,220,224,229,235,238,242,250,253,257,262,265,270,275,280,287,288,292,301,307,314,321,329,337,343,352,361,368,374,382,392,400,407,413,424,432,440,445,449,457,465,472,478,486,492,498,503,506,511,515,518,525,529,536,542,550,556,565,570,577,582,585,592,596,604,612,618,625,631,638,645,653,661,666,670,673,677,681,686,692,700,705,710,714,719,726,733,739,746,752,759,764,772,777,782,789,798,808,817,825,834,842,849,857,863,871,880,884,891,900,908,914,920,927,932,936,941,947,956,966,977,984,991,998,1006,1012,1022,1028,1036,1042,1050,1059,1075,1085,1093,1099,1105,1111,1115,1119,1126,1134,1143,1151,1162,1170,1178,1187,1195,1202,1208,1215,1224,1232,1238,1244,1251,1258,1264,1269,1274,1278,1285,1292,1299,1306,1311,1318,1325,1332,1338,1345,1350,1356,1361,1368,1374,1382,1388,1393,1401,1410,1421,1429,1438,1446,1456,1465,1474,1482,1489,1496,1505,1514,1522,1530,1538,1547,1557,1565,1574,1585,1594,1602,1612,1620,1628,1635,1641,1650,1661,1667,1676,1684,1693,1701,1709,1715,1723,1729,1738,1744,1752,1760,1766,1774,1779,1788,1797,1807,1822,1838,1858,1877,1897,1912,1920,1932,1940,1948,1960,1970,1978,1985,1993,1999,2008,2016,2024,2034,2041,2051,2061,2072,2083,2092,2100,2109,2120,2130,2138,2148,2159,2164,2171,2178,2188,2196,2204,2217,2226,2237,2249,2259,2273,2286,2300,2313,2326,2345,2359,2384,2398,2411,2423,2434,2444,2458,2471,2482,2492,2506,2517,2526,2539,2553,2562,2571,2582,2593,2598,2608,2614,2621,2629,2637,2646,2655,2663,2669,2686,2696,2711,2729,2744,2759,2774,2788,2798,2808,2815,2819,2824,2830,2839,2844,2847,2852,2861,2870,2882,2893,2905,2917,2927,2945,2965,2987,3010,3038,3063,3086,3110,3133,3153,3166,3175,3189,3199,3210,3218,3231,3243,3252,3260,3268,3276,3283,3291,3298,3307,3318,3325,3332,3341,3349,3358,3366,3374,3381,3388,3399,3409,3419,3428,3436,3445,3454,3464,3474,3482,3491,3497,3508,3517,3527,3533,3542,3549,3557,3562,3570,3577,3581,3589,3600,3607,3614,3622,3631,3639,3648,3657,3665,3672,3684,3692,3699,3711,3726,3739,3753,3769,3782,3806,3833,3858,3884,3908,3935,3964,3979,3989,4005,4024,4046,4056,4061,4070,4080,4087,4094,4103,4114,4121,4128,4137,4147,4155,4162,4171,4180,4188,4198,4206,4216,4225,4234,4243,4251,4259,4267,4272,4279,4288,4300,4307,4318,4330,4341,4355,4369,4382,4398,4415,4435,4454,4466,4475,4485,4494,4503,4509,4517,4524,4536,4544,4554,4563,4572,4578,4586,4591,4596,4603,4610,4625,4645,4661,4685,4706,4727,4744,4762,4788,4805,4829,4850,4872,4894,4918,4946,4973,5008,5034,5057,5065,5071,5077,5082,5088,5093,5102,5106,5112,5119,5127,5132,5138,5145,5154,5162,5169,5176,5185,5194,5199,5206,5213,5218,5231,5245,5265,5291,5308,5336,5363,5393,5407,5427,5440,5455,5472,5491,5519,5546,5572,5592,5617,5648,5678,5704,5733,5773,5804,5827,5856,5883,5906,5933,5964,5992,6018,6044,6069,6095,6113,6130,6154,6171,6185,6199,6214],"thumn":[19,31,39,49,59,65,72,81,90,97,107,111,120,129,138,147,153,163,173,182,190,194,202,207,217,223,232,237,240,247,252,257,263,268,272,277,287,288,296,306,317,324,333,342,354,365,373,382,395,404,412,424,435,444,451,462,470,477,486,497,502,504,510,515,522,527,537,548,554,564,568,577,583,590,595,604,613,620,628,638,649,656,662,670,673,679,685,691,700,709,713,717,727,735,743,750,758,765,774,779,789,802,814,825,839,848,858,869,880,884,889,900,909,916,925,930,934,940,947,956,973,983,991,1001,1009,1019,1029,1042,1054,1071,1086,1097,1103,1111,1118,1126,1135,1143,1154,1166,1173,1183,1193,1202,1211,1222,1234,1242,1249,1256,1262,1271,1277,1283,1291,1298,1307,1313,1322,1331,1339,1349,1355,1361,1370,1378,1386,1393,1404,1416,1428,1438,1450,1460,1471,1482,1491,1500,1508,1517,1526,1537,1549,1559,1570,1581,1595,1607,1619,1630,1640,1650,1664,1674,1685,1698,1707,1713,1725,1729,1739,1744,1753,1765,1774,1782,1793,1807,1832,1855,1886,1906,1920,1935,1943,1956,1968,1976,1984,1995,2003,2016,2025,2034,2044,2056,2069,2083,2094,2103,2118,2132,2144,2160,2166,2175,2187,2196,2206,2217,2225,2238,2249,2269,2288,2307,2326,2348,2371,2401,2418,2428,2440,2455,2473,2482,2497,2511,2523,2532,2554,2567,2581,2593,2603,2611,2620,2628,2639,2650,2660,2669,2689,2704,2726,2744,2766,2784,2798,2808,2817,2822,2829,2838,2845,2848,2859,2870,2881,2894,2910,2927,2948,2976,3004,3037,3072,3107,3134,3158,3170,3179,3194,3210,3221,3236,3248,3258,3266,3276,3285,3298,3308,3323,3330,3342,3350,3360,3371,3381,3395,3412,3425,3434,3444,3457,3474,3484,3494,3507,3519,3532,3539,3546,3554,3557,3566,3577,3581,3586,3598,3606,3614,3623,3633,3645,3658,3668,3684,3693,3700,3726,3743,3758,3775,3803,3832,3864,3895,3926,3964,3983,3992,4014,4046,4058,4067,4080,4089,4099,4113,4122,4130,4142,4151,4162,4174,4187,4199,4213,4221,4230,4242,4251,4259,4269,4277,4289,4298,4306,4319,4331,4350,4371,4392,4421,4445,4463,4475,4490,4503,4509,4521,4534,4544,4557,4570,4580,4589,4592,4600,4605,4615,4636,4655,4685,4710,4736,4756,4787,4816,4840,4863,4878,4908,4936,4983,5032,5060,5068,5074,5082,5089,5095,5107,5113,5127,5133,5140,5154,5162,5173,5182,5189,5199,5205,5213,5218,5237,5267,5296,5338,5371,5392,5411,5427,5444,5472,5503,5528,5567,5585,5613,5648,5688,5728,5765,5789,5829,5874,5895,5923,5958,6000,6035,6067,6103,6133,6166,6214],"rub":[31,49,65,81,97,111,129,147,163,182,194,207,223,237,247,257,268,277,288,306,324,342,365,382,404,424,444,462,477,497,504,515,527,548,564,577,590,604,620,638,656,670,679,691,709,717,735,750,765,779,802,825,848,869,884,900,916,930,940,956,983,1001,1019,1042,1071,1097,1111,1126,1143,1166,1183,1202,1222,1242,1256,1271,1283,1298,1313,1331,1349,1361,1378,1393,1416,1438,1460,1482,1500,1517,1537,1559,1581,1607,1630,1650,1674,1698,1713,1729,1744,1765,1782,1807,1855,1906,1935,1956,1976,1995,2016,2034,2056,2083,2103,2132,2160,2175,2196,2217,2238,2269,2307,2348,2401,2428,2455,2482,2511,2532,2567,2593,2611,2628,2650,2669,2704,2744,2784,2808,2822,2838,2848,2870,2894,2927,2976,3037,3107,3158,3179,3210,3236,3258,3276,3298,3323,3342,3360,3381,3412,3434,3457,3484,3507,3532,3546,3557,3577,3586,3606,3623,3645,3668,3693,3726,3758,3803,3864,3926,3983,4014,4058,4080,4099,4122,4142,4162,4187,4213,4230,4251,4269,4289,4306,4331,4371,4421,4463,4490,4509,4534,4557,4580,4592,4605,4636,4685,4736,4787,4840,4878,4936,5032,5068,5082,5095,5113,5133,5154,5173,5189,5205,5218,5267,5338,5392,5427,5472,5528,5585,5648,5728,5789,5874,5923,6000,6067,6133,6214],"half":[49,81,111,147,182,207,237,257,277,306,342,382,424,462,497,515,548,577,604,638,670,691,717,750,779,825,869,900,930,956,1001,1042,1097,1126,1166,1202,1242,1271,1298,1331,1361,1393,1438,1482,1517,1559,1607,1650,1698,1729,1765,1807,1906,1956,1995,2034,2083,2132,2175,2217,2269,2348,2428,2482,2532,2593,2628,2669,2744,2808,2838,2870,2927,3037,3158,3210,3258,3298,3342,3381,3434,3484,3532,3557,3586,3623,3668,3726,3803,3926,4014,4080,4122,4162,4213,4251,4289,4331,4421,4490,4534,4580,4605,4685,4787,4878,5032,5082,5113,5154,5189,5218,5338,5427,5528,5648,5789,5923,6067,6214],"hizb":[81,147,207,257,306,382,462,515,577,638,691,750,825,900,956,1042,1126,1202,1271,1331,1393,1482,1559,1650,1729,1807,1956,2034,2132,2217,2348,2482,2593,2669,2808,2870,3037,3210,3298,3381,3484,3557,3623,3726,3926,4080,4162,4251,4331,4490,4580,4685,4878,5082,5154,5218,5427,5648,5923,6214]},"1":{"page":[7,12,23,31,36,44,55,64,68,76,83,90,95,100,108,112,119,126,133,141,148,152,160,170,176,183,188,193,197,203,209,217,222,226,231,237,240,244,252,255,259,263,266,271,276,281,288,289,293,302,308,315,322,330,338,345,354,363,370,376,384,393,401,408,414,425,433,441,446,450,458,466,473,479,487,493,499,504,507,512,516,519,526,530,537,544,552,558,567,572,579,584,587,594,598,606,614,620,627,633,640,647,655,663,668,671,674,678,682,686,692,700,705,710,714,719,726,733,739,745,751,758,764,772,777,782,789,797,807,816,824,833,841,848,857,862,870,879,883,890,899,907,913,920,926,931,935,940,946,954,965,976,984,991,997,1005,1011,1021,1027,1035,1041,1049,1058,1074,1084,1091,1097,1103,1109,1113,1117,1124,1132,1141,1149,1160,1168,1176,1185,1193,1200,1205,1212,1221,1229,1235,1241,1248,1255,1261,1266,1271,1275,1282,1289,1296,1303,1307,1314,1321,1328,1334,1341,1346,1352,1357,1364,1370,1378,1384,1389,1397,1406,1417,1425,1434,1442,1452,1461,1470,1478,1485,1492,1501,1510,1518,1526,1535,1544,1554,1561,1570,1581,1590,1600,1610,1618,1626,1633,1639,1648,1659,1665,1674,1682,1691,1699,1707,1712,1720,1725,1735,1741,1749,1755,1760,1768,1774,1783,1792,1802,1817,1833,1853,1872,1892,1907,1915,1927,1935,1943,1955,1965,1973,1980,1988,1994,2003,2011,2019,2029,2036,2046,2056,2067,2078,2087,2095,2104,2115,2125,2133,2144,2155,2160,2167,2174,2185,2193,2201,2214,2223,2237,2250,2261,2275,2288,2301,2314,2326,2345,2360,2385,2399,2412,2424,2435,2446,2461,2473,2483,2493,2507,2518,2527,2540,2555,2564,2573,2584,2595,2600,2610,2618,2625,2633,2641,2650,2659,2667,2673,2690,2700,2715,2732,2747,2762,2777,2791,2801,2811,2818,2822,2827,2834,2844,2849,2852,2857,2866,2875,2887,2898,2910,2922,2932,2951,2971,2992,3015,3043,3068,3091,3115,3138,3159,3172,3181,3194,3203,3214,3222,3235,3247,3257,3265,3273,3280,3287,3295,3302,3311,3322,3329,3336,3346,3354,3363,3370,3378,3385,3392,3403,3414,3424,3433,3441,3450,3459,3469,3480,3488,3497,3503,3514,3523,3533,3539,3548,3555,3563,3568,3576,3583,3587,3595,3606,3613,3620,3628,3637,3645,3654,3663,3671,3678,3690,3698,3704,3717,3732,3745,3759,3775,3788,3812,3839,3864,3890,3914,3941,3970,3986,3996,4012,4031,4053,4063,4068,4079,4089,4098,4105,4114,4125,4132,4140,4149,4158,4166,4173,4182,4191,4199,4210,4218,4229,4238,4247,4256,4264,4272,4282,4287,4294,4303,4316,4323,4335,4347,4358,4372,4385,4398,4414,4432,4453,4473,4486,4495,4505,4515,4524,4530,4538,4545,4556,4564,4574,4583,4592,4598,4606,4611,4616,4623,4630,4645,4665,4681,4705,4726,4749,4766,4784,4810,4828,4852,4873,4895,4917,4941,4968,4995,5029,5055,5078,5086,5093,5099,5104,5110,5115,5125,5129,5135,5142,5150,5155,5161,5168,5177,5185,5192,5199,5208,5217,5222,5229,5236,5241,5253,5267,5286,5313,5331,5357,5385,5414,5429,5447,5460,5475,5494,5512,5542,5570,5596,5616,5641,5672,5702,5727,5758,5800,5829,5854,5882,5909,5931,5963,5993,6016,6043,6072,6098,6125,6137,6155,6176,6193,6207,6221,6236],"rub":[32,50,66,81,98,112,130,148,164,183,195,209,225,239,249,259,269,278,289,307,325,344,367,385,405,425,445,463,478,493,504,516,528,550,566,580,592,606,627,640,655,669,680,695,709,719,735,750,765,777,801,824,847,862,883,899,915,929,939,954,984,1000,1018,1041,1070,1095,1109,1124,1142,1160,1181,1200,1220,1235,1253,1268,1280,1294,1309,1327,1345,1356,1374,1389,1416,1434,1453,1478,1496,1513,1533,1556,1580,1602,1625,1648,1672,1696,1711,1725,1741,1759,1777,1802,1851,1901,1930,1951,1975,1990,2011,2029,2051,2078,2098,2127,2156,2171,2190,2214,2238,2271,2308,2348,2402,2430,2458,2483,2511,2533,2565,2595,2613,2632,2654,2673,2708,2747,2791,2811,2825,2843,2855,2875,2907,2932,2983,3042,3112,3159,3185,3214,3240,3263,3280,3302,3327,3340,3365,3385,3409,3439,3462,3490,3513,3533,3550,3563,3583,3592,3615,3629,3651,3674,3700,3732,3764,3809,3870,3932,3990,4021,4065,4089,4110,4133,4153,4173,4198,4226,4242,4264,4284,4298,4322,4348,4381,4430,4484,4510,4530,4554,4577,4600,4612,4625,4656,4705,4758,4809,4854,4901,4979,5053,5090,5104,5117,5136,5156,5177,5191,5217,5229,5241,5271,5323,5393,5447,5494,5551,5609,5672,5758,5829,5884,5948,6023,6090,6154,6236],"half":[50,81,112,148,183,209,239,259,278,307,344,385,425,463,493,516,550,580,606,640,669,695,719,750,777,824,862,899,929,954,1000,1041,1095,1124,1160,1200,1235,1268,1294,1327,1356,1389,1434,1478,1513,1556,1602,1648,1696,1725,1759,1802,1901,1951,1990,2029,2078,2127,2171,2214,2271,2348,2430,2483,2533,2595,2632,2673,2747,2811,2843,2875,2932,3042,3159,3214,3263,3302,3340,3385,3439,3490,3533,3563,3592,3629,3674,3732,3809,3932,4021,4089,4133,4173,4226,4264,4298,4348,4430,4510,4554,4600,4625,4705,4809,4901,5053,5104,5136,5177,5217,5241,5323,5447,5551,5672,5829,5948,6090,6236],"hizb":[81,148,209,259,307,385,463,516,580,640,695,750,824,899,954,1041,1124,1200,1268,1327,1389,1478,1556,1648,1725,1802,1951,2029,2127,2214,2348,2483,2595,2673,2811,2875,3042,3214,3302,3385,3490,3563,3629,3732,3932,4089,4173,4264,4348,4510,4600,4705,4901,5104,5177,5241,5447,5672,5948,6236]}};
+let clsMark = null;                          // الحد المعروض بإطار أحمر: page | thumn | rub | half | hizb
+const CLS_MARK_NAMES = { page: 'صفحة', thumn: 'ثمن', rub: 'ربع', half: 'نصف', hizb: 'حزب' };
+
+// مجموعة أرقام الآيات (تسلسلياً) التي هي نهاية الحد الحالي، مع إزاحة كل سورة
+function clsMarkSet() {
+    const list = clsMark && CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark];
+    if (!list) return null;
+    return new Set(list);
+}
+
+function clsOffsets() {
+    const off = [];
+    let t = 0;
+    for (let s = 0; s < 114; s++) { off.push(t); t += getAyatCount(s) || 0; }
+    return off;
+}
+
+function clsMapHtml() {
+    const R = clsRanks(), cuts = lsGet(LS_KEYS.cuts(userRiwaya), {}) || {};
+    const mk = clsMarkSet(), off = clsOffsets();
+    let h = '';
+    surahsNames.forEach((name, s) => {
+        const x = R.get(s), N = R.n(s);
+        let b = '';
+        for (let n = 1; n <= N; n++) b += `<button type="button" id="cm-${s}-${n}" class="cm-a cm-r${x[n]}${clsIsCut(R, cuts, s, n) ? ' cut' : ''}${clsInSel(s, n) ? ' sel' : ''}${mk && mk.has(off[s] + n) ? ' mk' : ''}" data-s="${s}" data-a="${n}">${n}</button>`;
+        h += `<div class="cm-surah"><div class="cm-name">${name}</div><div class="cm-ayahs">${b}</div></div>`;
+    });
+    return h;
+}
+
+function showClassifyPage() {
+    clsA = null; clsB = null; clsScroll = 0;
+    if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
+            <div class="surah-title select-title">تصنيف القرآن حسب درجة الحفظ</div>
+            <div class="cm-legend cm-marks">${['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<button type="button" id="cm-mk-${k}" class="cm-mkbtn${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button>`).join('')}</div>
+            <div class="cm-legend"><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">راسخ</button><button type="button" class="cm-pick cm-r2" onclick="clsApply('mid')">متوسط</button><button type="button" class="cm-pick cm-r1" onclick="clsApply('new')">جديد</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير محفوظ</button></div>
+            <div id="cm-status" class="cm-status">اضغط آية البداية</div>
+            <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
+        </div>
+        ${hfUtilRow('رجوع', 'showSettings()')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+}
+
+function clsPaint() {
+    document.querySelectorAll('#cm-map .cm-a').forEach((e) => {
+        e.classList.toggle('sel', clsInSel(+e.dataset.s, +e.dataset.a) || (!clsB && !!clsA && +e.dataset.s === clsA.s && +e.dataset.a === clsA.a));
+    });
+    const st = document.getElementById('cm-status');
+    if (!st) return;
+    if (!clsA) st.textContent = 'اضغط آية البداية';
+    else if (!clsB) st.textContent = 'اضغط آية النهاية';
+    else st.textContent = clsRangeLabel() + ' · اختر الدرجة أو اضغط للإلغاء';
+}
+
+function clsRangeLabel() {
+    const f = (p) => surahsNames[p.s] + ' ' + p.a;
+    return clsA.s === clsB.s && clsA.a === clsB.a ? f(clsA) : f(clsA) + ' ← ' + f(clsB);
+}
+
+// إطار أحمر على نهايات الحد المختار؛ الضغط على الزر نفسه ثانية يخفي الإطار
+function clsSetMark(k) {
+    if (!(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][k])) {
+        showToast('لا توجد أثمان في مصحف حفص (المدني)؛ الأثمان لرواية ورش فقط.');
+        return;
+    }
+    clsMark = clsMark === k ? null : k;
+    document.querySelectorAll('.cm-mkbtn').forEach((b) => b.classList.toggle('on', b.id === 'cm-mk-' + clsMark));
+    const mk = clsMarkSet(), off = clsOffsets();
+    document.querySelectorAll('#cm-map .cm-a').forEach((e) => e.classList.toggle('mk', !!mk && mk.has(off[+e.dataset.s] + +e.dataset.a)));
+}
+
+// ضغطة في أي مكان من الشاشة: تلغي التحديد الكامل (الأصفر)، وأزرار الدرجات في الأعلى تصنّفه
+function clsGlobalTap(ev) {
+    const t = ev.target;
+    if (t.closest && (t.closest('.cm-pick') || t.closest('.cm-mkbtn'))) return;
+    if (clsA && clsB) { clsA = null; clsB = null; clsPaint(); return; }
+    clsTap(ev);
+}
+
+function clsTap(ev) {
+    const el = ev.target.closest && ev.target.closest('.cm-a');
+    if (!el) return;
+    const s = +el.dataset.s, a = +el.dataset.a;
+    if (clsA && clsB) {
+        clsA = null; clsB = null; clsPaint(); return;
+    } else if (clsA && !clsB) {
+        if (clsA.s === s && clsA.a === a) {                 // الضغط على آية البداية نفسها: فاصل أجزاء (التصنيف لا يكون بآية واحدة)
+            clsA = null;
+            const R = clsRanks();
+            if (!R.get(s)[a]) { clsPaint(); return; }       // آية بيضاء: نلغي التحديد فقط
+            if (clsNextRank(R, s, a) !== R.get(s)[a]) { showToast("لا يُوضع فاصل في آخر آية من المقطع."); clsPaint(); return; }
+            clsToggleCut(s, a);
+            clsRefreshCut(s, a);
+            clsPaint();
+            return;
+        }
+        if (clsCmp(s, a, clsA.s, clsA.a) < 0) clsA = { s, a };   // قبل البداية: تصير هي البداية وننتظر النهاية
+        else clsB = { s, a };
+    } else {
+        const R = clsRanks();
+        if (clsIsCut(R, lsGet(LS_KEYS.cuts(userRiwaya), {}) || {}, s, a)) {   // ضغطة على آية داكنة: يُلغى الفاصل ويصير المقطعان مقطعاً واحداً
+            clsToggleCut(s, a);
+            clsRefreshCut(s, a);
+            return;
+        }
+        clsA = { s, a };
+    }
+    clsPaint();
+}
+
+function clsRefreshCut(s, a) {
+    const el = document.getElementById(`cm-${s}-${a}`);
+    if (el) el.classList.toggle('cut', clsIsCut(clsRanks(), lsGet(LS_KEYS.cuts(userRiwaya), {}) || {}, s, a));
+}
+
+function clsApply(cat) {
+    if (!clsA || !clsB) { showToast('حدّد المقطع أولاً: اضغط آية البداية ثم آية النهاية.'); return; }
+    const label = clsRangeLabel();
+    clsAssignRange(cat, clsA.s, clsA.a, clsB.s, clsB.a);
+    clsA = null; clsB = null;
+    const box = document.getElementById('cm-map');
+    const top = box ? box.scrollTop : 0;
+    if (box) { box.innerHTML = clsMapHtml(); box.scrollTop = top; }
+    clsPaint();
+    showToast(label + (cat === 'none' ? ': غير محفوظ.' : ': ' + CLS_CATS[cat].name + '.'));
+}
+
+// ==========================================================
+// 9ب. «مراجعة الحفظ الجديد»
+// المقطع الذي يُترك في «الحفظ مع الشيخ» لمقطع آخر ينتقل تلقائياً إلى هذه القائمة (الأحدث في الأسفل)،
+// والمراجعة تعيد استعمال شاشة المراجعة اليومية: الآية الأولى مطلعاً أزرق ثم يتلو الباقي إلى آخر المقطع.
+// لا تعثّر ولا عقال آيات هنا، ولا يتغير موضع التوقف الخاص بالمراجعة اليومية.
+// ==========================================================
+let newReviewMode = false;
+let reviewOrigin = 'new';        // قائمة الرجوع: 'new' أو 'mid'
+let newReviewPending = null;     // فهرس عنصر ينتظر تأكيد الإلغاء
+let newReviewPendTimer = null;
+
+function newReviewLoad() {
+    const l = lsGet(LS_KEYS.newrev, []);
+    return Array.isArray(l) ? l : [];
+}
+
+function newReviewValid(e) {
+    return e && Number.isInteger(e.surah) && surahsNames[e.surah] && Number.isInteger(e.start) && Number.isInteger(e.end) &&
+        e.start >= 1 && e.end >= e.start && e.end <= (getAyatCount(e.surah, e.riwaya) || 0);
+}
+
+// old: المقطع المحفوظ سابقاً في «الحفظ مع الشيخ» (خاماً من التخزين)، next: المقطع الجديد المؤكَّد
+function newReviewAgeText(t) {
+    if (!Number.isFinite(t)) return '';
+    const d = Math.max(0, Math.floor((Date.now() - t) / DAY_MS));
+    if (d === 0) return 'حُفظ اليوم';
+    if (d === 1) return 'حُفظ أمس';
+    if (d === 2) return 'حُفظ قبل يومين';
+    if (d <= 10) return 'حُفظ قبل ' + d + ' أيام';
+    return 'حُفظ قبل ' + d + ' يوماً';
+}
+
+// أجزاء مرتبة بترتيب المصحف ومدموجة (المتلامس والمتداخل في سورة واحدة يصير جزءاً واحداً)
+function segsFromEntries(entries) {
+    const by = {};
+    entries.forEach((e) => { (by[e.surah] = by[e.surah] || []).push([e.start, e.end]); });
+    const out = [];
+    Object.keys(by).map(Number).sort((a, b) => a - b).forEach((sv) => {
+        mergeRanges(by[sv]).forEach(([st, en]) => out.push({ surah: sv, start: st, end: en }));
+    });
+    return out;
+}
+
+function unitLabelOf(segs) {
+    const f = segs[0], l = segs[segs.length - 1];
+    return f.surah === l.surah ? `${surahsNames[f.surah]} — من ${f.start} إلى ${l.end}` : `من ${surahsNames[f.surah]} ${f.start} إلى ${surahsNames[l.surah]} ${l.end}`;
+}
+
+function showNewReviewList() {
+    const items = [];
+    newReviewLoad().forEach((e, i) => {
+        if (e.riwaya !== userRiwaya || !newReviewValid(e)) return;
+        items.push({ k: e.surah * 1000 + e.start, label: `${surahsNames[e.surah]} — من ${e.start} إلى ${e.end}`, on: `startNewReview(${i})`, cls: 'cm-r1' });
+    });
+    items.sort((a, b) => a.k - b.k);
+    renderPassageList({
+        items, title: 'اختر المقطع الذي تريد مراجعته',
+        empty: 'لا توجد مقاطع في «الجديد» بعد.<br>صنّف ما حفظتَه حديثاً من «تصنيف القرآن» باختيار «جديد».'
+    });
+}
+
+// ---------- المراجعة المتوسطة ----------
+function midLoad() {
+    const l = lsGet(LS_KEYS.midrev, []);
+    return Array.isArray(l) ? l : [];
+}
+
+function midValid(u) {
+    return u && Array.isArray(u.segs) && u.segs.length && u.segs.every((g) => newReviewValid({ surah: g.surah, start: g.start, end: g.end, riwaya: u.riwaya }));
+}
+
+function showMidReviewList() {
+    const items = [];
+    midLoad().forEach((u, i) => {
+        if (u.riwaya !== userRiwaya || !midValid(u)) return;
+        items.push({ k: u.segs[0].surah * 1000 + u.segs[0].start, label: unitLabelOf(u.segs), on: `startMidReview(${i})`, cls: 'cm-r2' });
+    });
+    items.sort((a, b) => a.k - b.k);
+    renderPassageList({
+        items, title: 'اختر ما تريد مراجعته',
+        empty: 'لا توجد وحدات في «المتوسط» بعد.<br>صنّف ما تريد من «تصنيف القرآن» باختيار «متوسط».'
+    });
+}
+
+function startMidReview(i) {
+    const u = midLoad()[i];
+    if (!u || u.riwaya !== userRiwaya || !midValid(u)) return;
+    startUnitReview('mid', u.segs);
+}
+
+// ---------- قائمتا «الحفظ مع الشيخ» و«مراجعة الراسخ»: المقاطع المصنَّفة ----------
+function renderPassageList(o) {
+    try { prepStopAudio(); prepRecDiscard(); } catch (e) {}
+    newReviewMode = false;
+    reviewPlan = null;
+    const rows = o.items.map((it, k) => `
+            <button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span></button>`).join('');
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title">الحفظ مع الشيخ</div>
-            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
-                <button type="button" id="hf-prep-btn" class="resume-btn hf-card" onclick="showPrepSelect()">
-                    <span class="rb-main">تحضير المقطع</span>
-                    <span class="rb-sub">اختيار المقطع، التفسير، الاستماع للشيخ، تجزئة المقطع</span>
-                </button>
-                <button type="button" id="hf-memo-btn" class="resume-btn hf-card hf-soon" onclick="showToast('مرحلة «حفظ المقطع» ستُضاف بعد الاتفاق على تفاصيلها.')">
-                    <span class="rb-main">حفظ المقطع</span>
-                    <span class="rb-sub">قريباً</span>
-                </button>
-            </div>
+            <div class="surah-title select-title">${o.title}</div>
+            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">${rows || `<div class="nr-empty">${o.empty}</div>`}</div>
         </div>
         ${hfUtilRow('رجوع', 'showMainButtons()')}
     `;
@@ -3083,9 +3563,185 @@ function showHifzHome() {
     applyTheme();
 }
 
+// مقاطع «قيد الحفظ»: كل مقطع مصنَّف في سورة واحدة (يُقصّ مما صار في درجة أخرى)
+let progList = [];
+function progPassages() {
+    const R = clsRanks(), out = [];
+    progLoad().forEach((e) => {
+        if (e.riwaya !== userRiwaya || !surahsNames[e.surah]) return;
+        const x = R.get(e.surah), N = R.n(e.surah);
+        let a = null;
+        for (let n = e.start; n <= Math.min(e.end, N) + 1; n++) {
+            if (n <= Math.min(e.end, N) && x[n] === 4) { if (a === null) a = n; }
+            else if (a !== null) { out.push({ surah: e.surah, start: a, end: n - 1 }); a = null; }
+        }
+    });
+    out.sort((p, q) => clsCmp(p.surah, p.start, q.surah, q.start));
+    return out;
+}
+
+function showProgList() {
+    progList = progPassages();
+    renderPassageList({
+        items: progList.map((g) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4' })),
+        startFn: 'startProgPassage',
+        title: 'اختر المقطع الذي تحفظه',
+        empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «قيد الحفظ».'
+    });
+}
+
+function startProgPassage(k) {
+    const g = progList[k];
+    if (!g) return;
+    const old = lsGet(LS_KEYS.prep, null);
+    const same = old && old.riwaya === userRiwaya && old.surah === g.surah && old.start === g.start && old.end === g.end;
+    if (same) { prep = loadPrep(); }
+    if (!same || !prep) {
+        prep = prepNormalize({ riwaya: userRiwaya, surah: g.surah, start: g.start, end: g.end, cuts: [], t: Date.now() });
+        savePrep();
+    }
+    prepSel = null;
+    prepTafEd = 'muyassar';
+    showPrepPage();
+}
+
+// مقاطع الراسخ: آيات متصلة بترتيب المصحف (قد تمتد عبر سور) وتنقسم عند فواصل الأجزاء
+let rasikhList = [];
+function rasikhPassages() {
+    const R = clsRanks(), cuts = lsGet(LS_KEYS.cuts(userRiwaya), {}) || {}, out = [];
+    let cur = null;
+    for (let s = 0; s < surahsNames.length; s++) {
+        const x = R.get(s), N = R.n(s);
+        for (let n = 1; n <= N; n++) {
+            if (x[n] === 3) {
+                if (!cur) cur = { segs: [], count: 0 };
+                const last = cur.segs[cur.segs.length - 1];
+                if (last && last.surah === s && last.end === n - 1) last.end = n; else cur.segs.push({ surah: s, start: n, end: n });
+                cur.count++;
+                if (clsIsCut(R, cuts, s, n)) { out.push(cur); cur = null; }
+            } else if (cur) { out.push(cur); cur = null; }
+        }
+    }
+    if (cur) out.push(cur);
+    return out;
+}
+
+function showRasikhList() {
+    rasikhList = rasikhPassages();
+    renderPassageList({
+        items: rasikhList.map((p) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3' })),
+        startFn: 'startRasikhPassage',
+        title: 'اختر المقطع الذي تريد مراجعته',
+        empty: 'لا توجد مقاطع في «الراسخ» بعد.<br>صنّف ما حفظتَه من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «راسخ».'
+    });
+}
+
+function startRasikhPassage(k) {
+    const p = rasikhList[k];
+    if (p) startUnitReview('rasikh', p.segs);
+}
+
+function startNewReview(i) {
+    const e = newReviewLoad()[i];
+    if (!e || e.riwaya !== userRiwaya || !newReviewValid(e)) return;
+    startUnitReview('new', [{ surah: e.surah, start: e.start, end: e.end }]);
+}
+
+// مراجعة وحدة (مقطع واحد أو مجموعة أجزاء مرتبة بترتيب المصحف) بشاشة المراجعة اليومية:
+// الآية الأولى مطلعاً أزرق ثم تُتلى البقية بالتسلسل (تُتخطى الفجوات)، ولا تعثّر ولا موضع توقف
+function startUnitReview(origin, segs) {
+    const all = [];
+    segs.forEach((g) => { for (let n = g.start; n <= g.end; n++) all.push({ s: g.surah, a: n - 1 }); });
+    if (!all.length) return;
+    showSpecialSessionScreen();            // يبني شاشة المراجعة اليومية بكل أزرارها
+    newReviewMode = true;
+    reviewOrigin = origin;
+    selectedSpecialSurah = all[0].s;
+    reviewPlan = all.length > 1 ? { seq: all.slice(1), prompt: all[0] } : { seq: all };
+    loadSpecialFullSectionExercise();
+}
+
+function leaveNewReview() {
+    resetRecordingStates();
+    stopStopPickSafe();
+    sessionActive = false;
+    reviewPlan = null;
+    if (reviewOrigin === 'mid') showMidReviewList(); else if (reviewOrigin === 'rasikh') showRasikhList(); else showNewReviewList();
+}
+function stopStopPickSafe() { stopPickMode = false; closeStopDialog(); }
+
+// ==========================================================
+// 10. التشغيل
+// ==========================================================
+
+// ==========================================================
+// 9. «الحفظ مع الشيخ»
+//    اختيار المقطع ← صفحة واحدة: نص المقطع + التفسير + الشيخ + التجزئة
+//    النظام يعمل بالآيات (بلا تجزئة) أو بالأجزاء (بعد التجزئة)، لا بهما معاً.
+// ==========================================================
+
+let prep = null;              // {riwaya, surah (من 0), start, end, cuts[]}: cuts = آخر آية في كل جزء عدا الأخير
+let prepSel = null;           // آية محدَّدة (وإن وُجدت تجزئة فالمحدَّد هو الجزء الذي تنتمي إليه)
+let prepScroll = 0;
+let prepAudio = null;
+let prepPlaying = false;
+let prepAudioToken = 0;
+let prepSheikhPos = null;      // موضع التوقف: {key, i, t} لمواصلة المقطع نفسه من حيث انتهى
+let prepSheikhLive = null;     // الحالة الحيّة للتشغيل: {key, get()}
+const prepBlobs = {};          // ملفات الآيات المحمَّلة كاملة (رابط → رابط محلي)
+const prepPending = {};
+let prepAudioKind = null;       // 'sheikh' | 'rec'
+let prepHidden = false;         // النص مخفي (أثناء التسجيل وحتى «العرض»)
+let prepRecState = 'idle';      // idle | recording | recorded
+let prepRecScope = null, prepRecUrl = null, prepRecorder = null, prepRecStream = null;
+let prepRecChunks = [], prepPlayAfterStop = false, prepRecStarting = false;
+let prepSurahSel = null;
+let prepField = 'start';
+let prepStartStr = "";
+let prepEndStr = "";
+let prepTafToken = 0;
+let prepTafEd = 'muyassar';   // الميسّر هو الافتراضي، ويبقى اختياره ما دام المقطع نفسه
+
+// ---------- أدوات مشتركة ----------
+
+function hfUtilRow(endLabel, endOnclick, midHtml) {
+    return `
+        <div id="util-row" class="util-row">
+            <div class="u-start">
+                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
+            </div>
+            <div class="u-mid">${midHtml || ''}</div>
+            <div class="u-end">${endLabel ? `<button class="btn-home btn-end-session" onclick="${endOnclick}">${endLabel}</button>` : ''}</div>
+        </div>`;
+}
+
+function prepNormalize(p) {
+    if (!p) return null;
+    const total = getAyatCount(p.surah, p.riwaya);
+    if (p.riwaya !== userRiwaya || !surahsNames[p.surah] || !(p.start >= 1) || !(p.end >= p.start) || p.end > total) return null;
+    // الافتراضي: كل آية جزء مستقل (قطع بعد كل آية عدا الأخيرة)؛ ما بعد ذلك يعدّله المستخدم بنفسه (cv=1 يعني أنه عُدِّل/حُفظ بهذا النظام)
+    let cuts = [];
+    if (!p.cv) { for (let n = p.start; n < p.end; n++) cuts.push(n); }
+    else (Array.isArray(p.cuts) ? p.cuts : []).forEach((n) => {
+        if (Number.isInteger(n) && n >= p.start && n < p.end && (!cuts.length || n > cuts[cuts.length - 1])) cuts.push(n);
+    });
+    return { riwaya: p.riwaya, surah: p.surah, start: p.start, end: p.end, cuts, cv: 1, t: Number.isFinite(p.t) ? p.t : undefined };
+}
+
+function loadPrep() {
+    const cur = prepNormalize(lsGet(LS_KEYS.prep, null));
+    if (cur) return cur;
+    // الإصدار السابق كان يحفظ تجزئة تلقائية: نأخذ منه السورة والآيتين فقط
+    const old = lsGet(LS_KEYS.prepOld, null);
+    return old ? prepNormalize({ riwaya: old.riwaya, surah: old.surah, start: old.start, end: old.end, cuts: [] }) : null;
+}
+
+function savePrep() { if (prep) lsSet(LS_KEYS.prep, prep); }
+
 // ---------- اختيار المقطع ----------
 
 function showPrepSelect() {
+    try { prepStopAudio(); prepRecDiscard(); } catch (e) {}
     prepStopAudio();
     prepSurahSel = null;
     let surahsHtml = '';
@@ -3104,13 +3760,13 @@ function showPrepSelect() {
         : '';
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title">اختر السورة التي تريد تحضيرها</div>
+            <div class="surah-title select-title">اختر السورة التي تريد حفظها</div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
                 ${resumeHtml}
                 ${surahsHtml}
             </div>
         </div>
-        ${hfUtilRow('رجوع', 'showHifzHome()')}
+        ${hfUtilRow('رجوع', 'showMainButtons()')}
         <div id="prep-modal" class="modal-overlay hidden" onclick="if (event.target === this) cancelPrepModal()"></div>
     `;
     renderInContainer(html);
@@ -3121,6 +3777,8 @@ function resumePrep() {
     const saved = loadPrep();
     if (!saved) { showPrepSelect(); return; }
     prep = saved;
+    prepSel = null;
+    prepTafEd = 'muyassar';
     showPrepPage();
 }
 
@@ -3160,7 +3818,7 @@ function selectPrepSurah(surahIndex) {
                 <button type="button" class="np-clear" onclick="prepNumpadPress('clear')" title="مسح الكل">مسح</button>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn-start-review" onclick="confirmPrepSelection()">بدء التحضير</button>
+                <button type="button" class="btn-start-review" onclick="confirmPrepSelection()">بدء الحفظ</button>
                 <button type="button" class="btn-cancel" onclick="cancelPrepModal()">إلغاء</button>
             </div>
         </div>
@@ -3211,66 +3869,140 @@ function confirmPrepSelection() {
     if (prepEndStr === "") { showToast("اكتب آية النهاية."); prepSetField('end'); return; }
     const end = Math.min(parseInt(prepEndStr, 10), max);
     if (end < start) { showToast("آية النهاية يجب ألا تسبق آية البداية."); return; }
-    prep = {
-        riwaya: userRiwaya, surah: prepSurahSel, start, end,
-        cuts: prepDefaultCuts(start, end), half: prepDefaultHalf(start, end)
-    };
-    prep = prepNormalize(prep);
+    prep = prepNormalize({ riwaya: userRiwaya, surah: prepSurahSel, start, end, cuts: [], t: Date.now() });
+    prepSel = null;
+    prepTafEd = 'muyassar';
     savePrep();
     closePrepModal();
     showPrepPage();
 }
 
+// ---------- وحدات المقطع: آية أو جزء ----------
+
+// كل المقطع مجزأ دائماً: الأقطاع تنتهي عندها الأجزاء، والافتراضي كل آية جزء
+function prepUnitOf(n) {
+    let from = prep.start;
+    for (let i = 0; i < prep.cuts.length; i++) {
+        if (n <= prep.cuts[i]) return { from, to: prep.cuts[i], idx: i + 1 };
+        from = prep.cuts[i] + 1;
+    }
+    return { from, to: prep.end, idx: prep.cuts.length + 1 };
+}
+
+// ما تعمل عليه الأزرار الآن: الوحدة المحدَّدة، وإن لم يوجد تحديد فالمقطع كله
+function prepScope() {
+    if (prepSel === null) return { from: prep.start, to: prep.end, kind: 'all', label: 'كل آيات المقطع' };
+    const u = prepUnitOf(prepSel);
+    if (u.from === u.to) return { from: u.from, to: u.to, kind: 'ayah', label: 'الآية ' + u.from };
+    const span = u.from === u.to ? 'الآية ' + u.from : 'الآيات ' + u.from + '–' + u.to;
+    return { from: u.from, to: u.to, kind: 'part', label: 'الجزء ' + u.idx + ' (' + span + ')' };
+}
+
+// أثناء التسجيل وبعده (حتى «العرض») يبقى النص مخفياً ولا تعمل بقية الأزرار
+function prepGuardHidden() {
+    if (!prepHidden) return false;
+    showToast("اضغط «العرض» لإظهار النص أولاً.");
+    return true;
+}
+
 // ---------- صفحة المقطع ----------
 
-function showPrepPage(keepSelection) {
+function showPrepPage(keep) {
     if (!prep) { showPrepSelect(); return; }
     prepStopAudio();
-    if (!keepSelection) prepSel = null;
-    let textHtml = '';
-    for (let n = prep.start; n <= prep.end; n++) {
-        const t = getAyahText(userRiwaya, prep.surah, n - 1) || '';
-        textHtml += `<span class="prep-ayah" id="pa-${n}" onclick="prepSelectAyah(${n})">${t} <span class="circle-num">${n}</span></span> `;
-    }
+    if (!keep) { prepSel = null; prepRecDiscard(); }
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title" style="font-size: 16px;">سورة ${surahsNames[prep.surah]} — الآيات ${prep.start} إلى ${prep.end}</div>
-            <div class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;">${textHtml}</div>
+            <div id="prep-text" class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;"></div>
         </div>
-        <div id="prep-hint" class="hf-hint">اضغط على آية ثم اختر التفسير</div>
-        <div class="hf-grid">
-            <button type="button" id="prep-taf-muyassar" class="btn-secondary hf-btn" onclick="prepOpenTafsir('muyassar')">التفسير الميسّر</button>
-            <button type="button" id="prep-taf-saadi" class="btn-secondary hf-btn" onclick="prepOpenTafsir('saadi')">تفسير السعدي</button>
+        <div class="hf-grid3">
             <button type="button" id="prep-sheikh-btn" class="btn-secondary hf-btn" onclick="prepToggleSheikh()">الشيخ</button>
-            <button type="button" id="prep-split-btn" class="btn-secondary hf-btn" onclick="showPrepSplit()">تجزئة المقطع</button>
+            <button type="button" id="prep-rec-btn" class="btn-secondary hf-btn" onclick="prepRecBtn()">تسجيل</button>
+            <button type="button" id="prep-show-btn" class="btn-secondary hf-btn" onclick="prepShowBtn()">العرض</button>
         </div>
-        ${hfUtilRow('رجوع', 'showPrepSelect()')}
+        ${hfUtilRow('إنهاء الجلسة', 'showMainButtons()', '<button type="button" id="prep-taf-btn" class="btn-home btn-end-session" onclick="prepOpenTafsir()">التفسير</button>')}
     `;
     renderInContainer(html);
     applyTheme();
+    prepRefreshUI();
     const box = document.getElementById('exercise-container');
-    if (box && keepSelection) box.scrollTop = prepScroll;
-    if (keepSelection && prepSel !== null) prepSelectAyah(prepSel, true);
+    if (box && keep) box.scrollTop = prepScroll;
 }
 
-function prepSelectAyah(n, force) {
-    const prev = prepSel;
-    if (!force && prev === n) prepSel = null; else prepSel = n;
-    document.querySelectorAll('.prep-ayah.prep-sel').forEach((el) => el.classList.remove('prep-sel'));
-    if (prepSel !== null) {
-        const el = document.getElementById('pa-' + prepSel);
-        if (el) el.classList.add('prep-sel');
+function prepRenderText() {
+    const el = document.getElementById('prep-text');
+    if (!el || !prep) return;
+    const sel = prepSel !== null ? prepUnitOf(prepSel) : null;
+    const hid = (prepHidden && prepRecScope) ? prepRecScope : null;
+    const one = (n) => {
+        const t = getAyahText(userRiwaya, prep.surah, n - 1) || '';
+        const on = sel && n >= sel.from && n <= sel.to;
+        const hidden = hid && n >= hid.from && n <= hid.to;
+        return `<span class="prep-ayah${on ? ' prep-sel' : ''}" id="pa-${n}" onclick="prepSelectAyah(${n})"><span class="at${hidden ? ' prep-hide' : ''}">${t}</span> <span class="circle-num prep-cn" onclick="prepCircleTap(${n}, event)">${n}</span> </span>`;
+    };
+    let html = '';
+    let from = prep.start, idx = 0;
+    prep.cuts.concat([prep.end]).forEach((to) => {
+        let inner = '';
+        for (let n = from; n <= to; n++) inner += one(n);
+        const isSel = sel && sel.from === from;
+        html += `<span class="chunk ${idx % 2 === 0 ? 'chunk-a' : 'chunk-b'}${isSel ? ' chunk-sel' : ''}">${inner}</span> `;
+        from = to + 1; idx++;
+    });
+    el.innerHTML = html;
+}
+
+function prepRefreshUI() {
+    if (!prep) return;
+    prepRenderText();
+    refreshPrepBtns();
+}
+
+// نصوص أزرار الصف الأول وحالتها (الشيخ، التسجيل، العرض)
+function refreshPrepBtns() {
+    const sh = document.getElementById('prep-sheikh-btn');
+    if (sh) sh.textContent = (prepPlaying && prepAudioKind === 'sheikh') ? 'إيقاف' : 'الشيخ';
+    const rc = document.getElementById('prep-rec-btn');
+    if (rc) {
+        const live = prepRecState === 'recording';
+        rc.classList.toggle('rec-live', live);
+        rc.innerHTML = live ? '<span class="rec-pulse"></span><span>إيقاف</span>' : 'تسجيل';
     }
-    const hint = document.getElementById('prep-hint');
-    if (hint) hint.textContent = prepSel === null ? 'اضغط على آية ثم اختر التفسير' : 'الآية المحدّدة: ' + prepSel + ' — اختر التفسير الذي تريده';
+    const sw = document.getElementById('prep-show-btn');
+    if (sw) sw.textContent = (prepPlaying && prepAudioKind === 'rec') ? 'إيقاف' : 'العرض';
 }
 
-// ---------- صوت الشيخ: المقطع كله متصلاً ----------
-
-function refreshPrepSheikhBtn() {
-    const b = document.getElementById('prep-sheikh-btn');
-    if (b) b.textContent = prepPlaying ? 'إيقاف الشيخ' : 'الشيخ';
+function prepSelectAyah(n) {
+    if (prepGuardHidden()) return;
+    prepStopAudio();
+    prepRecDiscard();            // التسجيل مرتبط بما كان محدَّداً
+    if (prepSel !== null) {
+        const a = prepUnitOf(prepSel), b = prepUnitOf(n);
+        if (a.from === b.from && a.to === b.to) { prepSel = null; prepRefreshUI(); return; }
+    }
+    prepSel = n;
+    prepRefreshUI();
 }
+
+// ---------- التجزئة: كل آية جزء، والضغط على رقم آية يدمجها مع التي بعدها (يلغي القطع) وإعادة الضغط تعيد القطع ----------
+
+function prepCircleTap(n, ev) {
+    if (!prep) return;
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    if (prepGuardHidden()) return;
+    if (n < prep.start || n >= prep.end) return;      // آخر آية في المقطع نهايته أصلاً
+    prepStopAudio();
+    prepRecDiscard();
+    const i = prep.cuts.indexOf(n);
+    if (i >= 0) prep.cuts.splice(i, 1);
+    else { prep.cuts.push(n); prep.cuts.sort((a, b) => a - b); }
+    prepSel = null;
+    savePrep();
+    prepRefreshUI();
+}
+
+// ---------- صوت الشيخ: الآية أو الجزء أو المقطع كله ----------
 
 function prepStopAudio() {
     prepAudioToken++;
@@ -3282,16 +4014,24 @@ function prepStopAudio() {
     }
     if (prepPlaying) releaseWakeLock();
     prepPlaying = false;
-    refreshPrepSheikhBtn();
+    prepAudioKind = null;
+    refreshPrepBtns();
 }
 
 function prepToggleSheikh() {
-    if (prepPlaying) { prepStopAudio(); return; }
     if (!prep) return;
+    if (prepPlaying && prepAudioKind === 'sheikh') {
+        try { if (prepSheikhLive) { const p = prepSheikhLive.get(); prepSheikhPos = { key: prepSheikhLive.key, i: p.i, t: p.t }; } } catch (e) {}
+        prepStopAudio();
+        return;
+    }
+    if (prepGuardHidden()) return;
+    prepStopAudio();
     if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
     stopSheikh();
+    const sc = prepScope();
     const urls = [];
-    for (let n = prep.start; n <= prep.end; n++) {
+    for (let n = sc.from; n <= sc.to; n++) {
         const u = ayahAudioUrls(userRiwaya, prep.surah, n - 1);
         if (u) urls.push(...u);
     }
@@ -3302,30 +4042,193 @@ function prepToggleSheikh() {
 function prepPlayQueue(urls) {
     const token = ++prepAudioToken;
     prepPlaying = true;
+    prepAudioKind = 'sheikh';
     acquireWakeLock();
-    refreshPrepSheikhBtn();
-    const cache = [];
-    const make = (i) => {
-        if (!cache[i]) { const a = new Audio(urls[i]); a.preload = 'auto'; cache[i] = a; }
-        return cache[i];
+    refreshPrepBtns();
+    const key = urls.join('|');
+    const saved = prepSheikhPos && prepSheikhPos.key === key && prepSheikhPos.i < urls.length ? prepSheikhPos : null;
+    prepSheikhPos = null;
+    const a = new Audio();
+    a.preload = 'auto';
+    try { a.defaultPlaybackRate = userRate; a.playbackRate = userRate; a.preservesPitch = true; } catch (e) {}
+    prepAudio = a;
+    let i = saved ? saved.i : 0, tries = 0, lastT = -1, stall = 0, retryTimer = null, loading = false;
+    prepSheikhLive = { key, get: () => ({ i, t: a.currentTime || 0 }) };
+    const alive = () => token === prepAudioToken;
+    const stopAll = (msg) => {
+        if (!alive()) return;
+        if (msg) showToast(msg);
+        prepStopAudio();
     };
+    // تحميل المقطع كله مقدَّماً (ملفات كاملة في الذاكرة) فلا يبقى انتظار بين الآيات
+    const ensure = (n) => {
+        const u = urls[n];
+        if (prepBlobs[u]) return Promise.resolve(prepBlobs[u]);
+        if (!prepPending[u]) {
+            prepPending[u] = fetch(u).then((r) => { if (!r.ok) throw new Error('http'); return r.blob(); })
+                .then((bl) => { const o = URL.createObjectURL(bl); prepBlobs[u] = o; delete prepPending[u]; return o; })
+                .catch(() => { delete prepPending[u]; return u; });   // تعذّر التحميل الكامل: نبثّ الرابط مباشرة
+        }
+        return prepPending[u];
+    };
+    let nextLoad = i;
+    const worker = async () => { while (alive() && nextLoad < urls.length) { const n = nextLoad++; await ensure(n); } };
+    for (let k = 0; k < 3; k++) worker();
+    const start = (n, at) => {
+        if (!alive()) return;
+        i = n; lastT = -1; stall = 0; loading = true;
+        ensure(n).then((src) => {
+            if (!alive() || i !== n) return;
+            loading = false;
+            a.src = src;
+            if (at) a.onloadedmetadata = () => { a.onloadedmetadata = null; try { a.currentTime = at; } catch (e) {} };
+            try { a.load(); } catch (e) {}
+            const p = a.play();
+            if (p && p.catch) p.catch(() => { if (alive()) onFail(); });
+        });
+    };
+    const onFail = () => {
+        if (!alive() || retryTimer) return;
+        if (++tries > 4) { stopAll("انقطع صوت الشيخ. تحقق من الاتصال بالإنترنت ثم أعد التشغيل."); return; }
+        const at = a.currentTime > 1 ? a.currentTime - 0.5 : 0;
+        retryTimer = setTimeout(() => { retryTimer = null; start(i, at); }, 500 * tries);
+    };
+    a.onended = () => {
+        if (!alive()) return;
+        tries = 0;
+        if (i + 1 >= urls.length) { prepSheikhPos = null; prepStopAudio(); return; }
+        start(i + 1, 0);
+    };
+    a.onerror = onFail;
+    const wd = setInterval(() => {
+        if (!alive()) { clearInterval(wd); if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; } return; }
+        if (loading || retryTimer || document.visibilityState !== 'visible') return;
+        if (a.ended) return;
+        if (a.paused) { const p = a.play(); if (p && p.catch) p.catch(() => {}); return; }
+        if (a.currentTime === lastT) { if (++stall >= 12) { stall = 0; onFail(); } } else { stall = 0; lastT = a.currentTime; }
+    }, 1000);
+    try {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({ title: 'تلاوة الشيخ', artist: 'ابن باديس' });
+            navigator.mediaSession.setActionHandler('pause', () => stopAll());
+            navigator.mediaSession.setActionHandler('stop', () => stopAll());
+        }
+    } catch (e) {}
+    start(i, saved ? Math.max(0, saved.t - 0.3) : 0);
+}
+
+// ---------- التسجيل والعرض: يُخفى النص (المحدَّد أو كله) ويتلوه المستخدم من حفظه ثم يقارن ----------
+
+function prepRecDiscard() {
+    prepPlayAfterStop = false;
+    prepRecStarting = false;
+    if (prepPlaying && prepAudioKind === 'rec') prepStopAudio();
+    if (prepRecorder) {
+        const r = prepRecorder;
+        prepRecorder = null;
+        r.onstop = null;
+        try { if (r.state !== 'inactive') r.stop(); } catch (e) {}
+    }
+    if (prepRecStream) {
+        try { prepRecStream.getTracks().forEach((t) => t.stop()); } catch (e) {}
+        prepRecStream = null;
+    }
+    if (prepRecUrl) { try { URL.revokeObjectURL(prepRecUrl); } catch (e) {} prepRecUrl = null; }
+    if (prepRecState === 'recording') releaseWakeLock();
+    prepRecState = 'idle';
+    prepHidden = false;
+    prepRecScope = null;
+    prepRecChunks = [];
+}
+
+async function prepRecBtn() {
+    if (!prep || prepRecStarting) return;
+    if (prepRecState === 'recording') { prepRecStop(false); return; }
+    prepStopAudio();
+    prepRecDiscard();
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') {
+        showToast("التسجيل غير مدعوم في هذا المتصفح.");
+        return;
+    }
+    prepRecStarting = true;
+    let stream = null;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    catch (e) { prepRecStarting = false; showToast("تعذر الوصول إلى الميكروفون. اسمح للتطبيق باستعماله."); return; }
+    if (!prepRecStarting) { try { stream.getTracks().forEach((t) => t.stop()); } catch (e) {} return; }   // أُلغي أثناء طلب الإذن
+    prepRecStarting = false;
+    const rec = new MediaRecorder(stream);
+    prepRecStream = stream;
+    prepRecorder = rec;
+    prepRecChunks = [];
+    prepRecScope = prepScope();
+    prepHidden = true;
+    prepRecState = 'recording';
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) prepRecChunks.push(e.data); };
+    rec.onstop = () => prepRecFinish(rec);
+    rec.start();
+    acquireWakeLock();
+    prepRefreshUI();
+}
+
+function prepRecStop(playAfter) {
+    prepPlayAfterStop = !!playAfter;
+    const r = prepRecorder;
+    if (!r) return;
+    try { if (r.state !== 'inactive') r.stop(); else prepRecFinish(r); } catch (e) { prepRecFinish(r); }
+}
+
+function prepRecFinish(rec) {
+    if (rec !== prepRecorder) return;
+    const chunks = prepRecChunks;
+    prepRecorder = null;
+    if (prepRecStream) { try { prepRecStream.getTracks().forEach((t) => t.stop()); } catch (e) {} prepRecStream = null; }
+    releaseWakeLock();
+    const play = prepPlayAfterStop;
+    prepPlayAfterStop = false;
+    if (!chunks.length) {
+        prepRecState = 'idle';
+        prepHidden = false;
+        prepRecScope = null;
+        showToast("لم يُسجَّل شيء.");
+        prepRefreshUI();
+        return;
+    }
+    prepRecUrl = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || 'audio/webm' }));
+    prepRecState = 'recorded';
+    if (play) { prepHidden = false; prepRefreshUI(); prepPlayRec(); }
+    else prepRefreshUI();
+}
+
+// «العرض»: يعيد النص المخفي ويشغّل التسجيل
+function prepShowBtn() {
+    if (!prep) return;
+    if (prepRecState === 'recording') { prepRecStop(true); return; }
+    if (prepPlaying && prepAudioKind === 'rec') { prepStopAudio(); return; }
+    if (prepRecUrl) { prepHidden = false; prepRefreshUI(); prepPlayRec(); return; }
+    if (prepHidden) { prepHidden = false; prepRefreshUI(); return; }
+    showToast("لا يوجد تسجيل بعد. اضغط «تسجيل» أولاً.");
+}
+
+function prepPlayRec() {
+    if (!prepRecUrl) return;
+    prepStopAudio();
+    stopSheikh();
+    const token = ++prepAudioToken;
+    prepPlaying = true;
+    prepAudioKind = 'rec';
+    acquireWakeLock();
+    const a = new Audio(prepRecUrl);
+    prepAudio = a;
     const fail = () => {
         if (token !== prepAudioToken) return;
         prepStopAudio();
-        showToast("تعذر تشغيل صوت الشيخ. تحقق من الاتصال بالإنترنت.");
+        showToast("تعذر تشغيل التسجيل.");
     };
-    const go = (i) => {
-        if (token !== prepAudioToken) return;
-        if (i >= urls.length) { prepStopAudio(); return; }
-        const a = make(i);
-        prepAudio = a;
-        a.onended = () => go(i + 1);
-        a.onerror = fail;
-        const p = a.play();
-        if (p && p.catch) p.catch(fail);
-        if (i + 1 < urls.length) make(i + 1);   // تحميل مسبق للمقطع التالي لتقليل الفراغ بين الآيات
-    };
-    go(0);
+    a.onended = () => { if (token === prepAudioToken) prepStopAudio(); };
+    a.onerror = fail;
+    const p = a.play();
+    if (p && p.catch) p.catch(fail);
+    refreshPrepBtns();
 }
 
 // ---------- التفسير ----------
@@ -3449,152 +4352,146 @@ async function loadTafsirText(edKey, surah1, ayah1) {
     return { text: '', from: ayah1 };
 }
 
-async function prepOpenTafsir(edKey) {
-    if (!prep) return;
-    if (prepSel === null) { showToast("اضغط على آية أولاً، ثم اختر التفسير."); return; }
+// صفحة التفسير: تبويبان في الأعلى (الميسّر ثم السعدي)، وتفسير الوحدة المحدَّدة أو المقطع كله
+function prepOpenTafsir() {
+    if (!prep || prepGuardHidden()) return;
     prepStopAudio();
-    let targets = null;
-    try { targets = await tafsirTargets(prep.surah, prepSel); } catch (e) { targets = null; }
-    if (!targets) { showToast("تعذر ضبط ترقيم الآية على رواية حفص. تحقق من الاتصال بالإنترنت ثم أعد المحاولة."); return; }
     const box = document.getElementById('exercise-container');
     prepScroll = box ? box.scrollTop : 0;
-    prepShowTafsirView(edKey, prepSel, targets);
+    showPrepTafsir();
 }
 
-function prepShowTafsirView(edKey, n, targets) {
-    const ed = TAFSIR_EDITIONS[edKey];
-    const myToken = ++prepTafToken;
-    const ayahText = getAyahText(userRiwaya, prep.surah, n - 1) || '';
+function showPrepTafsir() {
+    const sc = prepScope();
     const html = `
+        <div class="taf-tabs">
+            <button type="button" id="taf-tab-muyassar" class="btn-secondary taf-tab" onclick="prepTafSwitch('muyassar')">${TAFSIR_EDITIONS.muyassar.name}</button>
+            <button type="button" id="taf-tab-saadi" class="btn-secondary taf-tab" onclick="prepTafSwitch('saadi')">${TAFSIR_EDITIONS.saadi.name}</button>
+        </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title" style="font-size: 17px;">${ed.name}</div>
-            <div class="taf-ref">سورة ${surahsNames[prep.surah]} — الآية ${n}</div>
-            <div class="taf-ayah">${ayahText} <span class="circle-num">${n}</span></div>
-            <div id="tafsir-body" class="taf-body">جارٍ تحميل التفسير…</div>
+            <div class="surah-title" style="font-size: 16px;">سورة ${surahsNames[prep.surah]} — ${sc.label}</div>
+            <div id="tafsir-body" class="taf-body"></div>
         </div>
         <button type="button" id="taf-back-btn" class="btn-main" style="margin: 0 auto;" onclick="prepBackFromTafsir()">رجوع</button>
         ${hfUtilRow('', '')}
     `;
     renderInContainer(html);
     applyTheme();
-    const showHafsNo = userRiwaya !== 1 && !(targets.length === 1 && targets[0] === n);
-    Promise.all(targets.map((h) => loadTafsirText(edKey, prep.surah + 1, h).then((r) => ({ h, r })))).then((list) => {
+    prepTafRender();
+}
+
+function prepTafSwitch(edKey) {
+    if (edKey === prepTafEd) return;
+    prepTafEd = edKey;
+    prepTafRender();
+}
+
+async function prepTafRender() {
+    const myToken = ++prepTafToken;
+    const edKey = prepTafEd;
+    ['muyassar', 'saadi'].forEach((k) => {
+        const b = document.getElementById('taf-tab-' + k);
+        if (b) b.classList.toggle('active', k === edKey);
+    });
+    const body = document.getElementById('tafsir-body');
+    if (!body || !prep) return;
+    const sc = prepScope();
+    const multi = sc.to > sc.from;
+    body.textContent = '';
+    const jobs = [];
+    for (let n = sc.from; n <= sc.to; n++) {
+        const sec = document.createElement('div');
+        sec.className = 'taf-sec';
+        if (multi) {
+            const t = document.createElement('div');
+            t.className = 'taf-sec-title';
+            t.textContent = 'الآية ' + n;
+            sec.appendChild(t);
+        }
+        const ay = document.createElement('div');
+        ay.className = 'taf-ayah';
+        ay.innerHTML = `${getAyahText(userRiwaya, prep.surah, n - 1) || ''} <span class="circle-num">${n}</span>`;
+        sec.appendChild(ay);
+        const tx = document.createElement('div');
+        tx.className = 'taf-text';
+        tx.textContent = 'جارٍ تحميل التفسير…';
+        sec.appendChild(tx);
+        body.appendChild(sec);
+        jobs.push({ n, tx });
+    }
+
+    const seen = new Set();
+    const addMsg = (parent, msg) => {
+        const d = document.createElement('div');
+        d.textContent = msg;
+        parent.appendChild(d);
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn-secondary hf-btn taf-retry';
+        b.textContent = 'إعادة المحاولة';
+        b.onclick = () => prepTafRender();
+        parent.appendChild(b);
+    };
+    const run = async ({ n, tx }) => {
+        let targets = null;
+        try { targets = await tafsirTargets(prep.surah, n); } catch (e) { targets = null; }
         if (myToken !== prepTafToken) return;
-        const el = document.getElementById('tafsir-body');
-        if (!el) return;
-        el.textContent = '';
-        list.forEach(({ h, r }) => {
-            const sec = document.createElement('div');
-            sec.className = 'taf-sec';
-            if (showHafsNo) {
+        tx.textContent = '';
+        if (!targets) { addMsg(tx, 'تعذر ضبط ترقيم هذه الآية على رواية حفص. تحقق من الاتصال بالإنترنت.'); return; }
+        const showNo = userRiwaya !== 1 && !(targets.length === 1 && targets[0] === n);
+        for (const h of targets) {
+            const blk = document.createElement('div');
+            blk.className = 'taf-blk';
+            if (showNo) {
                 const t = document.createElement('div');
                 t.className = 'taf-sec-title';
                 t.textContent = 'تفسير الآية ' + h + ' (ترقيم حفص)';
-                sec.appendChild(t);
+                blk.appendChild(t);
             }
-            if (!r.text) {
-                const e = document.createElement('div');
-                e.className = 'taf-text';
-                e.textContent = 'لا يوجد تفسير لهذه الآية في هذا الكتاب.';
-                sec.appendChild(e);
-            } else {
-                if (r.from !== h) {
-                    const note = document.createElement('div');
-                    note.className = 'taf-note';
-                    note.textContent = 'هذا التفسير مذكور عند الآية ' + r.from + ' لأنه يشمل عدة آيات.';
-                    sec.appendChild(note);
+            tx.appendChild(blk);
+            if (seen.has(h)) {
+                const d = document.createElement('div');
+                d.textContent = 'سبق عرض تفسير هذه الآية.';
+                blk.appendChild(d);
+                continue;
+            }
+            seen.add(h);
+            try {
+                const r = await loadTafsirText(edKey, prep.surah + 1, h);
+                if (myToken !== prepTafToken) return;
+                if (!r.text) {
+                    const d = document.createElement('div');
+                    d.textContent = 'لا يوجد تفسير لهذه الآية في هذا الكتاب.';
+                    blk.appendChild(d);
+                } else {
+                    if (r.from !== h) {
+                        const note = document.createElement('div');
+                        note.className = 'taf-note';
+                        note.textContent = 'هذا التفسير مذكور عند الآية ' + r.from + ' لأنه يشمل عدة آيات.';
+                        blk.appendChild(note);
+                    }
+                    const d = document.createElement('div');
+                    d.textContent = r.text;
+                    blk.appendChild(d);
                 }
-                const e = document.createElement('div');
-                e.className = 'taf-text';
-                e.textContent = r.text;
-                sec.appendChild(e);
+            } catch (e) {
+                if (myToken !== prepTafToken) return;
+                seen.delete(h);
+                addMsg(blk, 'تعذر تحميل التفسير. تحقق من الاتصال بالإنترنت.');
             }
-            el.appendChild(sec);
-        });
-    }).catch(() => {
-        if (myToken !== prepTafToken) return;
-        const el = document.getElementById('tafsir-body');
-        if (!el) return;
-        el.innerHTML = `<div>تعذر تحميل التفسير. تحقق من الاتصال بالإنترنت.</div><button type="button" class="btn-secondary hf-btn" style="margin-top: 10px;" onclick="prepShowTafsirView('${edKey}', ${n}, [${targets.join(',')}])">إعادة المحاولة</button>`;
+        }
+    };
+    // أربع طلبات متوازية على الأكثر حتى لا يُثقَل الهاتف عند تفسير مقطع طويل
+    const queue = jobs.slice();
+    const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
+        while (queue.length) await run(queue.shift());
     });
+    await Promise.all(workers);
 }
 
 function prepBackFromTafsir() {
     prepTafToken++;
     showPrepPage(true);
-}
-
-// ---------- تجزئة المقطع ----------
-
-function showPrepSplit() {
-    if (!prep) { showPrepSelect(); return; }
-    prepStopAudio();
-    const single = prep.start === prep.end;
-    const html = `
-        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title" style="font-size: 16px;">تجزئة المقطع — سورة ${surahsNames[prep.surah]}</div>
-            <div class="split-sec">
-                <div class="split-lbl">التجزئة الأولى</div>
-                <div id="split-row-1" class="split-row"></div>
-            </div>
-            <div class="split-sec ${single ? 'hidden' : ''}" id="split-sec-2">
-                <div class="split-lbl">التجزئة الثانية</div>
-                <div id="split-row-2" class="split-row"></div>
-            </div>
-            ${single ? '<div class="hf-hint">المقطع آية واحدة، فلا حاجة لتجزئته.</div>' : ''}
-            <div id="split-text" class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;"></div>
-        </div>
-        ${hfUtilRow('تم', 'showPrepPage()')}
-    `;
-    renderInContainer(html);
-    applyTheme();
-    prepRenderSplit();
-}
-
-function prepRenderSplit() {
-    if (!prep) return;
-    const { start, end, cuts, half } = prep;
-    const cutSet = new Set(cuts);
-    let r1 = '', r2 = '';
-    for (let n = start; n <= end; n++) {
-        const isEnd = cutSet.has(n);
-        r1 += `<button type="button" class="pc${isEnd ? ' on' : ''}${n === end ? ' lock' : ''}" data-n="${n}" onclick="prepToggleCut(${n})">${n}</button>`;
-        r2 += `<button type="button" class="pc${n === half ? ' half' : ''}${n === end ? ' dim' : ''}" data-n="${n}" onclick="prepSetHalf(${n})">${n}</button>`;
-    }
-    const e1 = document.getElementById('split-row-1');
-    const e2 = document.getElementById('split-row-2');
-    if (e1) e1.innerHTML = r1;
-    if (e2) e2.innerHTML = r2;
-
-    // نص المقطع بخلفيات متناوبة لكل جزء من التجزئة الأولى
-    let html = '', chunkIdx = 0, buf = '';
-    for (let n = start; n <= end; n++) {
-        const t = getAyahText(userRiwaya, prep.surah, n - 1) || '';
-        buf += `${t} <span class="circle-num">${n}</span> `;
-        if (cutSet.has(n)) {
-            html += `<span class="chunk ${chunkIdx % 2 === 0 ? 'chunk-a' : 'chunk-b'}">${buf}</span> `;
-            buf = '';
-            chunkIdx++;
-        }
-    }
-    if (buf) html += `<span class="chunk ${chunkIdx % 2 === 0 ? 'chunk-a' : 'chunk-b'}">${buf}</span>`;
-    const te = document.getElementById('split-text');
-    if (te) te.innerHTML = html;
-}
-
-function prepToggleCut(n) {
-    if (!prep || n === prep.end) return;
-    const i = prep.cuts.indexOf(n);
-    if (i >= 0) prep.cuts.splice(i, 1); else { prep.cuts.push(n); prep.cuts.sort((a, b) => a - b); }
-    savePrep();
-    prepRenderSplit();
-}
-
-function prepSetHalf(n) {
-    if (!prep || n >= prep.end) return;
-    prep.half = n;
-    savePrep();
-    prepRenderSplit();
 }
 
 async function initApp() {
