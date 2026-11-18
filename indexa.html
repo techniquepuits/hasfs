@@ -735,7 +735,9 @@ body.dark-mode .rv-row, body.dark-mode .rv-all { background: #0f172a !important;
 body.dark-mode .rv-empty { color: #cbd5e1; }
 .resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
-.resume-btn.ps-btn { padding: 9px 12px; margin-bottom: 5px; }
+.resume-btn.ps-btn { padding: 9px 12px; margin-bottom: 5px; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; }
+.rc-banner .rcb-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.rc-banner .rcb-row button { width: auto; min-width: 46px; padding: 6px 10px; }
 .ps-row { display: flex; gap: 6px; align-items: stretch; margin-bottom: 5px; }
 .ps-row .ps-btn { flex: 1 1 0; width: auto; min-width: 0; margin-bottom: 0; flex-direction: row; justify-content: space-between; gap: 8px; }
 .ps-row .rc-btn { flex: 0 0 44px; width: 44px; margin: 0; padding: 0; font-size: 22px; font-weight: bold; line-height: 1; justify-content: center; align-items: center; }
@@ -3754,14 +3756,13 @@ function showRcBanner() {
     const b = document.createElement('div');
     b.id = 'rc-banner';
     b.className = 'stop-pick-banner rc-banner';
-    b.innerHTML = `<div>عدد المراجعات الصحيحة لهذا المقطع: <span id="rc-banner-n">${n}</span></div>
-        <button type="button" id="rc-plus" onclick="rcFinish(1)">رفعه بنقطة (+1)</button>
-        <button type="button" id="rc-minus" onclick="rcFinish(-1)">حذف نقطة (−1)</button>
-        <button type="button" id="rc-keep" onclick="rcFinish(0)">إبقاء العلامة كما هي</button>
-        <button type="button" id="rc-back" onclick="closeRcBanner()">متابعة المراجعة</button>`;
+    b.innerHTML = `<div class="rcb-row"><span>عدد المراجعات الصحيحة: <span id="rc-banner-n">${n}</span></span>
+        <button type="button" id="rc-plus" onclick="rcStep(1)">+1</button>
+        <button type="button" id="rc-minus" onclick="rcStep(-1)">−1</button></div>
+        <button type="button" id="rc-end" onclick="leaveNewReview()">إنهاء الجلسة</button>`;
     document.body.appendChild(b);
 }
-function rcFinish(d) { if (d) revCountAdd(reviewSig, d); leaveNewReview(); }
+function rcStep(d) { revCountAdd(reviewSig, d); const el = document.getElementById('rc-banner-n'); if (el) el.textContent = revCountGet(reviewSig); }
 
 function leaveNewReview() {
     closeRcBanner();
