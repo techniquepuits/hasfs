@@ -699,6 +699,8 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
 .rec-inline:empty { display: none; }
 .stats-line { display: inline-flex; align-items: center; gap: 7px; margin-inline-start: 4px; }
 .due-num { font-weight: bold; font-size: 17px; }
+.due-total { color: #1b4d3e; font-size: 20px; }
+body.dark-mode .due-total { color: #6ee7b7; }
 .due-forgot { color: #dc2626; }
 .due-hard { color: #ea580c; }
 .due-good { color: #2563eb; }
@@ -734,6 +736,10 @@ body.dark-mode .rv-empty { color: #cbd5e1; }
 .resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
 .resume-btn.ps-btn { padding: 9px 12px; margin-bottom: 5px; }
+.ps-row { display: flex; gap: 6px; align-items: stretch; margin-bottom: 5px; }
+.ps-row .ps-btn { flex: 1 1 0; width: auto; min-width: 0; margin-bottom: 0; flex-direction: row; justify-content: space-between; gap: 8px; }
+.ps-row .rc-btn { flex: 0 0 44px; width: 44px; margin: 0; padding: 0; font-size: 22px; font-weight: bold; line-height: 1; justify-content: center; align-items: center; }
+.rc-num { min-width: 26px; text-align: center; padding: 1px 8px; border-radius: 12px; background: rgba(0, 0, 0, 0.14); font-size: 15px; font-weight: bold; font-variant-numeric: tabular-nums; }
 .resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
 .resume-btn.cm-r2 { background: #bfdbfe; border-color: #60a5fa; color: #1e3a8a; }
 .resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
@@ -819,6 +825,8 @@ body.dark-mode .stepper .st-val { border-color: #64748b !important; }
 body.dark-mode .btn-recording.btn-record-big.btn-stop-session { background: #0f172a !important; color: #e2e8f0 !important; border-color: #64748b !important; }
 #action-area .action-top-row .btn-record-big, #action-area .action-top-row .btn-stop-session { font-size: 16px; padding: 13px 6px; }
 .stop-pick-banner { display: flex; flex-direction: column; align-items: stretch; text-align: center; gap: 10px; background: #fef9c3; border: 1.5px solid #facc15; color: #713f12; border-radius: 12px; padding: 10px 12px; font-weight: bold; font-size: 15px; }
+.rc-banner { position: fixed; left: 8px; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); z-index: 60; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+
 .stop-pick-banner button { background: #e5e7eb; border: 1.5px solid #9ca3af; color: #374151; box-shadow: 0 1px 2px rgba(0,0,0,0.12); border-radius: 10px; padding: 10px 12px; font-size: 15px; font-weight: bold; font-family: inherit; cursor: pointer; width: 100%; }
 body.dark-mode .stop-pick-banner button { background: #475569 !important; color: #f1f5f9 !important; border-color: #94a3b8 !important; }
 body.dark-mode .stop-pick-banner { background: #422006 !important; color: #fde68a !important; border-color: #a16207 !important; }
@@ -1041,6 +1049,7 @@ const LS_KEYS = {
     newrev: "ibnbadis.newrev.v1",     // قائمة «مراجعة الحفظ الجديد»: [{riwaya, surah, start, end, t}] الأحدث أخيراً
     cuts: (riwaya) => "ibnbadis.cuts.v1." + riwaya,   // فواصل الأجزاء داخل المقطع الواحد: {"سورة": [آخر آية في الجزء,...]}
     prog: "ibnbadis.prog.v1",         // مقاطع «قيد الحفظ» (يحفظها الآن ولم تدخل «الجديد» بعد): [{riwaya, surah, start, end}]
+    revcount: "ibnbadis.revcount.v1", // عدّاد يدوي لعدد المراجعات الصحيحة لكل مقطع في الجديد والمتوسط: {"رواية:درجة:سورة:بداية-سورة:نهاية": n}
     lastpass: "ibnbadis.lastpass.v1", // آخر مقطع فُتح في كل قائمة: {"رواية:درجة": {s, a}} (أول آية فيه)
     prep: "ibnbadis.prep.v2",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[]}
     prepOld: "ibnbadis.prep.v1",     // إصدار سابق: نأخذ منه السورة والآيتين فقط
@@ -1553,9 +1562,9 @@ function computeDueStats() {
     return { all, per };
 }
 
+// رقم واحد: عدد الآيات المتبقية للمراجعة اليوم (مجموع نسيت وصعب وجيد وسهل)
 function dueNumsHtml(c) {
-    return ['forgot', 'hard', 'good', 'easy'].map(k =>
-        `<span class="due-num due-${k}${c[k] ? '' : ' zero'}">${c[k]}</span>`).join('');
+    return `<span class="due-num due-total${c.total ? '' : ' zero'}" title="الآيات المتبقية للمراجعة اليوم">${c.total}</span>`;
 }
 
 // صفحة بداية عقال الآيات: كل القرآن + السور التي فيها آيات مستحقة
@@ -1646,12 +1655,8 @@ function showReviewScreen(onlyKeys, scope) {
                 <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
             </div>
             <div class="u-mid">
-                <span class="stats-line" title="الآيات المستحقة الآن حسب آخر تقييم: نسيت / صعب / جيد / سهل">
-                    <span id="due-forgot" class="due-num due-forgot">0</span>
-                    <span id="due-hard" class="due-num due-hard">0</span>
-                    <span id="due-good" class="due-num due-good">0</span>
-                    <span id="due-easy" class="due-num due-easy">0</span>
-                    <span id="daily-progress-badge" class="progress-text">راجعتَ: 0</span>
+                <span class="stats-line" title="عدد الآيات المتبقية للمراجعة اليوم">
+                    <span id="due-total" class="due-num due-total">0</span>
                 </span>
             </div>
             <div class="u-end"><button class="btn-home btn-end-session" onclick="leaveReviewScreen()">إنهاء الجلسة</button></div>
@@ -1727,10 +1732,8 @@ function countDueByLast() {
 
 function updateDueCounts() {
     const c = countDueByLast();
-    ['forgot', 'hard', 'good', 'easy'].forEach(k => {
-        const el = document.getElementById('due-' + k);
-        if (el) el.textContent = c[k];
-    });
+    const el = document.getElementById('due-total');
+    if (el) el.textContent = c.forgot + c.hard + c.good + c.easy;
 }
 
 // أعلى أولوية أولاً؛ نتجنب تكرار الآية التي راجعناها للتو إن وُجدت غيرها
@@ -1760,8 +1763,6 @@ function loadNextAyahToReview() {
     resetRecordingStates();
     currentContextOffset = 0;
 
-    const badgeEl = document.getElementById('daily-progress-badge');
-    if (badgeEl) badgeEl.innerText = `راجعتَ: ${reviewedThisSession}`;
     updateDueCounts();
 
     const showBtn = document.getElementById('show-btn');
@@ -2214,7 +2215,10 @@ function openStopSessionDialog() {
         isPlayingRecording = false;
         enterPausedMode();
     }
-    if (newReviewMode) { leaveNewReview(); return; }   // لا حفظ لموضع التوقف ولا نافذة تعثر
+    if (newReviewMode) {   // لا حفظ لموضع التوقف؛ الجديد والمتوسط: نافذة العدّاد أولاً
+        if (reviewSig && (reviewOrigin === 'new' || reviewOrigin === 'mid')) { showRcBanner(); return; }
+        leaveNewReview(); return;
+    }
     closeStopDialog();
     // بعد إظهار الآيات: تظهر مباشرة النافذة الصفراء لاختيار آخر آية (بلا نافذة وسيطة)
     if (specialRevealed) { beginStopPick(); return; }
@@ -2548,10 +2552,13 @@ function enterPausedMode() {
 }
 let stumbledSet = new Set();
 
+// «تعثر» وربط الآيات بعقال الآيات: في المراجعة اليومية وفي مراجعة الراسخ فقط (لا في الحفظ والجديد والمتوسط)
+function stumbleAllowed() { return !newReviewMode || reviewOrigin === 'rasikh'; }
+
 function refreshStumbleBtn() {
     const btn = document.getElementById('stumble-btn');
     if (!btn) return;
-    btn.style.display = newReviewMode ? 'none' : '';   // لا تعثّر (ولا عقال آيات) في مراجعة الحفظ الجديد
+    btn.style.display = stumbleAllowed() ? '' : 'none';
     btn.innerText = stumbledSet.has(ayahBarIndex) ? "✓ أُدرجت" : "تعثر";
 }
 
@@ -2563,7 +2570,7 @@ function playBarSheikh() {
 
 // «تعثر»: تُدرج الآية المحددة في عقال الآيات بصعوبة 10
 function markStumbled() {
-    if (newReviewMode) return;
+    if (!stumbleAllowed()) return;
     const it = reviewSeq[ayahBarIndex];
     if (ayahBarIndex === null || !it) return;
     addStumbledAyah(it.s, it.a);
@@ -3314,6 +3321,7 @@ function clsAssignRange(cat, s1, a1, s2, b2) {
     else if (cat === 'prog') { const l = progLoad(); segs.forEach((g) => l.push({ riwaya: rw, surah: g.surah, start: g.start, end: g.end })); lsSet(LS_KEYS.prog, l); }
     const R1 = clsRanks();
     prevEnds.forEach(([q, n, x]) => { if (R1.get(q)[n] === x && clsNextRank(R1, q, n) === x) clsAddCut(q, n); });
+    passChanged();
     if (cat !== 'none') { const last = segs[segs.length - 1]; if (last && clsNextRank(R1, last.surah, last.end) === R1.get(last.surah)[last.end]) clsAddCut(last.surah, last.end); }
 }
 
@@ -3350,6 +3358,7 @@ function clsToggleCut(s, a) {
     else ct[k] = list.concat([a]).sort((p, q) => p - q);
     if (!ct[k].length) delete ct[k];
     lsSet(LS_KEYS.cuts(rw), ct);
+    passChanged();
 }
 
 // نهايات الصفحات والأثمان والأرباع والأنصاف والأحزاب: أرقام تسلسلية للآية (1 = أول آية في المصحف) لكل رواية
@@ -3393,7 +3402,7 @@ function showClassifyPage() {
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
             <div class="surah-title select-title">تصنيف القرآن حسب درجة الحفظ</div>
             <div class="cm-legend cm-marks">${['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<button type="button" id="cm-mk-${k}" class="cm-mkbtn${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button>`).join('')}</div>
-            <div class="cm-legend"><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">راسخ</button><button type="button" class="cm-pick cm-r2" onclick="clsApply('mid')">متوسط</button><button type="button" class="cm-pick cm-r1" onclick="clsApply('new')">جديد</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير محفوظ</button></div>
+            <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير محفوظ</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r1" onclick="clsApply('new')">جديد</button><button type="button" class="cm-pick cm-r2" onclick="clsApply('mid')">متوسط</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">راسخ</button></div>
             <div id="cm-status" class="cm-status">اضغط آية البداية</div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
         </div>
@@ -3540,7 +3549,7 @@ function showNewReviewList() {
     newList = rankPassages(1);
     const li = lastPassIndex(1, newList.map((p) => p.segs));
     renderPassageList({
-        items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li })),
+        items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li, sig: passSig(1, p.segs) })),
         startFn: 'startNewPassage', title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «الجديد» بعد.<br>صنّف ما حفظتَه حديثاً من «تصنيف القرآن» باختيار «جديد».'
     });
@@ -3566,7 +3575,7 @@ function showMidReviewList() {
     midList = rankPassages(2);
     const li = lastPassIndex(2, midList.map((p) => p.segs));
     renderPassageList({
-        items: midList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r2', last: i === li })),
+        items: midList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r2', last: i === li, sig: passSig(2, p.segs) })),
         startFn: 'startMidPassage', title: 'اختر ما تريد مراجعته',
         empty: 'لا توجد وحدات في «المتوسط» بعد.<br>صنّف ما تريد من «تصنيف القرآن» باختيار «متوسط».'
     });
@@ -3578,6 +3587,35 @@ function startMidPassage(k) {
 }
 
 // ---------- قائمتا «الحفظ مع الشيخ» و«مراجعة الراسخ»: المقاطع المصنَّفة ----------
+// أي تغيير في التصنيف أو الفواصل = تقسيم جديد: تُلغى علامة «آخر مقطع»، ويُصفَّر عدّاد كل مقطع تغيّر (المقطع الذي بقي كما هو يحتفظ بعدّاده)
+function passSig(rank, segs) {
+    const f = segs[0], l = segs[segs.length - 1];
+    return userRiwaya + ':' + rank + ':' + f.surah + ':' + f.start + '-' + l.surah + ':' + l.end;
+}
+function passChanged() {
+    const pre = userRiwaya + ':';
+    const lp = lsGet(LS_KEYS.lastpass, {}) || {};
+    Object.keys(lp).forEach((k) => { if (k.startsWith(pre)) delete lp[k]; });
+    lsSet(LS_KEYS.lastpass, lp);
+    const valid = new Set();
+    [1, 2].forEach((r) => rankPassages(r).forEach((p) => valid.add(passSig(r, p.segs))));
+    const rc = lsGet(LS_KEYS.revcount, {}) || {};
+    Object.keys(rc).forEach((k) => { if (k.startsWith(pre) && !valid.has(k)) delete rc[k]; });
+    lsSet(LS_KEYS.revcount, rc);
+}
+function revCountGet(sig) { const rc = lsGet(LS_KEYS.revcount, {}) || {}; return Math.max(0, +rc[sig] || 0); }
+let psSigs = [];
+function revCountStep(k, d) {
+    const sig = psSigs[k];
+    if (!sig) return;
+    const rc = lsGet(LS_KEYS.revcount, {}) || {};
+    const n = Math.max(0, (+rc[sig] || 0) + d);
+    if (n) rc[sig] = n; else delete rc[sig];
+    lsSet(LS_KEYS.revcount, rc);
+    const el = document.getElementById('rc-' + k);
+    if (el) el.textContent = n;
+}
+
 function lastPassSet(rank, s, a) {
     const m = lsGet(LS_KEYS.lastpass, {}) || {};
     m[userRiwaya + ':' + rank] = { s, a };
@@ -3595,8 +3633,11 @@ function renderPassageList(o) {
     try { prepStopAudio(); prepRecDiscard(); } catch (e) {}
     newReviewMode = false;
     reviewPlan = null;
-    const rows = o.items.map((it, k) => `
-            <button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span></button>`).join('');
+    psSigs = o.items.map((it) => it.sig || null);
+    const rows = o.items.map((it, k) => {
+        const btn = `<button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span>${it.sig ? `<span class="rc-num" id="rc-${k}" title="عدد المراجعات الصحيحة">${revCountGet(it.sig)}</span>` : ''}</button>`;
+        return btn;
+    }).join('');
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title select-title">${o.title}</div>
@@ -3692,17 +3733,45 @@ function startUnitReview(origin, segs) {
     showSpecialSessionScreen();            // يبني شاشة المراجعة اليومية بكل أزرارها
     newReviewMode = true;
     reviewOrigin = origin;
+    reviewSig = (origin === 'new' || origin === 'mid') ? passSig(origin === 'new' ? 1 : 2, segs) : null;
     selectedSpecialSurah = all[0].s;
     reviewPlan = all.length > 1 ? { seq: all.slice(1), prompt: all[0] } : { seq: all };
     loadSpecialFullSectionExercise();
 }
 
+let reviewSig = null;
+function revCountAdd(sig, d) {
+    if (!sig) return;
+    const rc = lsGet(LS_KEYS.revcount, {}) || {};
+    const n = Math.max(0, (+rc[sig] || 0) + d);
+    if (n) rc[sig] = n; else delete rc[sig];
+    lsSet(LS_KEYS.revcount, rc);
+}
+function closeRcBanner() { const b = document.getElementById('rc-banner'); if (b) b.remove(); }
+function showRcBanner() {
+    closeRcBanner();
+    const n = revCountGet(reviewSig);
+    const b = document.createElement('div');
+    b.id = 'rc-banner';
+    b.className = 'stop-pick-banner rc-banner';
+    b.innerHTML = `<div>عدد المراجعات الصحيحة لهذا المقطع: <span id="rc-banner-n">${n}</span></div>
+        <button type="button" id="rc-plus" onclick="rcFinish(1)">رفعه بنقطة (+1)</button>
+        <button type="button" id="rc-minus" onclick="rcFinish(-1)">حذف نقطة (−1)</button>
+        <button type="button" id="rc-keep" onclick="rcFinish(0)">إبقاء العلامة كما هي</button>
+        <button type="button" id="rc-back" onclick="closeRcBanner()">متابعة المراجعة</button>`;
+    document.body.appendChild(b);
+}
+function rcFinish(d) { if (d) revCountAdd(reviewSig, d); leaveNewReview(); }
+
 function leaveNewReview() {
+    closeRcBanner();
+    const keys = reviewOrigin === 'rasikh' ? [...stumbledSet].filter((k) => reviewSeq[k]).map((k) => ayahKey(reviewSeq[k].s, reviewSeq[k].a)) : [];
     resetRecordingStates();
     stopStopPickSafe();
     sessionActive = false;
     reviewPlan = null;
     if (reviewOrigin === 'mid') showMidReviewList(); else if (reviewOrigin === 'rasikh') showRasikhList(); else showNewReviewList();
+    if (keys.length) showStumbleReviewPrompt(keys);
 }
 function stopStopPickSafe() { stopPickMode = false; closeStopDialog(); }
 
