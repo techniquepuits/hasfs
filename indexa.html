@@ -786,7 +786,6 @@ body.dark-mode .rd-hint { color: #cbd5e1; }
 .rd-msg { white-space: pre-line; text-align: center; font-size: 18px; line-height: 2; color: #475569; padding: 18px 6px; }
 body.dark-mode .rd-msg { color: #cbd5e1; }
 #rd-row1 { margin-top: 8px; grid-template-columns: repeat(4, 1fr); }
-#rd-row1.solo { grid-template-columns: 1fr; }
 .rd-hint:empty { display: none; }
 .rd-fab-wrap { position: sticky; top: 0; height: 0; flex: none; align-self: stretch; z-index: 6; margin: 0 0 -8px !important; }
 .rd-moon { position: absolute; left: 0; top: -6px; }
@@ -794,6 +793,12 @@ body.dark-mode .rd-msg { color: #cbd5e1; }
 .rd-head { padding-left: 40px; }
 .hf-btn.rd-back { background: #e2e8f0 !important; border-color: #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
+.rd-wide .speed-ctl { width: 100%; }
+.rd-wide .stepper { width: 100%; height: 50px; }
+.rd-wide .stepper button { flex: 1; }
+.rd-wide .stepper .st-val { min-width: 56px; }
+.hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
+body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
 .hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
@@ -806,8 +811,6 @@ body.dark-mode .hf-btn.taf-on { background: #1e3a8a !important; border-color: #6
 .taf-nav3 .hf-btn:disabled { opacity: 0.4; }
 .hf-btn.full { gap: 12px; font-size: 20px !important; }
 .hf-btn.full .rd-timer { font-size: 20px; }
-.rd-msgcell { grid-column: span 2; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; font-weight: bold; color: #1d4ed8; padding: 0 6px; }
-body.dark-mode .rd-msgcell { color: #93c5fd; }
 .hf-btn.rd-paused { border-color: #d97706 !important; color: #92400e !important; }
 body.dark-mode .hf-btn.rd-paused { border-color: #f59e0b !important; color: #fde68a !important; }
 .hf-btn.rp-on, .stepper.rp { background: #ccfbf1 !important; border-color: #0d9488 !important; color: #115e59 !important; }
@@ -2675,7 +2678,8 @@ let rdRecT0 = 0, rdTick = null;
 let rdTafToken = 0;
 let rdScrollSaved = 0;
 let rdSheikhMode = false;     // وضعية الشيخ (زر الشيخ أصفر)
-let rdReplaying = false, rdReplayTimer = null;
+let rdReplaying = false, rdReplayTimer = null, rdReplayMode = false, rdReplayPos = 0;
+let rdCancelArmed = false, rdCancelTimer = null;
 
 // نوع الجلسة ← سلوكها
 const RD_KINDS = {
@@ -2870,7 +2874,7 @@ function rdRenderText() {
 // ---------- صفّا الأزرار ----------
 
 function rdSpeedHtml() {
-    return `<span id="speed-ctl" class="speed-ctl" title="سرعة النزول التلقائي"><span class="stepper sm"><button type="button" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span>`;
+    return `<span id="speed-ctl" class="speed-ctl" title="سرعة النزول التلقائي"><span class="stepper"><button type="button" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span>`;
 }
 
 function rdRenderBars() {
@@ -2892,33 +2896,53 @@ function rdRenderBars() {
     const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
     const B = (id, cls, fn, label, extra) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}"${extra || ''}>${label}</button></div>`;
     const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone ? 'rd-paused' : ''), 'rdShowBtn()', 'العرض');
-    const cancelBtn = B('rd-cancel', '', 'rdCancelRec()', 'إلغاء');
     const backBtn = B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
+    const cancelB = (label) => B('rd-cancel', rdCancelArmed ? 'rd-confirm' : '', 'rdCancelRec()', rdCancelArmed ? 'تأكيد الإلغاء؟' : label);
+    const stepCell = (html) => `<div class="rd-cell rd-wide">${html}</div>`;
     const dot = `<span class="rec-pulse${recOn ? '' : ' rec-frozen'}"></span>`;
+    let cols = '1fr 1fr 1fr 1fr', html;
 
     if (rd.tafMode) {
-        r1.innerHTML = `<div id="rd-taf-msg" class="rd-msgcell">اضغط على آية لتفسيرها</div>` + B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'التفسير') + backBtn;
+        cols = '1fr';
+        html = B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'اضغط على آية لتفسيرها');
     } else if (rdSheikhMode) {
-        r1.innerHTML = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ')
-            + B('rd-settings', 'rd-gear', 'rdOpenSettings()', '⚙', ' aria-label="الإعدادات" title="الإعدادات"')
-            + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء') + backBtn;
+        if (sheikhPlaying) {
+            cols = '1fr 3fr';
+            html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ') + stepCell(rdSpeedHtml());
+        } else {
+            cols = '1fr 1fr 1fr';
+            html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ')
+                + B('rd-settings', 'rd-gear', 'rdOpenSettings()', '⚙', ' aria-label="الإعدادات" title="الإعدادات"')
+                + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء الشيخ');
+        }
     } else if (recOn) {
-        r1.innerHTML = `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live full" onclick="rdRecBtn()" aria-label="إيقاف التسجيل">${dot}<span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></button></div>`;
+        cols = '1fr';
+        html = `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live full" onclick="rdRecBtn()" aria-label="إيقاف التسجيل">${dot}<span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></button></div>`;
     } else if (recPaused) {
-        r1.innerHTML = cancelBtn
+        cols = '1fr 1fr 1fr';
+        html = showBtn
             + `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live" onclick="rdRecBtn()" aria-label="مواصلة التسجيل">${dot}</button></div>`
-            + showBtn + backBtn;
+            + cancelB('إلغاء التسجيل');
     } else if (recDone) {
-        r1.innerHTML = cancelBtn
-            + B('rd-replay', rdReplaying ? 'rp-on' : '', 'rdReplay()', 'الإعادة')
-            + showBtn + backBtn;
+        if (rdReplayMode) {
+            cols = '1fr 1.4fr 1fr';
+            html = B('rd-replay', 'rp-on', 'rdReplay()', 'الإعادة') + stepCell(rdReplayCtlHtml()) + B('rd-replay-cancel', '', 'rdReplayCancel()', 'إلغاء الإعادة');
+        } else if (showOn) {
+            cols = '1fr 3fr';
+            html = showBtn + stepCell(rdSpeedHtml());
+        } else {
+            cols = '1fr 1fr 1fr';
+            html = showBtn + B('rd-replay', '', 'rdReplay()', 'الإعادة') + cancelB('إلغاء العرض');
+        }
     } else {
-        r1.innerHTML = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
+        html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
             + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
             + (revealOnly ? showBtn : B('rd-taf', '', 'rdToggleTafsir()', 'التفسير')) + backBtn;
     }
+    r1.style.gridTemplateColumns = cols;
+    r1.innerHTML = html;
 
-    // السطر فوق الأزرار: عدّاد سرعة النزول (أو ثواني الإعادة) وزر «تعثر» للآية المحدَّدة
+    // السطر فوق الأزرار: زر «تعثر» للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
     if (hint) {
         hint.classList.toggle('hidden', rd.pick);
@@ -2926,8 +2950,6 @@ function rdRenderBars() {
         if (!rd.tafMode && stumbleAllowed() && rd.sel !== null && !rd.hidden) {
             h += `<button type="button" id="rd-stumble" class="btn-rate btn-forgot rd-stumble" onclick="rdMarkStumble()">${rd.stumbled.has(rd.sel) ? '✓ أُدرجت في عقال الآيات' : 'تعثر في هذه الآية'}</button>`;
         }
-        if (rdReplaying) h += rdReplayCtlHtml();
-        else if (rdSheikhMode || recDone) h += rdSpeedHtml();
         hint.innerHTML = h;
     }
     // أزرار التقييم في عقال الآيات بعد إظهار الآية
@@ -3260,6 +3282,8 @@ function rdRecDiscard() {
     if (rdRecUrl) { try { URL.revokeObjectURL(rdRecUrl); } catch (e) {} rdRecUrl = null; }
     if (rdRecState === 'recording' || rdRecState === 'paused') releaseWakeLock();
     rdRecTickStop();
+    rdCancelDisarm();
+    rdReplayMode = false;
     rdRecState = 'idle';
     rdRecAcc = 0; rdRecEnd = 0;
     rdRecChunks = [];
@@ -3380,24 +3404,38 @@ function rdResumeShow() {
     rdRenderBars();
     rdScrollSync();
 }
-// «إلغاء»: يلغي التسجيل (أو العرض) ويعود إلى الحالة الأولى
+// «إلغاء التسجيل/العرض»: يحتاج تأكيداً (ضغطتان خلال 3 ثوانٍ) ثم يعود إلى الأزرار الأربعة
+function rdCancelDisarm() {
+    rdCancelArmed = false;
+    if (rdCancelTimer) { clearTimeout(rdCancelTimer); rdCancelTimer = null; }
+}
 function rdCancelRec() {
+    if (!rdCancelArmed) {
+        rdCancelArmed = true;
+        if (rdCancelTimer) clearTimeout(rdCancelTimer);
+        rdCancelTimer = setTimeout(() => { rdCancelTimer = null; rdCancelArmed = false; rdRenderBars(); }, 3000);
+        rdRenderBars();
+        return;
+    }
     rdStopAudio(true);
     rdRecDiscard();
     rdRefreshUI();
 }
-// «الإعادة»: ترجع بتسجيلك N ثانية وتشغّله حتى الموضع الذي كنت عنده، ثم يتوقف العرض وينتظر «العرض» لمواصلته
+// «الإعادة»: ترجع بتسجيلك N ثانية وتشغّله حتى نقطة توقف العرض الأصلية ثم يتوقف؛ وتبقى أزرارها ظاهرة لإعادتها
 function rdReplayClear() {
     if (rdReplayTimer) { clearInterval(rdReplayTimer); rdReplayTimer = null; }
     rdReplaying = false;
 }
 function rdReplay() {
-    if (rdRecState !== 'recorded' || rdReplaying) return;
-    let pos;
-    if (rdAudio && rdAudioKind === 'rec') pos = rdAudio.currentTime || 0;
-    else { pos = rdRecEnd; rdPlayRec(); }
+    if (rdRecState !== 'recorded') return;
+    if (!rdReplayMode) {
+        rdReplayPos = (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : rdRecEnd;
+        rdReplayMode = true;
+    }
+    rdReplayClear();
+    if (!rdAudio || rdAudioKind !== 'rec') rdPlayRec();
     if (!rdAudio) return;
-    const token = rdAudioToken;
+    const pos = rdReplayPos, token = rdAudioToken;
     rdReplaying = true;
     try { rdAudio.currentTime = Math.max(0, pos - userReplay); } catch (e) {}
     if (!rdPlaying) rdResumeShow();
@@ -3408,8 +3446,19 @@ function rdReplay() {
     rdRenderBars();
     rdScrollSync();
 }
+// «إلغاء الإعادة»: نعود إلى حالة العرض المتوقف عند نقطة توقفه الأصلية
+function rdReplayCancel() {
+    rdReplayClear();
+    rdReplayMode = false;
+    if (rdAudio && rdAudioKind === 'rec') {
+        try { rdAudio.currentTime = rdReplayPos; } catch (e) {}
+        if (rdPlaying) { rdPauseShow(); return; }
+    }
+    rdRenderBars();
+    rdScrollSync();
+}
 function rdReplayCtlHtml() {
-    return `<span id="replay-ctl" class="speed-ctl" title="مدة الإعادة بالثواني"><span class="stepper sm rp"><button type="button" id="rd-rp-minus" onclick="rdReplayStep(-1)" aria-label="أقل">−</button><span id="rd-rp-n" class="st-val speed-val">${userReplay}</span><button type="button" id="rd-rp-plus" onclick="rdReplayStep(1)" aria-label="أكثر">+</button></span></span>`;
+    return `<span id="replay-ctl" class="speed-ctl" title="مدة الإعادة بالثواني"><span class="stepper rp"><button type="button" id="rd-rp-minus" onclick="rdReplayStep(-1)" aria-label="أقل">−</button><span id="rd-rp-n" class="st-val speed-val">${userReplay}</span><button type="button" id="rd-rp-plus" onclick="rdReplayStep(1)" aria-label="أكثر">+</button></span></span>`;
 }
 function rdReplayStep(dl) {
     userReplay = Math.max(1, Math.min(30, userReplay + dl));
@@ -3582,6 +3631,7 @@ async function rdTafRender() {
 // الرجوع من صفحة التفسير: نعود إلى الآيات المتلوّنة وزر التفسير ما زال مفعَّلاً
 function rdBackFromTafsir() {
     rdTafToken++;
+    rd.tafMode = false;
     rd.tafIdx = null;
     rdRenderPage(true);
 }
