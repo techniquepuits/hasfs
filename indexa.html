@@ -794,12 +794,29 @@ body.dark-mode .rd-msg { color: #cbd5e1; }
 .hf-btn.rd-back { background: #e2e8f0 !important; border-color: #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
 .rd-wide .speed-ctl { width: 100%; }
-.rd-wide .stepper { width: 100%; height: 50px; }
-.rd-wide .stepper button { flex: 1; }
-.rd-wide .stepper .st-val { min-width: 56px; }
+.rd-wide .stepper { width: 100%; height: 38px; }
+.rd-wide .stepper button { flex: 1 1 0; width: auto; min-width: 0; }
+.rd-wide .stepper .st-val { flex: 1 1 0; min-width: 0; padding: 0; }
+.rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-top: 8px; direction: rtl; }
+.rd-strip.hidden { display: none; }
+.rd-strip .rs-replay { width: auto; flex: none; min-width: 84px; min-height: 44px; padding: 8px 12px !important; }
+.rs-step { flex: none; width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
+.rs-bars { position: relative; flex: 1; min-width: 0; padding-top: 16px; }
+.rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 16px; direction: rtl; }
+.rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 12px; line-height: 14px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
+.rs-lab b { font-size: 12px; }
+.rs-track { position: relative; height: 9px; border-radius: 5px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 3px; }
+.rs-track i { position: absolute; top: 0; bottom: 0; }
+.rs-up i { background: #0d9488; border-radius: 5px; }
+.rs-real i { right: 0; background: #1b4d3e; }
+.rs-real u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
+body.dark-mode .rs-step { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
+body.dark-mode .rs-lab { color: #99f6e4; }
+body.dark-mode .rs-track { background: #334155; }
+body.dark-mode .rs-up i { background: #2dd4bf; }
+body.dark-mode .rs-real i { background: #86efac; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
-.st-unit { font-size: 11px; margin-inline-start: 1px; opacity: 0.85; font-family: sans-serif; }
 #dark-mode-btn.rd-moon { background: #fde68a !important; border-color: #f59e0b !important; color: #92400e !important; opacity: 1; }
 body.dark-mode #dark-mode-btn.rd-moon { background: #78350f !important; border-color: #f59e0b !important; color: #fde68a !important; }
 .hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
@@ -816,10 +833,8 @@ body.dark-mode .hf-btn.taf-on { background: #1e3a8a !important; border-color: #6
 .hf-btn.full .rd-timer { font-size: 20px; }
 .hf-btn.rd-paused { border-color: #d97706 !important; color: #92400e !important; }
 body.dark-mode .hf-btn.rd-paused { border-color: #f59e0b !important; color: #fde68a !important; }
-.hf-btn.rp-on, .stepper.rp { background: #ccfbf1 !important; border-color: #0d9488 !important; color: #115e59 !important; }
-.stepper.rp button, .stepper.rp .st-val { color: #115e59; }
-body.dark-mode .hf-btn.rp-on, body.dark-mode .stepper.rp { background: #134e4a !important; border-color: #2dd4bf !important; color: #ccfbf1 !important; }
-body.dark-mode .stepper.rp button, body.dark-mode .stepper.rp .st-val { color: #ccfbf1 !important; }
+.hf-btn.rp-on { background: #ccfbf1 !important; border-color: #0d9488 !important; color: #115e59 !important; }
+body.dark-mode .hf-btn.rp-on { background: #134e4a !important; border-color: #2dd4bf !important; color: #ccfbf1 !important; }
 .hf-small { width: auto !important; max-width: none !important; margin: 0 !important; padding: 7px 16px !important; font-size: 13px !important; font-weight: bold !important; border-radius: 10px !important; background: #e2e8f0 !important; border: 1.5px solid #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-small { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
 #dark-mode-btn.hf-small { font-size: 17px !important; padding: 3px 11px !important; opacity: 0.92; }
@@ -2695,7 +2710,7 @@ let rdRecT0 = 0, rdTick = null;
 let rdTafToken = 0;
 let rdScrollSaved = 0;
 let rdSheikhMode = false;     // وضعية الشيخ (زر الشيخ أصفر)
-let rdReplaying = false, rdReplayTimer = null, rdReplayMode = false, rdReplayPos = 0;
+let rdReplaying = false, rdReplayTimer = null, rdReplayPos = -1;
 let rdCancelArmed = false, rdCancelTimer = null;
 
 // نوع الجلسة ← سلوكها
@@ -2786,6 +2801,7 @@ function rdRenderPage(keep) {
             <button type="button" onclick="endSessionWithoutSaving()">إنهاء الجلسة بدون تسجيل آخر آية</button>
             <button type="button" id="stop-pick-back" onclick="cancelStopPick()">تراجع عن إنهاء الجلسة</button>
         </div>
+        <div id="rd-strip" class="rd-strip hidden"></div>
         <div id="rd-row1" class="hf-grid3"></div>
     `;
     renderInContainer(html);
@@ -2899,7 +2915,7 @@ function rdRenderBars() {
     const r1 = document.getElementById('rd-row1');
     if (!r1) return;
     const sheikhPlaying = rdPlaying && rdAudioKind === 'sheikh';
-    const showOn = rdPlaying && rdAudioKind === 'rec';
+    const showOn = rdPlaying && rdAudioKind === 'rec' && !rdReplaying;
     const recOn = rdRecState === 'recording';
     const recPaused = rdRecState === 'paused';
     const recDone = rdRecState === 'recorded';
@@ -2938,11 +2954,7 @@ function rdRenderBars() {
             + cancelB('إلغاء التسجيل');
     } else if (recDone) {
         cols = '1fr 1fr 1fr';
-        if (rdReplayMode) {
-            html = B('rd-replay', 'rp-on', 'rdReplay()', 'إعادة العرض') + stepCell(rdReplayCtlHtml()) + B('rd-replay-cancel', 'rp-on', 'rdReplayCancel()', 'إلغاء الإعادة');
-        } else {
-            html = showBtn + (showOn ? stepCell(rdSpeedHtml()) : B('rd-replay', '', 'rdReplay()', 'إعادة العرض')) + cancelB('إلغاء العرض');
-        }
+        html = showBtn + stepCell(rdSpeedHtml()) + cancelB('إلغاء العرض');
     } else {
         html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
             + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
@@ -2950,6 +2962,8 @@ function rdRenderBars() {
     }
     r1.style.gridTemplateColumns = cols;
     r1.innerHTML = html;
+
+    rdStripRender(recDone && !showOn && !none);
 
     // السطر فوق الأزرار: زر «تعثر» للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
@@ -3350,7 +3364,7 @@ function rdRecDiscard() {
     if (rdRecState === 'recording' || rdRecState === 'paused') releaseWakeLock();
     rdRecTickStop();
     rdCancelDisarm();
-    rdReplayMode = false;
+    rdReplayPos = -1;
     rdRecState = 'idle';
     rdRecAcc = 0; rdRecEnd = 0;
     rdRecChunks = [];
@@ -3445,7 +3459,8 @@ function rdShowBtn() {
     if (!rd || !rd.items.length) return;
     if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
     if (rdRecState === 'recorded') {
-        if (rdPlaying && rdAudioKind === 'rec') rdPauseShow();
+        if (rdReplaying) rdReplayEnd();
+        else if (rdPlaying && rdAudioKind === 'rec') rdPauseShow();
         else if (rdAudio && rdAudioKind === 'rec') rdResumeShow();
         else rdPlayRec();
         return;
@@ -3493,12 +3508,19 @@ function rdReplayClear() {
     if (rdReplayTimer) { clearInterval(rdReplayTimer); rdReplayTimer = null; }
     rdReplaying = false;
 }
+function rdRecTotal() {
+    const d = rdAudio && isFinite(rdAudio.duration) ? rdAudio.duration : 0;
+    return rdRecEnd > 0 ? rdRecEnd : (d > 0 ? d : Math.max(rdReplayAnchor(), 1));
+}
+// نقطة وصول القارئ: نقطة توقف العرض الأصلية (ثابتة أثناء الإعادة وبعدها)
+function rdReplayAnchor() {
+    const cur = (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : rdRecEnd;
+    if (rdReplaying || (rdReplayPos >= 0 && Math.abs(cur - rdReplayPos) < 0.35)) return rdReplayPos;
+    return cur;
+}
 function rdReplay() {
     if (rdRecState !== 'recorded') return;
-    if (!rdReplayMode) {
-        rdReplayPos = (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : rdRecEnd;
-        rdReplayMode = true;
-    }
+    rdReplayPos = rdReplayAnchor();
     rdReplayClear();
     if (!rdAudio || rdAudioKind !== 'rec') rdPlayRec();
     if (!rdAudio) return;
@@ -3508,29 +3530,57 @@ function rdReplay() {
     if (!rdPlaying) rdResumeShow();
     rdReplayTimer = setInterval(() => {
         if (token !== rdAudioToken || !rdAudio) { rdReplayClear(); rdRenderBars(); return; }
-        if ((rdAudio.currentTime || 0) >= pos - 0.05) { rdReplayClear(); rdPauseShow(); }
+        if ((rdAudio.currentTime || 0) >= pos - 0.05) { rdReplayClear(); rdPauseShow(); return; }
+        rdStripUpdate();
     }, 100);
     rdRenderBars();
     rdScrollSync();
 }
-// «إلغاء الإعادة»: نعود إلى حالة العرض المتوقف عند نقطة توقفه الأصلية
-function rdReplayCancel() {
+// «مواصلة العرض» أثناء الإعادة: نوقف الإعادة ونكمل من نقطة التوقف الأصلية
+function rdReplayEnd() {
+    const pos = rdReplayPos;
     rdReplayClear();
-    rdReplayMode = false;
-    if (rdAudio && rdAudioKind === 'rec') {
-        try { rdAudio.currentTime = rdReplayPos; } catch (e) {}
-        if (rdPlaying) { rdPauseShow(); return; }
-    }
-    rdRenderBars();
-    rdScrollSync();
+    if (rdAudio && rdAudioKind === 'rec' && pos >= 0) { try { rdAudio.currentTime = pos; } catch (e) {} }
+    if (rdAudio && !rdPlaying) rdResumeShow();
+    else { rdRenderBars(); rdScrollSync(); }
 }
-function rdReplayCtlHtml() {
-    return `<span id="replay-ctl" class="speed-ctl" title="مدة الإعادة بالثواني"><span class="stepper rp"><button type="button" id="rd-rp-minus" onclick="rdReplayStep(-1)" aria-label="أقل">−</button><span class="st-val speed-val"><span id="rd-rp-n">${userReplay}</span><small class="st-unit">s</small></span><button type="button" id="rd-rp-plus" onclick="rdReplayStep(1)" aria-label="أكثر">+</button></span></span>`;
+// شريط الإعادة: الشريط السفلي تقدّم القارئ الحقيقي، والعلوي المقطع الذي سيُعاد (آخر N ثانية)
+function rdStripGeom() {
+    const tot = rdRecTotal(), pos = Math.min(rdReplayAnchor(), tot);
+    const n = Math.min(userReplay, pos);
+    const cur = (rdAudio && rdAudioKind === 'rec') ? Math.min(rdAudio.currentTime || 0, tot) : pos;
+    return { real: pos / tot * 100, from: (pos - n) / tot * 100, w: n / tot * 100, cur: cur / tot * 100, n };
+}
+function rdStripRender(show) {
+    const el = document.getElementById('rd-strip');
+    if (!el) return;
+    el.classList.toggle('hidden', !show);
+    if (!show) { el.innerHTML = ''; return; }
+    const g = rdStripGeom();
+    el.innerHTML = `<button type="button" id="rd-replay" class="btn-secondary hf-btn rp-on rs-replay" onclick="rdReplay()">${rdReplaying ? '⟲ تعاد…' : 'إعادة'}</button>`
+        + `<button type="button" id="rd-rp-plus" class="rs-step" onclick="rdReplayStep(1)" aria-label="أكثر">+</button>`
+        + `<div class="rs-bars" dir="ltr" title="مدة الإعادة بالثواني"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"><b>${g.n}</b> s</span></div>`
+        + `<div class="rs-track rs-up"><i id="rs-up"></i></div><div class="rs-track rs-real"><i id="rs-real"></i><u id="rs-head"></u></div></div>`
+        + `<button type="button" id="rd-rp-minus" class="rs-step" onclick="rdReplayStep(-1)" aria-label="أقل">−</button>`;
+    rdStripUpdate();
+}
+function rdStripUpdate() {
+    const up = document.getElementById('rs-up');
+    if (!up) return;
+    const g = rdStripGeom();
+    // الشريطان يبدآن من اليمين كاتجاه القراءة
+    up.style.right = g.from + '%'; up.style.width = g.w + '%';
+    document.getElementById('rs-real').style.width = g.real + '%';
+    const h = document.getElementById('rs-head');
+    h.style.right = g.cur + '%'; h.style.display = rdReplaying ? 'block' : 'none';
+    const lab = document.getElementById('rd-rp-n');
+    lab.innerHTML = `<b>${g.n}</b> s`;
+    lab.style.right = Math.max(6, Math.min(94, g.from + g.w / 2)) + '%';
 }
 function rdReplayStep(dl) {
     userReplay = Math.max(1, Math.min(30, userReplay + dl));
     saveSettings();
-    rdRenderBars();
+    rdStripUpdate();
 }
 
 function rdPlayRec() {
