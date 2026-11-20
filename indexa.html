@@ -2684,7 +2684,7 @@ let rdPlaying = false;
 let rdAudioToken = 0;
 let rdAudioKind = null;       // 'sheikh' | 'rec'
 let rdSheikhPos = null;       // موضع توقف الشيخ: {key, i, t}
-let rdSheikhLive = null;
+let rdSheikhLive = null, rdSheikhMapNext = null;
 const rdBlobs = {};           // ملفات الآيات المحمَّلة كاملة (رابط → رابط محلي)
 const rdPending = {};
 let rdRecState = 'idle';      // idle | recording | paused | recorded
@@ -2926,7 +2926,7 @@ function rdRenderBars() {
     } else if (rdSheikhMode) {
         cols = '1fr 1fr 1fr';
         html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', sheikhPlaying ? 'توقيف القراءة' : (rdSheikhPos ? 'مواصلة القراءة' : 'الشيخ'))
-            + (sheikhPlaying ? stepCell(rdSpeedHtml()) : B('rd-settings', '', 'rdOpenSettings()', '⚙ الإعدادات'))
+            + B('rd-settings', '', 'rdOpenSettings()', '⚙ الإعدادات')
             + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء القراءة');
     } else if (recOn) {
         cols = '1fr';
@@ -3029,6 +3029,45 @@ function rdExpandCtx() {
 
 // ---------- النزول التلقائي أثناء صوت الشيخ أو «العرض» ----------
 
+// نزول الشيخ بسرعة شبه ثابتة: المسافة المتبقية إلى آخر المقطع ÷ الزمن المتبقي المقدَّر
+// (الزمن يُقدَّر من عدد حروف الآيات المتبقية ومعدّل ثواني الحرف المقيس من الآيات التي قُرئت)؛
+// السرعة تُنعَّم فلا اهتزاز، وتصحّح نفسها إن حرّك المستخدم الصفحة بإصبعه
+let rdSy = null;
+function rdSheikhPace(box, dt) {
+    const L = rdSheikhLive;
+    if (!L || !L.map || L.map.length !== L.n || !L.map.rounds) return null;
+    if (!rdSy || rdSy.L !== L) rdSy = { L, lastI: -1, lastD: 0, sumD: 0, sumW: 0, v: -1 };
+    const S = rdSy, g = L.get(), m = L.map[g.i];
+    if (!m) return null;
+    const boxTop = box.getBoundingClientRect().top, H = box.clientHeight, line = H * 0.3;
+    const rect = (k) => { const el = document.getElementById('rd-a-' + k); const rs = el ? el.getClientRects() : []; return rs.length ? rs : null; };
+    const rd0 = L.map.rounds[m.r];
+    const eRects = rect(rd0.endK);
+    if (!eRects) return null;
+    const d = g.d > 0 && isFinite(g.d) ? g.d : 0;
+    if (g.i !== S.lastI) {
+        const prev = S.lastI >= 0 ? L.map[S.lastI] : null;
+        if (prev && S.lastD > 0) { S.sumD += S.lastD / userRate; S.sumW += prev.w; }
+        const newRound = !prev || prev.r !== m.r;
+        const fr = rect(rd0.firstK);
+        if (newRound && fr) {
+            const top = fr[0].top - boxTop;
+            if (prev || top < 0 || top > H) {   // بداية جولة جديدة (تكرار المقطع) أو آية البداية خارج الشاشة
+                const y = Math.max(0, box.scrollTop + top - line);
+                box.scrollTop = y; rdScrollPos = y;
+            }
+        }
+        S.lastI = g.i; S.lastD = 0;
+    }
+    if (d) S.lastD = d;
+    const c = S.sumW > 0 ? S.sumD / S.sumW : 0.1 / userRate;
+    const wRem = rd0.endIdx >= g.i ? L.map[rd0.endIdx].cum - (m.cum - m.w) : m.w;
+    const T = Math.max(1, c * wRem - (g.t || 0) / userRate);
+    const endY = Math.min(box.scrollTop + (eRects[eRects.length - 1].bottom - boxTop) - line, Math.max(0, box.scrollHeight - H));
+    const vt = Math.max(0, Math.min(400, (endY - rdScrollPos) / T));
+    S.v = S.v < 0 ? vt : S.v + (vt - S.v) * Math.min(1, dt * 0.8);
+    return rdScrollPos + S.v * dt;
+}
 let rdScrollOn = false, rdHoldUntil = 0, rdScrollPos = 0, rdScrollLast = 0;
 function rdScrollFrame(ts) {
     if (!rdScrollOn) return;
@@ -3038,7 +3077,9 @@ function rdScrollFrame(ts) {
     rdScrollLast = ts;
     if (Date.now() >= rdHoldUntil) {
         if (Math.abs(box.scrollTop - rdScrollPos) > 2) rdScrollPos = box.scrollTop;
-        rdScrollPos += scrollLevel * SCROLL_PX_PER_LEVEL * dt;
+        const tgt = rdAudioKind === 'sheikh' ? rdSheikhPace(box, dt) : null;
+        if (tgt !== null) rdScrollPos = tgt;   // الشيخ: سرعة ثابتة تقريباً محسوبة من المقطع كله
+        else rdScrollPos += scrollLevel * SCROLL_PX_PER_LEVEL * dt;
         box.scrollTop = rdScrollPos;
     } else rdScrollPos = box.scrollTop;
     requestAnimationFrame(rdScrollFrame);
@@ -3081,16 +3122,32 @@ function rdSheikhUrls() {
     const u = rd.sel !== null ? rdUnitOf(rd.sel) : null;
     let from = u ? u.from : 0, to = n - 1;
     if (userRepMode === 'part') { const q = u || rdUnitOf(0); from = q.from; to = q.to; }
-    const groups = [];
+    const groups = [], ks = [];
     for (let k = from; k <= to; k++) {
         const it = rd.items[k];
         const x = it ? ayahAudioUrls(userRiwaya, it.s, it.a) : null;
-        if (x) groups.push(x);
+        if (x) { groups.push(x); ks.push(k); }
     }
+    rdSheikhMapNext = null;
     if (!groups.length) return [];
-    const out = [];
-    if (userRepMode === 'ayah') groups.forEach((g) => { for (let r = 0; r < userRep; r++) out.push(...g); });
-    else { const flat = [].concat(...groups); for (let r = 0; r < userRep; r++) out.push(...flat); }
+    const out = [], map = [];
+    const rounds = [];
+    const W = (k) => { const it = rd.items[k]; return Math.max(1, String(rdAyahText(it.s, it.a) || '').length); };
+    let cum = 0;
+    const put = (gi, r) => {
+        out.push(...groups[gi]);
+        groups[gi].forEach((_, jj) => {
+            const w = W(ks[gi]) / groups[gi].length;
+            cum += w;
+            map.push({ k: ks[gi], n: groups[gi].length, j: jj, r, w, cum });
+        });
+        if (!rounds[r]) rounds[r] = { firstK: ks[gi] };
+        rounds[r].endK = ks[gi]; rounds[r].endIdx = map.length - 1;
+    };
+    if (userRepMode === 'ayah') groups.forEach((g, gi) => { for (let r = 0; r < userRep; r++) put(gi, 0); });
+    else for (let r = 0; r < userRep; r++) groups.forEach((g, gi) => put(gi, r));
+    map.rounds = rounds;
+    rdSheikhMapNext = map;
     return out;
 }
 
@@ -3136,7 +3193,8 @@ function rdPlayQueue(urls) {
     try { a.defaultPlaybackRate = userRate; a.playbackRate = userRate; a.preservesPitch = true; } catch (e) {}
     rdAudio = a;
     let i = saved ? saved.i : 0, tries = 0, lastT = -1, stall = 0, retryTimer = null, loading = false;
-    rdSheikhLive = { key, get: () => ({ i, t: a.currentTime || 0 }) };
+    rdSheikhLive = { key, n: urls.length, map: rdSheikhMapNext, get: () => ({ i, t: a.currentTime || 0, d: a.duration }) };
+    rdSheikhMapNext = null;
     const alive = () => token === rdAudioToken;
     const stopAll = (msg) => {
         if (!alive()) return;
