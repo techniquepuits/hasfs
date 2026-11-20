@@ -799,6 +799,9 @@ body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #
 .rd-wide .stepper .st-val { min-width: 56px; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
+.st-unit { font-size: 11px; margin-inline-start: 1px; opacity: 0.85; font-family: sans-serif; }
+#dark-mode-btn.rd-moon { background: #fde68a !important; border-color: #f59e0b !important; color: #92400e !important; opacity: 1; }
+body.dark-mode #dark-mode-btn.rd-moon { background: #78350f !important; border-color: #f59e0b !important; color: #fde68a !important; }
 .hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
@@ -1172,7 +1175,14 @@ function fitDarkBtn() {
         btn.classList.add('icon-only');
     }
 }
-window.addEventListener('resize', fitDarkBtn);
+function fitMenuLabels() {
+    const b = document.getElementById('menu-prog-btn');
+    if (!b) return;
+    b.style.whiteSpace = 'nowrap';
+    b.textContent = 'قيد الحفظ';
+    if (b.scrollWidth > b.clientWidth + 1) b.textContent = 'الحفظ';
+}
+window.addEventListener('resize', () => { fitDarkBtn(); fitMenuLabels(); });
 
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
@@ -1248,7 +1258,7 @@ function showMainButtons() {
                     <button class="btn-main" onclick="showClassifyPage()">تصنيف القرآن</button>
                 </div>
                 <div class="menu-item menu-row3">
-                    <button class="btn-main" onclick="showProgList()">الحفظ</button>
+                    <button class="btn-main" id="menu-prog-btn" onclick="showProgList()">قيد الحفظ</button>
                     <button class="btn-main" onclick="showNewReviewList()">جديد</button>
                     <button class="btn-main" onclick="showRasikhList()">راسخ</button>
                 </div>
@@ -1262,6 +1272,7 @@ function showMainButtons() {
         </div>
     `;
     renderInContainer(MainButtonshtml);
+    fitMenuLabels();
 }
 
 function showHelpScreen() {
@@ -2026,13 +2037,17 @@ function showClassifyPage() {
     if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
-            <div class="surah-title select-title">تصنيف القرآن حسب درجة الحفظ</div>
+            <div class="rd-fab-wrap"><button type="button" id="dark-mode-btn" class="hf-small rd-moon" onclick="toggleDarkMode()" aria-label="الوضع الليلي">${isDarkMode ? '☀️' : '☾'}</button></div>
+            <div class="surah-title select-title" style="padding-left: 40px;">تصنيف القرآن حسب درجة الحفظ</div>
             <div class="cm-legend cm-marks">${['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<button type="button" id="cm-mk-${k}" class="cm-mkbtn${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button>`).join('')}</div>
             <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r1" onclick="clsApply('new')">جديد</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">راسخ</button></div>
-            <div id="cm-status" class="cm-status">اضغط آية البداية</div>
+            <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
         </div>
-        ${hfUtilRow('رجوع', 'showMainButtons()', '<button type="button" id="cls-text-btn" class="btn-home btn-end-session" onclick="clsShowText()">نص الآية</button>')}
+        <div id="cls-row" class="hf-grid3" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="rd-cell cls-text-cell hidden" id="cls-text-cell" style="grid-column: 1 / span 3;"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">نص الآية</button></div>
+            <div class="rd-cell" style="grid-column: 4;"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="showMainButtons()">العودة</button></div>
+        </div>
     `;
     renderInContainer(html);
     applyTheme();
@@ -2072,7 +2087,7 @@ function clsPaint() {
     });
     const st = document.getElementById('cm-status');
     if (!st) return;
-    if (!clsA) st.textContent = 'اضغط آية البداية';
+    if (!clsA) st.textContent = '';
     else if (!clsB) st.textContent = 'اضغط آية النهاية';
     else st.textContent = clsRangeLabel() + ' · اختر الدرجة أو اضغط للإلغاء';
 }
@@ -2107,6 +2122,8 @@ function clsTap(ev) {
     if (!el) return;
     const s = +el.dataset.s, a = +el.dataset.a;
     clsLast = { s, a };
+    const tc = document.getElementById('cls-text-cell');
+    if (tc) tc.classList.remove('hidden');
     if (clsA && clsB) {
         clsA = null; clsB = null; clsPaint(); return;
     } else if (clsA && !clsB) {
@@ -2895,7 +2912,8 @@ function rdRenderBars() {
     document.getElementById('rd-pick').classList.toggle('hidden', !rd.pick);
     const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
     const B = (id, cls, fn, label, extra) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}"${extra || ''}>${label}</button></div>`;
-    const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone ? 'rd-paused' : ''), 'rdShowBtn()', 'العرض');
+    const showLabel = recPaused || !recDone ? 'العرض' : (showOn ? 'توقيف العرض' : 'مواصلة العرض');
+    const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone ? 'rd-paused' : ''), 'rdShowBtn()', showLabel);
     const backBtn = B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
     const cancelB = (label) => B('rd-cancel', rdCancelArmed ? 'rd-confirm' : '', 'rdCancelRec()', rdCancelArmed ? 'تأكيد الإلغاء؟' : label);
     const stepCell = (html) => `<div class="rd-cell rd-wide">${html}</div>`;
@@ -2906,15 +2924,10 @@ function rdRenderBars() {
         cols = '1fr';
         html = B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'اضغط على آية لتفسيرها');
     } else if (rdSheikhMode) {
-        if (sheikhPlaying) {
-            cols = '1fr 3fr';
-            html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ') + stepCell(rdSpeedHtml());
-        } else {
-            cols = '1fr 1fr 1fr';
-            html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ')
-                + B('rd-settings', 'rd-gear', 'rdOpenSettings()', '⚙', ' aria-label="الإعدادات" title="الإعدادات"')
-                + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء الشيخ');
-        }
+        cols = '1fr 1fr 1fr';
+        html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', sheikhPlaying ? 'توقيف القراءة' : (rdSheikhPos ? 'مواصلة القراءة' : 'الشيخ'))
+            + (sheikhPlaying ? stepCell(rdSpeedHtml()) : B('rd-settings', '', 'rdOpenSettings()', '⚙ الإعدادات'))
+            + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء القراءة');
     } else if (recOn) {
         cols = '1fr';
         html = `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live full" onclick="rdRecBtn()" aria-label="إيقاف التسجيل">${dot}<span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></button></div>`;
@@ -2924,15 +2937,11 @@ function rdRenderBars() {
             + `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live" onclick="rdRecBtn()" aria-label="مواصلة التسجيل">${dot}</button></div>`
             + cancelB('إلغاء التسجيل');
     } else if (recDone) {
+        cols = '1fr 1fr 1fr';
         if (rdReplayMode) {
-            cols = '1fr 1.4fr 1fr';
-            html = B('rd-replay', 'rp-on', 'rdReplay()', 'الإعادة') + stepCell(rdReplayCtlHtml()) + B('rd-replay-cancel', '', 'rdReplayCancel()', 'إلغاء الإعادة');
-        } else if (showOn) {
-            cols = '1fr 3fr';
-            html = showBtn + stepCell(rdSpeedHtml());
+            html = B('rd-replay', 'rp-on', 'rdReplay()', 'إعادة العرض') + stepCell(rdReplayCtlHtml()) + B('rd-replay-cancel', 'rp-on', 'rdReplayCancel()', 'إلغاء الإعادة');
         } else {
-            cols = '1fr 1fr 1fr';
-            html = showBtn + B('rd-replay', '', 'rdReplay()', 'الإعادة') + cancelB('إلغاء العرض');
+            html = showBtn + (showOn ? stepCell(rdSpeedHtml()) : B('rd-replay', '', 'rdReplay()', 'إعادة العرض')) + cancelB('إلغاء العرض');
         }
     } else {
         html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
@@ -3458,7 +3467,7 @@ function rdReplayCancel() {
     rdScrollSync();
 }
 function rdReplayCtlHtml() {
-    return `<span id="replay-ctl" class="speed-ctl" title="مدة الإعادة بالثواني"><span class="stepper rp"><button type="button" id="rd-rp-minus" onclick="rdReplayStep(-1)" aria-label="أقل">−</button><span id="rd-rp-n" class="st-val speed-val">${userReplay}</span><button type="button" id="rd-rp-plus" onclick="rdReplayStep(1)" aria-label="أكثر">+</button></span></span>`;
+    return `<span id="replay-ctl" class="speed-ctl" title="مدة الإعادة بالثواني"><span class="stepper rp"><button type="button" id="rd-rp-minus" onclick="rdReplayStep(-1)" aria-label="أقل">−</button><span class="st-val speed-val"><span id="rd-rp-n">${userReplay}</span><small class="st-unit">s</small></span><button type="button" id="rd-rp-plus" onclick="rdReplayStep(1)" aria-label="أكثر">+</button></span></span>`;
 }
 function rdReplayStep(dl) {
     userReplay = Math.max(1, Math.min(30, userReplay + dl));
