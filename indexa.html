@@ -785,7 +785,17 @@ body.dark-mode .rd-hint { color: #cbd5e1; }
 .rd-hint .rd-stumble { width: auto; padding: 6px 16px; font-size: 14px; border-radius: 10px; }
 .rd-msg { white-space: pre-line; text-align: center; font-size: 18px; line-height: 2; color: #475569; padding: 18px 6px; }
 body.dark-mode .rd-msg { color: #cbd5e1; }
-#rd-row1, #rd-row2 { margin-top: 8px; }
+#rd-row1 { margin-top: 8px; grid-template-columns: repeat(4, 1fr); }
+#rd-row1.solo { grid-template-columns: 1fr; }
+.rd-hint:empty { display: none; }
+.rd-fab-wrap { position: sticky; top: 0; height: 0; flex: none; align-self: stretch; z-index: 6; margin: 0 0 -8px !important; }
+.rd-moon { position: absolute; left: 0; top: -6px; }
+.rd-moon-aq { left: 26px; }
+.rd-head { padding-left: 40px; }
+.hf-btn.rd-back { background: #e2e8f0 !important; border-color: #94a3b8 !important; color: #334155 !important; }
+body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
+.hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
+#rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .rd-cell .hf-btn { width: 100%; white-space: nowrap; }
 .rd-timer { font-size: 18px; font-weight: bold; font-variant-numeric: tabular-nums; color: #dc2626; }
@@ -794,7 +804,6 @@ body.dark-mode .hf-btn.rd-on { background: #78350f !important; border-color: #f5
 .hf-btn.taf-on { background: #dbeafe !important; border-color: #2563eb !important; color: #1d4ed8 !important; }
 body.dark-mode .hf-btn.taf-on { background: #1e3a8a !important; border-color: #60a5fa !important; color: #dbeafe !important; }
 .taf-nav3 .hf-btn:disabled { opacity: 0.4; }
-.hf-grid3.solo { grid-template-columns: 1fr; }
 .hf-btn.full { gap: 12px; font-size: 20px !important; }
 .hf-btn.full .rd-timer { font-size: 20px; }
 .rd-msgcell { grid-column: span 2; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; font-weight: bold; color: #1d4ed8; padding: 0 6px; }
@@ -805,11 +814,9 @@ body.dark-mode .hf-btn.rd-paused { border-color: #f59e0b !important; color: #fde
 .stepper.rp button, .stepper.rp .st-val { color: #115e59; }
 body.dark-mode .hf-btn.rp-on, body.dark-mode .stepper.rp { background: #134e4a !important; border-color: #2dd4bf !important; color: #ccfbf1 !important; }
 body.dark-mode .stepper.rp button, body.dark-mode .stepper.rp .st-val { color: #ccfbf1 !important; }
-.rd-row2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; width: 100%; }
-.rd-mid { flex: 1; display: flex; justify-content: center; min-height: 32px; }
 .hf-small { width: auto !important; max-width: none !important; margin: 0 !important; padding: 7px 16px !important; font-size: 13px !important; font-weight: bold !important; border-radius: 10px !important; background: #e2e8f0 !important; border: 1.5px solid #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-small { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
-#dark-mode-btn.hf-small { font-size: 17px !important; padding: 5px 14px !important; }
+#dark-mode-btn.hf-small { font-size: 17px !important; padding: 3px 11px !important; opacity: 0.92; }
 .rd-set-lbl { font-size: 13px; font-weight: bold; color: #64748b; margin-top: 10px; }
 .rd-set-box { max-height: 88vh; overflow-y: auto; }
 .rd-set-box .rd-pop-item { padding: 7px 10px !important; min-height: 0 !important; }
@@ -2738,6 +2745,7 @@ function rdRenderPage(keep) {
     const aq = rd.kind === 'aqal';
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="rd-fab-wrap"><button type="button" id="dark-mode-btn" class="hf-small rd-moon${aq ? ' rd-moon-aq' : ''}" onclick="toggleDarkMode()" aria-label="الوضع الليلي">☾</button></div>
             ${aq ? `<button class="expand-arc-btn" id="rd-ctx" onclick="rdExpandCtx()" title="إظهار الآية السابقة للمساعدة">&#8593;</button>` : ''}
             <div class="rd-head">
                 <span id="rd-title" class="surah-title" style="font-size: 16px;"></span>
@@ -2758,7 +2766,6 @@ function rdRenderPage(keep) {
             <button type="button" id="stop-pick-back" onclick="cancelStopPick()">تراجع عن إنهاء الجلسة</button>
         </div>
         <div id="rd-row1" class="hf-grid3"></div>
-        <div id="rd-row2" class="rd-row2"></div>
     `;
     renderInContainer(html);
     applyTheme();
@@ -2868,8 +2875,8 @@ function rdSpeedHtml() {
 
 function rdRenderBars() {
     if (!rd) return;
-    const r1 = document.getElementById('rd-row1'), r2 = document.getElementById('rd-row2');
-    if (!r1 || !r2) return;
+    const r1 = document.getElementById('rd-row1');
+    if (!r1) return;
     const sheikhPlaying = rdPlaying && rdAudioKind === 'sheikh';
     const showOn = rdPlaying && rdAudioKind === 'rec';
     const recOn = rdRecState === 'recording';
@@ -2880,52 +2887,48 @@ function rdRenderBars() {
     if (empty) rdSheikhMode = false;
 
     r1.classList.toggle('hidden', none);
-    r2.classList.toggle('hidden', rd.pick);
     r1.classList.toggle('solo', recOn);
     document.getElementById('rd-pick').classList.toggle('hidden', !rd.pick);
     const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
     const B = (id, cls, fn, label, extra) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}"${extra || ''}>${label}</button></div>`;
     const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone ? 'rd-paused' : ''), 'rdShowBtn()', 'العرض');
     const cancelBtn = B('rd-cancel', '', 'rdCancelRec()', 'إلغاء');
+    const backBtn = B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
     const dot = `<span class="rec-pulse${recOn ? '' : ' rec-frozen'}"></span>`;
 
     if (rd.tafMode) {
-        r1.innerHTML = `<div id="rd-taf-msg" class="rd-msgcell">اضغط على آية لتفسيرها</div>` + B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'التفسير');
+        r1.innerHTML = `<div id="rd-taf-msg" class="rd-msgcell">اضغط على آية لتفسيرها</div>` + B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'التفسير') + backBtn;
     } else if (rdSheikhMode) {
         r1.innerHTML = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', 'الشيخ')
-            + B('rd-settings', '', 'rdOpenSettings()', '⚙ الإعدادات')
-            + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء');
+            + B('rd-settings', 'rd-gear', 'rdOpenSettings()', '⚙', ' aria-label="الإعدادات" title="الإعدادات"')
+            + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء') + backBtn;
     } else if (recOn) {
         r1.innerHTML = `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live full" onclick="rdRecBtn()" aria-label="إيقاف التسجيل">${dot}<span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></button></div>`;
     } else if (recPaused) {
         r1.innerHTML = cancelBtn
             + `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live" onclick="rdRecBtn()" aria-label="مواصلة التسجيل">${dot}</button></div>`
-            + showBtn;
+            + showBtn + backBtn;
     } else if (recDone) {
         r1.innerHTML = cancelBtn
             + B('rd-replay', rdReplaying ? 'rp-on' : '', 'rdReplay()', 'الإعادة')
-            + showBtn;
+            + showBtn + backBtn;
     } else {
         r1.innerHTML = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
             + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
-            + (revealOnly ? showBtn : B('rd-taf', '', 'rdToggleTafsir()', 'التفسير'));
+            + (revealOnly ? showBtn : B('rd-taf', '', 'rdToggleTafsir()', 'التفسير')) + backBtn;
     }
 
-    // الصف السفلي: ☾ والعودة صغيران، وفي الوسط عدّاد سرعة النزول (أو ثواني الإعادة أثناء الإعادة)
-    const moon = `<button type="button" id="dark-mode-btn" class="btn-secondary hf-small" onclick="toggleDarkMode()" aria-label="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? '☀️' : '☾'}</button>`;
-    const back = `<button type="button" id="rd-end" class="btn-secondary hf-small" onclick="rdEnd()">العودة</button>`;
-    let mid = '';
-    if (rdReplaying) mid = rdReplayCtlHtml();
-    else if (rdSheikhMode || recDone) mid = rdSpeedHtml();
-    r2.innerHTML = `${moon}<div class="rd-mid">${mid}</div>${back}`;
-
-    // السطر فوق الأزرار: زر «تعثر» للآية المحدَّدة
+    // السطر فوق الأزرار: عدّاد سرعة النزول (أو ثواني الإعادة) وزر «تعثر» للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
     if (hint) {
         hint.classList.toggle('hidden', rd.pick);
+        let h = '';
         if (!rd.tafMode && stumbleAllowed() && rd.sel !== null && !rd.hidden) {
-            hint.innerHTML = `<button type="button" id="rd-stumble" class="btn-rate btn-forgot rd-stumble" onclick="rdMarkStumble()">${rd.stumbled.has(rd.sel) ? '✓ أُدرجت في عقال الآيات' : 'تعثر في هذه الآية'}</button>`;
-        } else hint.textContent = '';
+            h += `<button type="button" id="rd-stumble" class="btn-rate btn-forgot rd-stumble" onclick="rdMarkStumble()">${rd.stumbled.has(rd.sel) ? '✓ أُدرجت في عقال الآيات' : 'تعثر في هذه الآية'}</button>`;
+        }
+        if (rdReplaying) h += rdReplayCtlHtml();
+        else if (rdSheikhMode || recDone) h += rdSpeedHtml();
+        hint.innerHTML = h;
     }
     // أزرار التقييم في عقال الآيات بعد إظهار الآية
     const rate = document.getElementById('rd-rate');
