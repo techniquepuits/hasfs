@@ -790,7 +790,6 @@ body.dark-mode .numpad-display.pad-active { border-color: #60a5fa !important; bo
 .rd-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; }
 .rd-hint { min-height: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; font-size: 14px; font-weight: bold; color: #475569; flex-shrink: 0; margin-bottom: 6px; }
 body.dark-mode .rd-hint { color: #cbd5e1; }
-.rd-hint .rd-stumble { width: auto; padding: 6px 16px; font-size: 14px; border-radius: 10px; }
 .rd-msg { white-space: pre-line; text-align: center; font-size: 18px; line-height: 2; color: #475569; padding: 18px 6px; }
 body.dark-mode .rd-msg { color: #cbd5e1; }
 #rd-row1 { margin-top: 8px; grid-template-columns: repeat(4, 1fr); }
@@ -812,20 +811,20 @@ body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #
 .rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 16px; direction: rtl; }
 .rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 12px; line-height: 14px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
 .rs-lab b { font-size: 12px; }
-.rs-box { position: relative; height: 20px; border-radius: 7px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 2px; }
-.rs-box i { position: absolute; }
-#rs-up { top: 0; height: 10px; background: #0d9488; }
-#rs-real { top: 10px; bottom: 0; right: 0; background: #1b4d3e; }
+.rs-box { position: relative; height: 14px; border-radius: 7px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 2px; }
+.rs-box i { position: absolute; top: 0; bottom: 0; }
+#rs-real { right: 0; background: #1b4d3e; }
+#rs-up { background: #5eead4; }
 .rs-box u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
 body.dark-mode .rs-step { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
 body.dark-mode .rs-lab { color: #99f6e4; }
 body.dark-mode .rs-box { background: #334155; }
 body.dark-mode #rs-up { background: #2dd4bf; }
-body.dark-mode #rs-real { background: #86efac; }
+body.dark-mode #rs-real { background: #0f766e; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
-#dark-mode-btn.rd-moon { background: #fde68a !important; border-color: #f59e0b !important; color: #92400e !important; opacity: 1; }
-body.dark-mode #dark-mode-btn.rd-moon { background: #78350f !important; border-color: #f59e0b !important; color: #fde68a !important; }
+#dark-mode-btn.rd-moon { background: #312e81 !important; border-color: #4f46e5 !important; color: #fde047 !important; opacity: 1; }
+body.dark-mode #dark-mode-btn.rd-moon { background: #1e1b4b !important; border-color: #6366f1 !important; color: #fde047 !important; }
 .hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
@@ -2982,8 +2981,6 @@ function rdRenderBars() {
             h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
                 + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
                 + `</div>`;
-        } else if (!recDone && !rd.tafMode && stumbleAllowed() && rd.sel !== null && !rd.hidden) {
-            h += `<button type="button" id="rd-stumble" class="btn-rate btn-forgot rd-stumble" onclick="rdMarkStumble()">${rd.stumbled.has(rd.sel) ? '✓ أُدرجت في عقال الآيات' : 'تعثر في هذه الآية'}</button>`;
         }
         hint.innerHTML = h;
     }
@@ -3042,15 +3039,6 @@ function rdCircleTap(k, ev) {
     else { rd.cuts.push(k); rd.cuts.sort((a, b) => a - b); }
     rd.sel = null;
     if (prep) { prep.cuts = rd.cuts.map((x) => prep.start + x); savePrep(); }
-    rdRefreshUI();
-}
-
-function rdMarkStumble() {
-    if (!rd || !stumbleAllowed() || rd.sel === null) return;
-    const it = rd.items[rd.sel];
-    if (!it) return;
-    addStumbledAyah(it.s, it.a);
-    rd.stumbled.add(rd.sel);
     rdRefreshUI();
 }
 
@@ -3641,7 +3629,7 @@ function rdStripGeom() {
     const tot = rdRecTotal(), pos = Math.min(rdReplayAnchor(), tot);
     const n = Math.min(userReplay, pos);
     const cur = (rdAudio && rdAudioKind === 'rec') ? Math.min(rdAudio.currentTime || 0, tot) : pos;
-    return { real: pos / tot * 100, from: (pos - n) / tot * 100, w: n / tot * 100, cur: cur / tot * 100, n };
+    return { real: pos / tot * 100, from: (pos - n) / tot * 100, w: n / tot * 100, cur: cur / tot * 100, n: userReplay };
 }
 function rdStripRender(show) {
     const el = document.getElementById('rd-strip');
@@ -3651,7 +3639,7 @@ function rdStripRender(show) {
     const g = rdStripGeom();
     el.innerHTML = `<button type="button" id="rd-rp-plus" class="rs-step" onclick="rdReplayStep(1)" aria-label="أكثر">+</button>`
         + `<div class="rs-bars" dir="ltr" title="مدة الإعادة بالثواني"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"><b>${g.n}</b> s</span></div>`
-        + `<div class="rs-box"><i id="rs-up"></i><i id="rs-real"></i><u id="rs-head"></u></div></div>`
+        + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i><u id="rs-head"></u></div></div>`
         + `<button type="button" id="rd-rp-minus" class="rs-step" onclick="rdReplayStep(-1)" aria-label="أقل">−</button>`;
     rdStripUpdate();
 }
@@ -3661,7 +3649,7 @@ function rdStripUpdate() {
     const g = rdStripGeom();
     // الشريطان يبدآن من اليمين كاتجاه القراءة
     up.style.right = g.from + '%'; up.style.width = g.w + '%';
-    document.getElementById('rs-real').style.width = g.real + '%';
+    document.getElementById('rs-real').style.width = g.from + '%';
     const h = document.getElementById('rs-head');
     h.style.right = g.cur + '%'; h.style.display = rdReplaying ? 'block' : 'none';
     const lab = document.getElementById('rd-rp-n');
