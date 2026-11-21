@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#2d6a4f">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&display=swap" rel="stylesheet">
     <style>
 /* ==========================================================
    تطبيق ابن باديس - الأنماط (style.css سابقاً)
@@ -725,8 +725,6 @@ body.dark-mode .cm-a.cut.cm-r4 { background: #020617; border-color: #fb7185; }
 .cm-a.cut.sel, body.dark-mode .cm-a.cut.sel { background: #fde047 !important; border-color: #eab308 !important; color: #422006 !important; }
 .cm-a.sel { background: #fde047; border-color: #eab308; color: #422006; }
 .cm-pick { flex: 1 1 0; min-width: 0; height: 38px; padding: 0 2px; font-family: inherit; font-size: clamp(11px, 3.2vw, 14px); font-weight: bold; border-radius: 10px; border: 1.5px solid #94a3b8; color: #1e293b; cursor: pointer; white-space: nowrap; }
-.btn-end-session.taf-on { background: #dbeafe !important; border-color: #2563eb !important; color: #1d4ed8 !important; }
-body.dark-mode .btn-end-session.taf-on { background: #1e3a8a !important; border-color: #60a5fa !important; color: #dbeafe !important; }
 .cm-mkbtn { flex: 1 1 0; min-width: 0; height: 32px; padding: 0 2px; font-family: inherit; font-size: clamp(12px, 3.4vw, 14px); font-weight: bold; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; white-space: nowrap; }
 .cm-mkbtn.on { border-color: #dc2626; color: #dc2626; background: #fef2f2; }
 .cm-a.mk, .cm-a.mk.cut, .cm-a.mk.sel { border: 2px solid #dc2626 !important; }
@@ -757,8 +755,6 @@ body.dark-mode .nr-empty { color: #94a3b8; }
 body.dark-mode .prep-ayah.prep-sel { background: rgba(251, 191, 36, 0.2); }
 .prep-hide { visibility: hidden; }
 .rec-pulse { width: 12px; height: 12px; border-radius: 50%; background: #dc2626; display: inline-block; animation: rec-dot-pulse 1.2s ease-in-out infinite; }
-.hf-btn.rec-live { color: #dc2626; }
-.rec-pulse.rec-frozen { animation: none; }
 .circle-num.prep-cn { width: 30px; height: 30px; font-size: 14px; cursor: pointer; }
 .chunk { padding: 2px 4px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .chunk-a { background: rgba(74, 222, 128, 0.25); }
@@ -800,10 +796,6 @@ body.dark-mode .rd-msg { color: #cbd5e1; }
 .rd-moon { position: absolute; left: 0; top: -6px; }
 .hf-btn.rd-back { background: #e2e8f0 !important; border-color: #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
-.rd-wide .speed-ctl { width: 100%; }
-.rd-wide .stepper { width: 100%; height: 38px; }
-.rd-wide .stepper button { flex: 1 1 0; width: auto; min-width: 0; }
-.rd-wide .stepper .st-val { flex: 1 1 0; min-width: 0; padding: 0; }
 .rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; direction: rtl; }
 .rd-strip.hidden { display: none; }
 .rs-step { flex: none; width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
@@ -836,15 +828,7 @@ body.dark-mode #dark-mode-btn.rd-moon { background: #1a237e !important; border-c
 .rd-timer { font-size: 18px; font-weight: bold; font-variant-numeric: tabular-nums; color: #dc2626; }
 .hf-btn.rd-on { background: #fef3c7 !important; border-color: #d97706 !important; color: #92400e !important; }
 body.dark-mode .hf-btn.rd-on { background: #78350f !important; border-color: #f59e0b !important; color: #fef3c7 !important; }
-.hf-btn.taf-on { background: #dbeafe !important; border-color: #2563eb !important; color: #1d4ed8 !important; }
-body.dark-mode .hf-btn.taf-on { background: #1e3a8a !important; border-color: #60a5fa !important; color: #dbeafe !important; }
 .taf-nav3 .hf-btn:disabled { opacity: 0.4; }
-.hf-btn.full { gap: 12px; font-size: 20px !important; }
-.hf-btn.full .rd-timer { font-size: 20px; }
-.hf-btn.rd-paused { border-color: #d97706 !important; color: #92400e !important; }
-body.dark-mode .hf-btn.rd-paused { border-color: #f59e0b !important; color: #fde68a !important; }
-.hf-btn.rp-on { background: #ccfbf1 !important; border-color: #0d9488 !important; color: #115e59 !important; }
-body.dark-mode .hf-btn.rp-on { background: #134e4a !important; border-color: #2dd4bf !important; color: #ccfbf1 !important; }
 .hf-small { width: auto !important; max-width: none !important; margin: 0 !important; padding: 7px 16px !important; font-size: 13px !important; font-weight: bold !important; border-radius: 10px !important; background: #e2e8f0 !important; border: 1.5px solid #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-small { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
 #dark-mode-btn.hf-small { font-size: 17px !important; padding: 3px 11px !important; opacity: 0.92; }
@@ -861,7 +845,6 @@ body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #
 .rd-bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; flex-shrink: 0; }
 .rd-bar .rd-cell + .rd-cell { margin-inline-start: -1.5px; }
 .rd-bar .hf-btn { border-radius: 0 !important; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.rd-bar .rd-wide .stepper { border-radius: 0; }
 .rd-top { margin-bottom: 8px; }
 .rd-top .rd-cell .hf-btn { min-height: 42px; padding: 8px 2px !important; font-size: 14px !important; }
 #dark-mode-btn.rd-moonbar { background: #283593 !important; border-color: #5c6bc0 !important; color: #fff !important; }
@@ -870,6 +853,22 @@ body.dark-mode #dark-mode-btn.rd-moonbar { background: #1a237e !important; borde
 .rd-mid { min-height: 44px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex-shrink: 0; margin-bottom: 8px; }
 .rd-act .hf-btn { border-radius: 0 !important; }
 .rd-act .hf-btn + .hf-btn { margin-inline-start: -1.5px; }
+/* ===== القارئ: الإطار الخارجي بزوايا قائمة والشريطان ملتصقان بحافتيه ===== */
+.welcome-container.rd-page { padding: 0 !important; border-radius: 0; overflow: hidden; }
+.rd-page > .exercise-box, .rd-page > .rd-mid, .rd-page > .rating-buttons { margin-left: 14px !important; margin-right: 14px !important; width: auto; }
+.rd-page > .exercise-box { margin-bottom: 8px !important; }
+.rd-page > .rd-mid { margin-bottom: 8px; }
+.rd-page > .rd-top { margin-bottom: 10px; }
+.rd-page > #rd-row1 { margin: 0; }
+.rd-page .rd-bar .hf-btn { border-left-width: 1.5px; }
+/* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
+#rd-text, #rd-text .prep-ayah, #rd-text .at, #rd-text .ayah-blue, #rd-text .ayah-gray, #rd-text .rv-surah-sep { font-family: 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif; }
+#rd-text .ayah-blue, #rd-text .ayah-gray { font-weight: normal; }
+.rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
+body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
+.rd-rectime { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 42px; }
+.rs-step { border-radius: 0; }
+.rs-play { color: #115e59; }
 </style>
 </head>
 <body>
@@ -991,7 +990,6 @@ let userSheikh = SHEIKH_RECITERS[0].id;
 const SHEIKH_RATES = [1, 1.15, 1.3, 1.5, 1.75];
 let userRate = 1;
 let userRep = 1;          // عدد تكرارات قراءة الشيخ
-let userReplay = 3;       // ثوانٍ تُعاد عند إعادة آخر جزء من تسجيلك
 let userRepMode = 'ayah';  // ayah: كل آية بعدد التكرار ثم التالية | all: المقطع كله | part: الجزء الملوَّن المحدَّد فقط
 
 // «المتوسط» أُلغي: ما صُنِّف فيه سابقاً ينتقل إلى «الجديد» (مع عدّاد مراجعاته)
@@ -1012,7 +1010,6 @@ function loadSettings() {
     isDarkMode = false;   // يبدأ التطبيق دائماً بوضع النهار
     if (Number.isInteger(s.rep) && s.rep >= 1 && s.rep <= 30) userRep = s.rep;
     userRepMode = ['ayah', 'all', 'part'].includes(s.repMode) ? s.repMode : (s.repAll === true ? 'all' : 'ayah');
-    if (Number.isInteger(s.replay) && s.replay >= 1 && s.replay <= 30) userReplay = s.replay;
     if (SHEIKH_RECITERS.some((r) => r.id === s.sheikh)) userSheikh = s.sheikh;
     if (SHEIKH_RATES.includes(s.rate)) userRate = s.rate;
 }
@@ -1024,7 +1021,6 @@ function saveSettings() {
         sheikh: userSheikh,
         rate: userRate,
         rep: userRep,
-        replay: userReplay,
         repMode: userRepMode
     });
 }
@@ -2622,8 +2618,7 @@ let rdRecChunks = [], rdPlayAfterStop = false, rdRecStarting = false;
 let rdRecT0 = 0, rdTick = null;
 let rdTafToken = 0;
 let rdScrollSaved = 0;
-let rdSheikhMode = false;     // وضعية الشيخ (زر الشيخ أصفر)
-let rdReplaying = false, rdReplayTimer = null, rdReplayPos = -1, rdRecEnded = false;
+let rdBackOrigin = null, rdBackN = 0, rdStripTimer = null, rdRecLen = 0;   // رجوع العرض: نقطة الأصل وعدد الثواني التي رجعناها
 let rdCancelArmed = false, rdCancelTimer = null;
 
 // نوع الجلسة ← سلوكها
@@ -2679,7 +2674,6 @@ function rdOpen(cfg) {
 
 // إيقاف كل شيء وتحرير الموارد (عند الخروج أو فتح جلسة أخرى)
 function rdTeardown() {
-    rdSheikhMode = false;
     rdStopAudio(true);
     rdRecDiscard();
     rdTafToken++;
@@ -2716,6 +2710,8 @@ function rdRenderPage(keep) {
         <div id="rd-row1" class="rd-bar"></div>
     `;
     renderInContainer(html);
+    const wc = document.querySelector('#main-container .welcome-container');
+    if (wc) wc.classList.add('rd-page');
     applyTheme();
     rdRefreshUI();
     if (aq) updateDueCounts();
@@ -2764,7 +2760,7 @@ function rdLeadHtml() {
     if (!L) return '';
     let h = '';
     if (L.type === 'ctx') {
-        h += `<span class="ayah-gray">${rdAyahText(L.s, L.a)} <span class="circle-num">${L.a + 1}</span> </span>`;
+        h += `<span class="ayah-blue">${rdAyahText(L.s, L.a)} <span class="circle-num">${L.a + 1}</span> </span>`;
     } else if (L.type === 'ayah') {
         for (let i = rd.ctx; i >= 1; i--) {
             const a = L.a - i;
@@ -2813,69 +2809,46 @@ function rdRenderText() {
     } else {
         for (let k = 0; k < n; k++) html += one(k);
     }
-    if (rd.tail && !rd.hidden) html += `<span class="ayah-gray">${rd.tail}</span>`;
+    if (rd.tail && !rd.hidden) html += `<span class="ayah-blue">${rd.tail}</span>`;
     el.innerHTML = html;
 }
 
 // ---------- صفّا الأزرار ----------
-
-function rdSpeedHtml() {
-    return `<span id="speed-ctl" class="speed-ctl" title="سرعة النزول التلقائي"><span class="stepper"><button type="button" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span>`;
-}
 
 function rdRenderBars() {
     if (!rd) return;
     const r1 = document.getElementById('rd-row1');
     if (!r1) return;
     const sheikhPlaying = rdPlaying && rdAudioKind === 'sheikh';
-    const showOn = rdPlaying && rdAudioKind === 'rec' && !rdReplaying;
+    const showOn = rdPlaying && rdAudioKind === 'rec';
     const recOn = rdRecState === 'recording';
     const recPaused = rdRecState === 'paused';
     const recDone = rdRecState === 'recorded';
-    const empty = !rd.items.length;
-    const none = empty;
-    if (empty) rdSheikhMode = false;
+    const none = !rd.items.length;
 
     r1.classList.toggle('hidden', none);
-    r1.classList.toggle('solo', recOn);
     const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
-    const B = (id, cls, fn, label, extra) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}"${extra || ''}>${label}</button></div>`;
-    const showLabel = recPaused || !recDone ? 'العرض' : (showOn ? 'توقيف العرض' : (rdRecEnded ? 'العرض' : 'مواصلة العرض'));
-    const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone && !rdRecEnded ? 'rd-paused' : ''), 'rdShowBtn()', showLabel);
-    const cancelB = (label) => B('rd-cancel', rdCancelArmed ? 'rd-confirm' : '', 'rdCancelRec()', rdCancelArmed ? 'تأكيد الإلغاء؟' : label);
-    const stepCell = (html) => `<div class="rd-cell rd-wide">${html}</div>`;
-    const dot = `<span class="rec-pulse${recOn ? '' : ' rec-frozen'}"></span>`;
-    let html;
+    const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
+    // الأزرار الثلاثة ثابتة دائماً؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل / التفسير مفعَّل
+    const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
+    r1.innerHTML = B('rd-sheikh', sheikhPlaying ? 'rd-on' : '', 'rdToggleSheikh()', 'الشيخ')
+        + B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
+        + (revealOnly ? B('rd-show', '', 'rdShowBtn()', 'العرض') : B('rd-taf', rd.tafMode ? 'rd-on' : '', 'rdToggleTafsir()', 'التفسير'));
 
-    if (rd.tafMode) {
-        html = B('rd-taf', 'taf-on', 'rdToggleTafsir()', 'اضغط على آية لتفسيرها');
-    } else if (rdSheikhMode) {
-        html = B('rd-sheikh', 'rd-on', 'rdToggleSheikh()', sheikhPlaying ? 'توقيف القراءة' : (rdSheikhPos ? 'مواصلة القراءة' : 'الشيخ'))
-            + B('rd-sheikh-cancel', '', 'rdSheikhCancel()', 'إلغاء القراءة');
-    } else if (recOn) {
-        html = `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live full" onclick="rdRecBtn()" aria-label="إيقاف التسجيل">${dot}<span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></button></div>`;
-    } else if (recPaused) {
-        html = showBtn
-            + `<div class="rd-cell"><button type="button" id="rd-rec" class="btn-secondary hf-btn rec-live" onclick="rdRecBtn()" aria-label="مواصلة التسجيل">${dot}</button></div>`
-            + cancelB('إلغاء التسجيل');
-    } else if (recDone) {
-        html = showBtn + ((showOn || rdRecEnded) ? stepCell(rdSpeedHtml()) : B('rd-replay', 'rp-on', 'rdReplay()', rdReplaying ? '⟲ تعاد…' : 'إعادة')) + cancelB('إلغاء العرض');
-    } else {
-        html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
-            + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
-            + (revealOnly ? showBtn : B('rd-taf', '', 'rdToggleTafsir()', 'التفسير'));
-    }
-    r1.innerHTML = html;
+    rdStripRender(recDone && !none);
 
-    rdStripRender(recDone && !showOn && !rdRecEnded && !none);
-
-    // السطر فوق الأزرار: زر «تعثر» للآية المحدَّدة
+    // المساحة فوق الأزرار: عبارة التفسير / عدّاد التسجيل / عرض ومواصلة / الشيخ وتعثر للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
     if (hint) {
         let h = '';
         if (rd.tafMode && !none) {
-            h = `<div class="rd-act"><button type="button" id="rd-taf-back" class="btn-secondary hf-btn rd-back" onclick="rdToggleTafsir()">العودة</button></div>`;
-        } else if (recDone && !showOn && rd.sel !== null && !rd.tafMode && !none) {
+            h = `<div id="rd-taf-note" class="rd-note">اضغط على آية لتفسيرها</div>`;
+        } else if (recOn) {
+            h = `<div class="rd-rectime"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></div>`;
+        } else if (recPaused) {
+            h = `<div class="rd-act"><button type="button" id="rd-show" class="btn-secondary hf-btn" onclick="rdShowBtn()">عرض التسجيل</button>`
+                + `<button type="button" id="rd-resume" class="btn-secondary hf-btn" onclick="rdRecResume()">مواصلة التسجيل</button></div>`;
+        } else if (recDone && !showOn && rd.sel !== null && !none) {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
             h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
                 + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
@@ -3064,7 +3037,7 @@ function rdScrollFrame(ts) {
 }
 function rdScrollSync() {
     const box = document.getElementById('exercise-container');
-    const want = !!(rdPlaying && !rdReplaying && box && document.getElementById('rd-text'));
+    const want = !!(rdPlaying && box && document.getElementById('rd-text'));
     if (want && !rdScrollOn) {
         rdScrollOn = true; rdScrollLast = 0; rdScrollPos = box.scrollTop;
         if (!box._rdHold) {
@@ -3080,7 +3053,7 @@ function rdScrollSync() {
 
 function rdStopAudio(silent) {
     rdPeekStop(true);
-    rdReplayClear();
+    rdBackClear();
     rdAudioToken++;
     if (rdAudio) {
         rdAudio.onended = null;
@@ -3139,22 +3112,13 @@ function rdToggleSheikh() {
         return;
     }
     if (rdGuardHidden()) return;
-    if (rdRecState !== 'idle') return;
-    if (rd.tafMode) return;
+    if (rdRecState !== 'idle') { showToast("ألغِ التسجيل أولاً (اضغط «تسجيل»)."); return; }
+    if (rd.tafMode) { rd.tafMode = false; rdRefreshUI(); }
     if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
     rdStopAudio(true);
     const urls = rdSheikhUrls();
     if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
-    rdSheikhMode = true;
     rdPlayQueue(urls);
-}
-
-function rdSheikhCancel() {
-    rdSheikhPos = null;
-    rdSheikhMode = false;
-    rdStopAudio(true);
-    closeRdPop();
-    rdRenderBars();
 }
 
 function rdPlayQueue(urls) {
@@ -3256,6 +3220,8 @@ function rdSetHtml() {
         <div class="rd-rep-row">
             <span class="stepper"><button type="button" id="rd-rep-minus" onclick="rdRepStep(-1)" aria-label="إنقاص">−</button><span id="rd-rep-n" class="st-val">${userRep}</span><button type="button" id="rd-rep-plus" onclick="rdRepStep(1)" aria-label="زيادة">+</button></span>
         </div>
+        <div class="rd-set-lbl">سرعة النزول التلقائي أثناء «عرض التسجيل»</div>
+        <div class="rd-rep-row"><span id="speed-ctl" class="speed-ctl"><span class="stepper"><button type="button" id="speed-minus" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" id="speed-plus" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span></div>
         <div class="rd-set-lbl">طريقة التكرار</div>
         <div class="rd-pop-list">
             ${modes.map((m) => `<button type="button" id="rd-mode-${m[0]}" class="resume-btn rd-pop-item${userRepMode === m[0] ? ' on' : ''}" onclick="rdRepMode('${m[0]}')"><span class="rb-main">${m[1]}</span></button>`).join('')}
@@ -3329,9 +3295,9 @@ function rdRecDiscard() {
     if (rdRecState === 'recording' || rdRecState === 'paused') releaseWakeLock();
     rdRecTickStop();
     rdCancelDisarm();
-    rdReplayPos = -1; rdRecEnded = false;
+    rdBackClear();
     rdRecState = 'idle';
-    rdRecAcc = 0; rdRecEnd = 0;
+    rdRecAcc = 0; rdRecEnd = 0; rdRecLen = 0;
     rdRecChunks = [];
     if (rd) {
         // الصفحات التي تبدأ مخفية (المراجعة الحرة وعقال الآيات) تبقى مخفية حتى أول «عرض»
@@ -3350,15 +3316,8 @@ async function rdRecBtn() {
         rdRefreshUI();
         return;
     }
-    if (rdRecState === 'paused') {             // مواصلة التسجيل في الملف نفسه
-        try { if (rdRecorder && rdRecorder.resume) rdRecorder.resume(); } catch (e) {}
-        rdRecState = 'recording';
-        rdRecTickStart();
-        rdRefreshUI();
-        return;
-    }
-    if (rdRecState === 'recorded') return;
-    if (rd.tafMode) { showToast("أوقف التفسير أولاً بالضغط على زر التفسير."); return; }
+    if (rdRecState === 'paused' || rdRecState === 'recorded') { rdCancelRec(); return; }   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
+    if (rd.tafMode) rd.tafMode = false;
     rdStopAudio(true);
     rdRecDiscard();
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') {
@@ -3412,10 +3371,21 @@ function rdRecFinish(rec) {
         rdRefreshUI();
         return;
     }
+    rdRecLen = rdRecElapsed() / 1000;
     rdRecUrl = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || 'audio/webm' }));
     rdRecState = 'recorded';
     if (play) { rd.hidden = false; rd.revealed = true; rdRefreshUI(); rdPlayRec(); }
     else rdRefreshUI();
+}
+
+// «مواصلة التسجيل» (تظهر فوق الأزرار عند الإيقاف المؤقت): يكمل في الملف نفسه
+function rdRecResume() {
+    if (rdRecState !== 'paused') return;
+    try { if (rdRecorder && rdRecorder.resume) rdRecorder.resume(); } catch (e) {}
+    rdRecState = 'recording';
+    rdCancelDisarm();
+    rdRecTickStart();
+    rdRefreshUI();
 }
 
 // «العرض» جزء من عملية التسجيل: بعد التسجيل يشغّل تسجيلك مع النزول التلقائي، والضغط عليه يوقف العرض مؤقتاً ثم يواصله.
@@ -3424,7 +3394,6 @@ function rdShowBtn() {
     if (!rd || !rd.items.length) return;
     if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
     if (rdRecState === 'recorded') {
-        if (rdReplaying) { rdReplayEnd(); return; }
         if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
         rdPeekStop(true);
         if (rd.sel !== null) { rd.sel = null; rdRenderText(); }   // نزول التحديد عند مواصلة العرض
@@ -3435,7 +3404,6 @@ function rdShowBtn() {
     if (rd.hidden) { rd.hidden = false; rd.revealed = true; rdRefreshUI(); return; }
 }
 function rdPauseShow() {
-    rdReplayClear();
     if (!rdAudio) return;
     try { rdAudio.pause(); } catch (e) {}
     if (rdPlaying) releaseWakeLock();
@@ -3470,101 +3438,75 @@ function rdCancelRec() {
     rdRecDiscard();
     rdRefreshUI();
 }
-// «الإعادة»: ترجع بتسجيلك N ثانية وتشغّله حتى نقطة توقف العرض الأصلية ثم يتوقف؛ وتبقى أزرارها ظاهرة لإعادتها
-function rdReplayClear() {
-    if (rdReplayTimer) { clearInterval(rdReplayTimer); rdReplayTimer = null; }
-    rdReplaying = false;
-}
-function rdRecTotal() {
+// مشغّل العرض: [تشغيل/إيقاف][شريط التقدم][رجوع ثانية]؛ كل ضغطة على الرجوع تعيد ثانية واحدة، والتشغيل يواصل من هناك مباشرة
+function rdCurT() { return (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : 0; }
+function rdRecTotal() {   // مدة التسجيل: من المسجِّل نفسه (مدة ملف webm قد تكون لانهائية)، وبحدّ أدنى ما بلغه المشغّل
     const d = rdAudio && isFinite(rdAudio.duration) ? rdAudio.duration : 0;
-    return rdRecEnd > 0 ? rdRecEnd : (d > 0 ? d : Math.max(rdReplayAnchor(), 1));
+    return Math.max(rdRecEnd, d, rdRecLen, rdCurT(), rdBackOrigin || 0, 1);
 }
-// نقطة وصول القارئ: نقطة توقف العرض الأصلية (ثابتة أثناء الإعادة وبعدها)
-function rdReplayAnchor() {
-    const cur = (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : rdRecEnd;
-    if (rdReplaying || (rdReplayPos >= 0 && Math.abs(cur - rdReplayPos) < 0.35)) return rdReplayPos;
-    return cur;
-}
-function rdReplay() {
-    if (rdRecState !== 'recorded') return;
+// إيقاف العرض مؤقتاً (عند الضغط على آية)
+function rdHaltShow() { if (rdPlaying && rdAudioKind === 'rec') rdPauseShow(); }
+function rdBackClear() { rdBackOrigin = null; rdBackN = 0; }
+function rdBackStep() {
+    if (rdRecState !== 'recorded' || !rdAudio || rdAudioKind !== 'rec') return;
     rdPeekStop(true);
-    rdReplayPos = rdReplayAnchor();
-    rdReplayClear();
-    if (!rdAudio || rdAudioKind !== 'rec') rdPlayRec();
-    if (!rdAudio) return;
-    const pos = rdReplayPos, token = rdAudioToken;
-    rdReplaying = true;
-    try { rdAudio.currentTime = Math.max(0, pos - userReplay); } catch (e) {}
-    if (!rdPlaying) rdResumeShow();
-    rdReplayTimer = setInterval(() => {
-        if (token !== rdAudioToken || !rdAudio) { rdReplayClear(); rdRenderBars(); return; }
-        if ((rdAudio.currentTime || 0) >= pos - 0.05) { rdReplayClear(); rdPauseShow(); return; }
-        rdStripUpdate();
-    }, 100);
-    rdRenderBars();
-    rdScrollSync();
+    const cur = rdAudio.currentTime || 0;
+    if (rdBackOrigin === null) rdBackOrigin = cur;
+    const t = Math.max(0, cur - 1);
+    try { rdAudio.currentTime = t; } catch (e) {}
+    rdBackN = Math.ceil(rdBackOrigin - t - 1e-6);
+    rdStripUpdate();
 }
-// إيقاف العرض (أو الإعادة الجارية) عند نقطة التوقف الأصلية
-function rdHaltShow() {
-    if (rdReplaying && rdAudio && rdAudioKind === 'rec' && rdReplayPos >= 0) {
-        const pos = rdReplayPos;
-        rdReplayClear();
-        try { rdAudio.currentTime = pos; } catch (e) {}
-    }
-    if (rdPlaying && rdAudioKind === 'rec') rdPauseShow();
-}
-// «مواصلة العرض» أثناء الإعادة: نوقف الإعادة ونكمل من نقطة التوقف الأصلية
-function rdReplayEnd() {
-    const pos = rdReplayPos;
-    rdReplayClear();
-    if (rd.sel !== null) { rd.sel = null; rdRenderText(); }
-    if (rdAudio && rdAudioKind === 'rec' && pos >= 0) { try { rdAudio.currentTime = pos; } catch (e) {} }
-    if (rdAudio && !rdPlaying) rdResumeShow();
-    else { rdRenderBars(); rdScrollSync(); }
-}
-// شريط الإعادة: الشريط السفلي تقدّم القارئ الحقيقي، والعلوي المقطع الذي سيُعاد (آخر N ثانية)
 function rdStripGeom() {
-    const tot = rdRecTotal(), pos = Math.min(rdReplayAnchor(), tot);
-    const n = Math.min(userReplay, pos);
-    const cur = (rdAudio && rdAudioKind === 'rec') ? Math.min(rdAudio.currentTime || 0, tot) : pos;
-    return { real: pos / tot * 100, from: (pos - n) / tot * 100, w: n / tot * 100, cur: cur / tot * 100, n: userReplay };
+    const tot = rdRecTotal(), cur = Math.min(rdCurT(), tot);
+    let up = null;
+    if (rdBackOrigin !== null) { const o = Math.min(rdBackOrigin, tot); up = { from: cur / tot * 100, w: Math.max(0, (o - cur) / tot * 100) }; }
+    return { cur: cur / tot * 100, up };
+}
+const RD_ICONS = {
+    play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>',
+    back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 4.5v15L4 12z" fill="currentColor"/></svg>'
+};
+function rdStripTimerStop() { if (rdStripTimer) { clearInterval(rdStripTimer); rdStripTimer = null; } }
+function rdStripTick() {
+    if (!document.getElementById('rs-real')) { rdStripTimerStop(); return; }
+    if (rdBackOrigin !== null && rdPlaying && rdAudioKind === 'rec' && rdCurT() >= rdBackOrigin - 0.05) rdBackClear();
+    rdStripUpdate();
 }
 function rdStripRender(show) {
     const el = document.getElementById('rd-strip');
     if (!el) return;
     el.classList.toggle('hidden', !show);
-    if (!show) { el.innerHTML = ''; return; }
-    const g = rdStripGeom();
-    el.innerHTML = `<button type="button" id="rd-rp-plus" class="rs-step" onclick="rdReplayStep(1)" aria-label="أكثر">+</button>`
-        + `<div class="rs-bars" dir="ltr" title="مدة الإعادة بالثواني"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"><b>${g.n}</b> s</span></div>`
+    if (!show) { el.innerHTML = ''; rdStripTimerStop(); return; }
+    const on = rdPlaying && rdAudioKind === 'rec';
+    el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : 'تشغيل العرض'}">${on ? RD_ICONS.pause : RD_ICONS.play}</button>`
+        + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
         + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i><u id="rs-head"></u></div></div>`
-        + `<button type="button" id="rd-rp-minus" class="rs-step" onclick="rdReplayStep(-1)" aria-label="أقل">−</button>`;
+        + `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`;
     rdStripUpdate();
+    if (!rdStripTimer) rdStripTimer = setInterval(rdStripTick, 100);
 }
 function rdStripUpdate() {
     const up = document.getElementById('rs-up');
     if (!up) return;
     const g = rdStripGeom();
-    // الشريطان يبدآن من اليمين كاتجاه القراءة
-    up.style.right = g.from + '%'; up.style.width = g.w + '%';
-    document.getElementById('rs-real').style.width = g.from + '%';
+    // الشريط يتقدم من اليمين كاتجاه القراءة؛ والمقطع الملوّن هو ما رجعنا عنه
+    document.getElementById('rs-real').style.width = g.cur + '%';
     const h = document.getElementById('rs-head');
-    h.style.right = g.cur + '%'; h.style.display = rdReplaying ? 'block' : 'none';
+    h.style.right = g.cur + '%'; h.style.display = 'block';
     const lab = document.getElementById('rd-rp-n');
-    lab.innerHTML = `<b>${g.n}</b> s`;
-    lab.style.right = Math.max(6, Math.min(94, g.from + g.w / 2)) + '%';
-}
-function rdReplayStep(dl) {
-    userReplay = Math.max(1, Math.min(30, userReplay + dl));
-    saveSettings();
-    rdStripUpdate();
+    if (g.up) {
+        up.style.display = 'block'; up.style.right = g.up.from + '%'; up.style.width = g.up.w + '%';
+        lab.style.display = 'block'; lab.innerHTML = `<b>${rdBackN}</b> s`;
+        lab.style.right = Math.max(6, Math.min(94, g.up.from + g.up.w / 2)) + '%';
+    } else { up.style.display = 'none'; lab.style.display = 'none'; }
 }
 
 function rdPlayRec() {
     if (!rdRecUrl) return;
     rdStopAudio(true);
     const token = ++rdAudioToken;
-    rdRecEnded = false;
     rdPlaying = true;
     rdAudioKind = 'rec';
     acquireWakeLock();
@@ -3575,7 +3517,15 @@ function rdPlayRec() {
         rdStopAudio();
         showToast("تعذر تشغيل التسجيل.");
     };
-    a.onended = () => { if (token === rdAudioToken) { rdRecEnd = a.duration || a.currentTime || 0; rdRecEnded = true; rdStopAudio(); } };
+    a.onended = () => {   // ينتهي العرض: يبقى المشغّل عند النهاية (يمكن الرجوع منه أو إعادة التشغيل)
+        if (token !== rdAudioToken) return;
+        rdRecEnd = a.duration || a.currentTime || 0;
+        releaseWakeLock();
+        rdPlaying = false;
+        rdBackClear();
+        rdScrollSync();
+        rdRenderBars();
+    };
     a.onerror = fail;
     const p = a.play();
     if (p && p.catch) p.catch(fail);
@@ -3588,7 +3538,7 @@ function rdPlayRec() {
 // زر التفسير: يتلوّن وتتلوّن الآيات بالتناوب وينتظر الضغط على آية؛ الضغط عليه ثانية يعيد كل شيء
 function rdToggleTafsir() {
     if (!rd || !rd.items.length || rdGuardHidden()) return;
-    if (rdRecState === 'recorded') { showToast("أوقف العرض ثم اضغط «إلغاء» قبل ذلك."); return; }
+    if (rdRecState !== 'idle') { showToast("ألغِ التسجيل أولاً (اضغط «تسجيل»)."); return; }
     rdStopAudio(true);
     rd.tafMode = !rd.tafMode;
     rdRefreshUI();
@@ -3734,7 +3684,6 @@ function rdBackFromTafsir() {
 // ---------- إنهاء الجلسة (يغني عن زر الرجوع) ----------
 
 function rdEnd() {
-    rdSheikhMode = false;
     if (!rd) { showMainButtons(); return; }
     rdStopAudio(true);
     rdRecDiscard();
