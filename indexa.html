@@ -626,6 +626,24 @@ body.dark-mode .cm-name { background: #1e293b; }
 .cm-txt { font-size: 22px; line-height: 2.1; text-align: center; margin: 8px 0 12px; max-height: 45vh; overflow-y: auto; }
 .cm-txt-nav { display: flex; gap: 8px; margin-bottom: 8px; }
 .cm-txt-nav button { flex: 1 1 0; }
+.ps-row { display: flex; gap: 6px; align-items: stretch; margin-bottom: 5px; }
+.ps-row .resume-btn.ps-btn { flex: 1 1 0; min-width: 0; width: auto; margin-bottom: 0; }
+.sd-btn { flex: none; min-width: 58px; padding: 0 8px; border-radius: 12px; border: 2px solid; font-family: inherit; font-size: 19px; font-weight: bold; cursor: pointer; touch-action: manipulation; font-variant-numeric: tabular-nums; }
+.sd-btn.sd-g { background: #16a34a; border-color: #15803d; color: #fff; }
+.sd-btn.sd-o { background: #fb923c; border-color: #ea580c; color: #431407; }
+.sd-btn.sd-r { background: #dc2626; border-color: #b91c1c; color: #fff; }
+body.dark-mode .sd-btn.sd-g { background: #15803d; border-color: #4ade80; }
+body.dark-mode .sd-btn.sd-o { background: #c2410c; border-color: #fdba74; color: #fff; }
+body.dark-mode .sd-btn.sd-r { background: #b91c1c; border-color: #fca5a5; }
+.sd-step { margin: 6px 0 4px; }
+.sd-step .stepper { width: 100%; height: 54px; }
+.sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
+.sd-step .stepper .st-val { flex: 1.4 1 0; min-width: 0; padding: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.sd-info { font-size: 14px; color: #475569; margin: 8px 0 2px; }
+body.dark-mode .sd-info { color: #cbd5e1; }
+.sd-ok { margin-top: 12px !important; width: 100% !important; }
+.menu-row3 .btn-main { position: relative; }
+.due-badge { position: absolute; top: -8px; left: -6px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #dc2626; color: #fff; font: bold 12px/20px sans-serif; font-style: normal; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
 .rc-num { min-width: 26px; text-align: center; padding: 1px 8px; border-radius: 12px; background: rgba(0, 0, 0, 0.14); font-size: 15px; font-weight: bold; font-variant-numeric: tabular-nums; }
 .resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
 .resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
@@ -907,6 +925,7 @@ const LS_KEYS = {
     cuts: (riwaya) => "ibnbadis.cuts.v1." + riwaya,   // فواصل الأجزاء داخل المقطع الواحد: {"سورة": [آخر آية في الجزء,...]}
     prog: "ibnbadis.prog.v1",         // مقاطع «قيد الحفظ» (يحفظها الآن ولم تدخل «الجديد» بعد): [{riwaya, surah, start, end}]
     revcount: "ibnbadis.revcount.v1", // عدّاد يدوي لعدد المراجعات الصحيحة لكل مقطع في الجديد: {"رواية:درجة:سورة:بداية-سورة:نهاية": n}
+    sched: "ibnbadis.sched.v1",       // جدولة المراجعة اليدوية لكل مقطع: {"رواية:درجة:...": {n: المدة التي اختارها بالأيام, d: رقم يوم الاستحقاق, l: رقم يوم آخر تأكيد}}
     lastpass: "ibnbadis.lastpass.v1", // آخر مقطع فُتح في كل قائمة: {"رواية:درجة": {s, a}} (أول آية فيه)
     prep: "ibnbadis.prep.v2",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[]}
     prepOld: "ibnbadis.prep.v1",     // إصدار سابق: نأخذ منه السورة والآيتين فقط
@@ -1201,11 +1220,14 @@ function fitDarkBtn() {
     }
 }
 function fitMenuLabels() {
-    const b = document.getElementById('menu-prog-btn');
-    if (!b) return;
+    const b = document.getElementById('menu-prog-btn'), lab = document.getElementById('menu-prog-lab');
+    if (!b || !lab) return;
     b.style.whiteSpace = 'nowrap';
-    b.textContent = 'قيد الحفظ';
-    if (b.scrollWidth > b.clientWidth + 1) b.textContent = 'الحفظ';
+    const bd = b.querySelector('.due-badge');
+    if (bd) bd.style.display = 'none';   // الشارة لا تدخل في قياس اتساع النص
+    lab.textContent = 'قيد الحفظ';
+    if (b.scrollWidth > b.clientWidth + 1) lab.textContent = 'الحفظ';
+    if (bd) bd.style.display = '';
 }
 window.addEventListener('resize', () => { fitDarkBtn(); fitMenuLabels(); });
 
@@ -1283,9 +1305,9 @@ function showMainButtons() {
                     <button class="btn-main" onclick="showClassifyPage()">تصنيف القرآن</button>
                 </div>
                 <div class="menu-item menu-row3">
-                    <button class="btn-main" id="menu-prog-btn" onclick="showProgList()">قيد الحفظ</button>
-                    <button class="btn-main" onclick="showNewReviewList()">جديد</button>
-                    <button class="btn-main" onclick="showRasikhList()">راسخ</button>
+                    <button class="btn-main" id="menu-prog-btn" onclick="showProgList()"><span id="menu-prog-lab">قيد الحفظ</span><i class="due-badge" id="due-prog"></i></button>
+                    <button class="btn-main" onclick="showNewReviewList()">جديد<i class="due-badge" id="due-new"></i></button>
+                    <button class="btn-main" onclick="showRasikhList()">راسخ<i class="due-badge" id="due-ras"></i></button>
                 </div>
                 <div class="menu-item">
                     <button class="btn-secondary" onclick="showReviewSelect()" style="width: 100%;">عقال الآيات</button>
@@ -1298,6 +1320,13 @@ function showMainButtons() {
     `;
     renderInContainer(MainButtonshtml);
     fitMenuLabels();
+    try {
+        const c = schedDueCounts();
+        [['due-prog', c.prog], ['due-new', c.nw], ['due-ras', c.ras]].forEach(([id, n]) => {
+            const e = document.getElementById(id);
+            if (e) { e.textContent = n > 99 ? '99+' : n; e.hidden = !n; }
+        });
+    } catch (e) {}
 }
 
 function showHelpScreen() {
@@ -2217,7 +2246,7 @@ function showNewReviewList() {
     newList = rankPassages(1);
     const li = lastPassIndex(1, newList.map((p) => p.segs));
     renderPassageList({
-        items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li, sig: passSig(1, p.segs) })),
+        items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li, sig: passSig(1, p.segs), sched: passSig(1, p.segs) })),
         startFn: 'startNewPassage', title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «الجديد» بعد.<br>صنّف ما حفظتَه حديثاً من «تصنيف القرآن» باختيار «جديد».'
     });
@@ -2244,6 +2273,71 @@ function passChanged() {
     const rc = lsGet(LS_KEYS.revcount, {}) || {};
     Object.keys(rc).forEach((k) => { if (k.startsWith(pre) && !valid.has(k)) delete rc[k]; });
     lsSet(LS_KEYS.revcount, rc);
+    const ok = new Set();
+    [1, 3, 4].forEach((r) => rankPassages(r).forEach((p) => (r === 4 ? p.segs.map((g) => [g]) : [p.segs]).forEach((sg) => ok.add(passSig(r, sg)))));
+    const sc = lsGet(LS_KEYS.sched, {}) || {};
+    Object.keys(sc).forEach((k) => { if (k.startsWith(pre) && !ok.has(k)) delete sc[k]; });
+    lsSet(LS_KEYS.sched, sc);
+}
+
+// ---------- جدولة المراجعة (يدوية): التطبيق يحسب الأيام فقط ----------
+// المقطع الجديد (إنشاء/دمج/فصل) بلا سجل: مدته 0 والمتبقي 0 = يُراجَع اليوم (أحمر)
+function schedToday() { const d = new Date(); return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+function schedGet(sig) {
+    const m = lsGet(LS_KEYS.sched, {}) || {}, r = sig ? m[sig] : null;
+    return r ? { n: Math.max(0, +r.n || 0), d: +r.d, l: (r.l === undefined || r.l === null) ? null : +r.l } : { n: 0, d: NaN, l: null };
+}
+function schedRemain(sig) { const r = schedGet(sig); return isNaN(r.d) ? 0 : r.d - schedToday(); }
+function schedCls(sig) {
+    const r = schedGet(sig), rem = schedRemain(sig);
+    return rem <= 0 ? 'sd-r' : (rem <= r.n / 4 ? 'sd-o' : 'sd-g');
+}
+function schedBtnHtml(k, sig) {
+    return `<button type="button" id="sd-${k}" class="sd-btn ${schedCls(sig)}" onclick="schedOpen(${k})" title="عدد الأيام المتبقية للمراجعة"><span dir="ltr">${schedRemain(sig)}</span></button>`;
+}
+let psSched = [], schedK = -1, schedVal = 0;
+function schedOpen(k) {
+    const sig = psSched[k];
+    if (!sig) return;
+    schedK = k;
+    schedVal = schedGet(sig).n;
+    closeSchedPop();
+    const d = document.createElement('div');
+    d.id = 'sd-pop';
+    d.className = 'modal-overlay';      // بلا إلغاء: لا بد من التأكيد
+    d.innerHTML = `<div class="modal-box sd-box">${schedBoxHtml()}</div>`;
+    document.body.appendChild(d);
+}
+function schedBoxHtml() {
+    const r = schedGet(psSched[schedK]);
+    let info = '';
+    if (r.l !== null) { const x = schedToday() - r.l; info = `<div class="sd-info" id="sd-info">${x <= 0 ? 'آخر مراجعة: اليوم' : 'مضى ' + x + ' يوم على آخر مراجعة'}</div>`; }
+    return `<div class="modal-title">عدد الأيام المتبقية للمراجعة</div>
+        <div class="sd-step"><span class="stepper"><button type="button" id="sd-minus" onclick="schedStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span id="sd-n">${schedVal}</span> يوم</span><button type="button" id="sd-plus" onclick="schedStep(1)" aria-label="زيادة">+</button></span></div>
+        ${info}
+        <button type="button" id="sd-ok" class="btn-main sd-ok" onclick="schedConfirm()">تأكيد</button>`;
+}
+function schedStep(d) {
+    schedVal = Math.max(0, Math.min(365, schedVal + d));
+    const el = document.getElementById('sd-n');
+    if (el) el.textContent = schedVal;
+}
+function closeSchedPop() { const d = document.getElementById('sd-pop'); if (d) d.remove(); }
+function schedConfirm() {
+    const sig = psSched[schedK];
+    if (sig) {
+        const m = lsGet(LS_KEYS.sched, {}) || {}, t = schedToday();
+        m[sig] = { n: schedVal, d: t + schedVal, l: t };
+        lsSet(LS_KEYS.sched, m);
+        const b = document.getElementById('sd-' + schedK);
+        if (b) { b.className = 'sd-btn ' + schedCls(sig); b.innerHTML = `<span dir="ltr">${schedRemain(sig)}</span>`; }
+    }
+    closeSchedPop();
+}
+// عدد المقاطع المستحقة اليوم (المتبقي ≤ 0) في كل درجة: للتذكير في القائمة الرئيسية
+function schedDueCounts() {
+    const cnt = (r) => { let n = 0; rankPassages(r).forEach((p) => (r === 4 ? p.segs.map((g) => [g]) : [p.segs]).forEach((sg) => { if (schedRemain(passSig(r, sg)) <= 0) n++; })); return n; };
+    return { prog: cnt(4), nw: cnt(1), ras: cnt(3) };
 }
 function revCountGet(sig) { const rc = lsGet(LS_KEYS.revcount, {}) || {}; return Math.max(0, +rc[sig] || 0); }
 let psSigs = [];
@@ -2267,9 +2361,11 @@ function renderPassageList(o) {
     newReviewMode = false;
     reviewPlan = null;
     psSigs = o.items.map((it) => it.sig || null);
+    psSched = o.items.map((it) => it.sched || null);
+    closeSchedPop();
     const rows = o.items.map((it, k) => {
         const btn = `<button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span>${it.sig ? `<span class="rc-num" id="rc-${k}" title="عدد المراجعات الصحيحة">${revCountGet(it.sig)}</span>` : ''}</button>`;
-        return btn;
+        return `<div class="ps-row">${btn}${it.sched ? schedBtnHtml(k, it.sched) : ''}</div>`;
     }).join('');
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
@@ -2295,7 +2391,7 @@ function showProgList() {
     progList = progPassages();
     const li = lastPassIndex(4, progList.map((g) => [g]));
     renderPassageList({
-        items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li })),
+        items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li, sched: passSig(4, [g]) })),
         startFn: 'startProgPassage',
         title: 'اختر المقطع الذي تحفظه',
         empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «قيد الحفظ».'
@@ -2343,7 +2439,7 @@ function showRasikhList() {
     rasikhList = rasikhPassages();
     const li = lastPassIndex(3, rasikhList.map((p) => p.segs));
     renderPassageList({
-        items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li })),
+        items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li, sched: passSig(3, p.segs) })),
         startFn: 'startRasikhPassage',
         title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «الراسخ» بعد.<br>صنّف ما حفظتَه من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «راسخ».'
