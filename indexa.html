@@ -69,14 +69,12 @@ body.dark-mode .header-box {
     border-bottom-color: #334155 !important;
 }
 
-body.dark-mode .expand-arc-btn,
 body.dark-mode .btn-home {
     background: #0f172a !important;
     border-color: #475569 !important;
     color: #34d399 !important;
 }
 
-body.dark-mode .expand-arc-btn:hover,
 body.dark-mode .btn-home:hover {
     background: #34d399 !important;
     color: #0f172a !important;
@@ -90,10 +88,6 @@ body.dark-mode .circle-num {
 
 body.dark-mode .ayah-blue {
     color: #60a5fa !important;
-}
-
-body.dark-mode .ayah-gray {
-    color: #94a3b8 !important;
 }
 
 #main-container {
@@ -545,35 +539,6 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
     background-color: #475569;
 }
 
-.expand-arc-btn {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    background: #f1f5f9;
-    border: 1.5px solid #cbd5e1;
-    color: #1b4d3e;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 5;
-}
-.expand-arc-btn:hover {
-    background: #2d6a4f;
-    color: white;
-    border-color: #2d6a4f;
-}
-
-.ayah-gray {
-    color: #374151 !important;
-    font-weight: bold;
-}
 .ayah-stumbled { border-bottom: 3px solid #d97706; }
 .ayah-stumbled .at { color: #dc2626 !important; }
 body.dark-mode .ayah-stumbled .at { color: #f87171 !important; }
@@ -616,20 +581,26 @@ body.dark-mode .cm-name { background: #1e293b; }
 .cm-txt-nav button { flex: 1 1 0; }
 .ps-row { position: relative; margin-bottom: 5px; }
 .ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 68px; box-sizing: border-box; }
-.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; border-radius: 9px; border: 1.5px solid; font-family: inherit; font-size: 15px; font-weight: bold; line-height: 1; cursor: pointer; touch-action: manipulation; font-variant-numeric: tabular-nums; }
-.sd-btn.sd-g { background: rgba(22, 163, 74, 0.32); border-color: rgba(22, 163, 74, 0.75); color: #14532d; }
-.sd-btn.sd-o { background: rgba(251, 146, 60, 0.38); border-color: rgba(234, 88, 12, 0.8); color: #7c2d12; }
-.sd-btn.sd-r { background: rgba(220, 38, 38, 0.3); border-color: rgba(220, 38, 38, 0.8); color: #991b1b; }
-body.dark-mode .sd-btn.sd-g { background: rgba(34, 197, 94, 0.3); border-color: rgba(74, 222, 128, 0.8); color: #bbf7d0; }
-body.dark-mode .sd-btn.sd-o { background: rgba(251, 146, 60, 0.32); border-color: rgba(253, 186, 116, 0.85); color: #fed7aa; }
-body.dark-mode .sd-btn.sd-r { background: rgba(248, 113, 113, 0.3); border-color: rgba(252, 165, 165, 0.85); color: #fecaca; }
+/* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
+.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; box-sizing: border-box; border-radius: 9px; border: 1.5px solid; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #fff; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
+.sd-btn.sd-g { background: #15803d; border-color: #166534; }
+.sd-btn.sd-o { background: #c2410c; border-color: #9a3412; }
+.sd-btn.sd-r { background: #b91c1c; border-color: #991b1b; }
+body.dark-mode .sd-btn.sd-g { background: #166534; border-color: #4ade80; }
+body.dark-mode .sd-btn.sd-o { background: #9a3412; border-color: #fb923c; }
+body.dark-mode .sd-btn.sd-r { background: #991b1b; border-color: #f87171; }
 .sd-step { margin: 6px 0 4px; }
 .sd-step .stepper { width: 100%; height: 54px; }
 .sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
 .sd-step .stepper .st-val { flex: 1.4 1 0; min-width: 0; padding: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.sd-info { font-size: 14px; color: #475569; margin: 8px 0 2px; }
-body.dark-mode .sd-info { color: #cbd5e1; }
 .sd-ok { margin-top: 12px !important; width: 100% !important; }
+.sd-box .sd-ok + .sd-ok { margin-top: 8px !important; }
+.rd-ctxrow { display: flex; justify-content: center; flex: none; }
+.rd-ctxtail { padding-bottom: 38px; }
+.rd-ctxbtn { background: transparent; border: 1px solid rgba(148, 163, 184, 0.7); color: #94a3b8; opacity: 0.8; border-radius: 14px; padding: 3px 16px; font-size: 13px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+.rd-ctxbtn.hidden { display: none; }
+.rd-speed-wrap { position: sticky; bottom: 4px; height: 0; flex: none; margin-top: auto; z-index: 6; }
+.rd-speed-wrap .speed-ctl { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.92; box-shadow: 0 1px 6px rgba(0,0,0,0.3); border-radius: 9px; }
 .due-badge { display: inline-block; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #dc2626; color: #fff; font: bold 13px/22px sans-serif; font-style: normal; text-align: center; vertical-align: middle; margin-inline-end: 8px; }
 .ps-f-due { background: #ffedd5 !important; border-color: #ea580c !important; color: #9a3412 !important; }
 .ps-f-red { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; }
@@ -808,7 +779,6 @@ body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #
 .rs-box i { position: absolute; top: 0; bottom: 0; }
 #rs-real { right: 0; background: #1b4d3e; }
 #rs-up { background: #5eead4; }
-.rs-box u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
 body.dark-mode #rd-text .at { color: #4ade80; }
 body.dark-mode #rd-text .chunk-b .at { color: #bbf7d0; }
 body.dark-mode #rd-text .chunk-a, body.dark-mode #rd-text .chunk-b { background: transparent; }
@@ -862,8 +832,8 @@ body.dark-mode #dark-mode-btn.rd-moonbar { background: #1a237e !important; borde
 .rd-page > #rd-row1 { margin: 0; }
 .rd-page .rd-bar .hf-btn { border-left-width: 1.5px; }
 /* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
-#rd-text, #rd-text .prep-ayah, #rd-text .at, #rd-text .ayah-blue, #rd-text .ayah-gray, #rd-text .rv-surah-sep { font-family: 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif; }
-#rd-text .ayah-blue, #rd-text .ayah-gray { font-weight: normal; }
+#rd-text, #rd-text .prep-ayah, #rd-text .at, #rd-text .ayah-blue, #rd-text .rv-surah-sep { font-family: 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif; }
+#rd-text .ayah-blue { font-weight: normal; }
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
 .rd-rectime { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 42px; }
@@ -2092,49 +2062,9 @@ function schedCls(sig) {
     return rem <= 0 ? 'sd-r' : (rem <= r.n / 4 ? 'sd-o' : 'sd-g');
 }
 function schedBtnHtml(k, sig) {
-    return `<button type="button" id="sd-${k}" class="sd-btn ${schedCls(sig)}" onclick="schedOpen(${k})" title="عدد الأيام المتبقية للمراجعة"><span dir="ltr">${schedRemain(sig)}</span></button>`;
+    return `<span id="sd-${k}" class="sd-btn ${schedCls(sig)}" title="عدد الأيام المتبقية للمراجعة"><span dir="ltr">${schedRemain(sig)}</span></span>`;
 }
-let psSched = [], schedK = -1, schedVal = 0;
-function schedOpen(k) {
-    const sig = psSched[k];
-    if (!sig) return;
-    schedK = k;
-    schedVal = schedGet(sig).n;
-    closeSchedPop();
-    const d = document.createElement('div');
-    d.id = 'sd-pop';
-    d.className = 'modal-overlay';      // بلا إلغاء: لا بد من التأكيد
-    d.innerHTML = `<div class="modal-box sd-box">${schedBoxHtml()}</div>`;
-    document.body.appendChild(d);
-}
-function schedBoxHtml() {
-    const r = schedGet(psSched[schedK]);
-    let info = '';
-    if (r.l !== null) { const x = schedToday() - r.l; info = `<div class="sd-info" id="sd-info">${x <= 0 ? 'آخر مراجعة: اليوم' : 'مضى ' + x + ' يوم على آخر مراجعة'}</div>`; }
-    return `<div class="modal-title">عدد الأيام المتبقية للمراجعة</div>
-        <div class="sd-step"><span class="stepper"><button type="button" id="sd-minus" onclick="schedStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span id="sd-n">${schedVal}</span> يوم</span><button type="button" id="sd-plus" onclick="schedStep(1)" aria-label="زيادة">+</button></span></div>
-        ${info}
-        <button type="button" id="sd-ok" class="btn-main sd-ok" onclick="schedConfirm()">تأكيد</button>`;
-}
-function schedStep(d) {
-    schedVal = Math.max(0, Math.min(365, schedVal + d));
-    const el = document.getElementById('sd-n');
-    if (el) el.textContent = schedVal;
-}
-function closeSchedPop() { const d = document.getElementById('sd-pop'); if (d) d.remove(); }
-function schedConfirm() {
-    const sig = psSched[schedK];
-    if (sig) {
-        const m = lsGet(LS_KEYS.sched, {}) || {}, t = schedToday();
-        m[sig] = { n: schedVal, d: t + schedVal, l: t };
-        lsSet(LS_KEYS.sched, m);
-        const b = document.getElementById('sd-' + schedK);
-        if (b) { b.className = 'sd-btn ' + schedCls(sig); b.innerHTML = `<span dir="ltr">${schedRemain(sig)}</span>`; }
-    }
-    closeSchedPop();
-    psFilterApply();
-}
-
+let psSched = [];
 function lastPassSet(rank, s, a) {
     const m = lsGet(LS_KEYS.lastpass, {}) || {};
     m[userRiwaya + ':' + rank] = { s, a };
@@ -2155,7 +2085,6 @@ function renderPassageList(o) {
     rd = null;
     newReviewMode = false;
     psSched = o.items.map((it) => it.sched || null);
-    closeSchedPop();
     const rows = o.items.map((it, k) => {
         const btn = `<button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span></button>`;
         return `<div class="ps-row" id="psr-${k}">${btn}${it.sched ? schedBtnHtml(k, it.sched) : ''}</div>`;
@@ -2657,17 +2586,17 @@ function stumbleAllowed() { return !!(rd && RD_KINDS[rd.kind] && RD_KINDS[rd.kin
 
 // ---------- فتح الجلسة ----------
 
-// cfg: {kind, items:[{s,a}], lead, pinFirst, cuts, title, tail, msg}
+// cfg: {kind, items:[{s,a}], lead, pinFirst, cuts, title, tail, msg, sig}
 function rdOpen(cfg) {
     rdTeardown();
     const K = RD_KINDS[cfg.kind];
     const n = cfg.items.length;
     rd = {
-        kind: cfg.kind, items: cfg.items, lead: cfg.lead || null, pinFirst: !!cfg.pinFirst,
+        kind: cfg.kind, items: cfg.items, lead: cfg.lead || null, pinFirst: !!cfg.pinFirst, sig: cfg.sig || '', showLead: false, showTail: false,
         cuts: (cfg.cuts || []).slice(), title: cfg.title || '', tail: cfg.tail || '', msg: cfg.msg || '',
         sel: null, startHidden: K.startHidden, revealed: false,
         hidden: K.startHidden, recScope: K.startHidden && n ? { from: 0, to: n - 1 } : null,
-        tafMode: false, tafIdx: null, tafEd: 'muyassar', stumbled: new Set(), ctx: 0
+        tafMode: false, tafIdx: null, tafEd: 'muyassar', stumbled: new Set()
     };
     rdRenderPage(false);
 }
@@ -2690,12 +2619,14 @@ function rdRenderPage(keep) {
             <div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="rdEnd()">إنهاء الجلسة</button></div>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
-            ${aq ? `<button class="expand-arc-btn" id="rd-ctx" onclick="rdExpandCtx()" title="إظهار الآية السابقة للمساعدة">&#8593;</button>` : ''}
             <div class="rd-head">
                 <span id="rd-title" class="surah-title" style="font-size: 16px;"></span>
                 ${aq ? `<span class="stats-line" title="عدد الآيات المتبقية للمراجعة اليوم"><span id="due-total" class="due-num due-total">0</span></span>` : ''}
             </div>
+            <div class="rd-ctxrow"><button type="button" id="rd-lead-btn" class="rd-ctxbtn" onclick="rdToggleCtx('lead')"></button></div>
             <div id="rd-text" class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;"></div>
+            <div class="rd-ctxrow rd-ctxtail"><button type="button" id="rd-tail-btn" class="rd-ctxbtn" onclick="rdToggleCtx('tail')"></button></div>
+            <div class="rd-speed-wrap"><span id="speed-ctl" class="speed-ctl"><span class="stepper sm"><button type="button" id="speed-minus" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" id="speed-plus" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span></div>
         </div>
         <div id="rd-rate" class="rating-buttons hidden">
             <button class="btn-rate btn-forgot" onclick="rdRate('forgot')">نسيت</button>
@@ -2757,22 +2688,29 @@ function rdAyahText(s, a) { return getAyahText(userRiwaya, s, a) || ''; }
 
 function rdLeadHtml() {
     const L = rd.lead;
-    if (!L) return '';
-    let h = '';
-    if (L.type === 'ctx') {
-        h += `<span class="ayah-blue">${rdAyahText(L.s, L.a)} <span class="circle-num">${L.a + 1}</span> </span>`;
-    } else if (L.type === 'ayah') {
-        for (let i = rd.ctx; i >= 1; i--) {
-            const a = L.a - i;
-            if (a >= 0) h += `<span class="ayah-gray">${rdAyahText(L.s, a)} <span class="circle-num">${a + 1}</span> </span>`;
-        }
-        h += `<span id="rd-lead" class="ayah-blue">${rdAyahText(L.s, L.a)}</span> <span class="circle-num">${L.a + 1}</span> `;
-    } else if (L.type === 'basmala') {
-        h += `<span id="rd-lead" class="ayah-blue">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span> `;
-    } else {
-        h += `<span id="rd-lead" class="ayah-blue">${L.text}</span> `;
-    }
-    return h;
+    if (!L || !rd.showLead) return '';
+    if (L.type === 'ayah') return `<span id="rd-lead" class="ayah-blue">${rdAyahText(L.s, L.a)}</span> <span class="circle-num">${L.a + 1}</span> `;
+    if (L.type === 'basmala') return `<span id="rd-lead" class="ayah-blue">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span> `;
+    return `<span id="rd-lead" class="ayah-blue">${L.text}</span> `;
+}
+
+// زرّا «الآية السابقة» و«الآية التالية»: خافتان، يُظهر الضغط الآية بالأزرق وإعادته تُخفيها
+function rdCtxBtns() {
+    if (!rd) return;
+    const set = (id, has, on, lab) => {
+        const b = document.getElementById(id);
+        if (!b) return;
+        b.classList.toggle('hidden', !has);
+        b.textContent = (on ? 'إخفاء ' : '') + lab;
+    };
+    const any = rd.items.length > 0;
+    set('rd-lead-btn', any && !!rd.lead, rd.showLead, 'الآية السابقة');
+    set('rd-tail-btn', any && !!rd.tail, rd.showTail, 'الآية التالية');
+}
+function rdToggleCtx(w) {
+    if (!rd) return;
+    if (w === 'lead') rd.showLead = !rd.showLead; else rd.showTail = !rd.showTail;
+    rdRenderText();
 }
 
 function rdRenderText() {
@@ -2780,18 +2718,18 @@ function rdRenderText() {
     if (!el || !rd) return;
     const T = document.getElementById('rd-title');
     if (T) T.textContent = rd.title;
-    if (!rd.items.length) { el.innerHTML = `<div class="rd-msg">${rd.msg}</div>`; return; }
+    if (!rd.items.length) { el.innerHTML = `<div class="rd-msg">${rd.msg}</div>`; rdCtxBtns(); return; }
     const sel = rd.sel !== null ? rdUnitOf(rd.sel) : null;
     const hid = (rd.hidden && rd.recScope) ? rd.recScope : null;
-    let prevS = rd.lead && rd.lead.s !== undefined ? rd.lead.s : rd.items[0].s;
+    let prevS = rd.lead && rd.showLead && rd.lead.s !== undefined ? rd.lead.s : rd.items[0].s;
     const one = (k) => {
         const it = rd.items[k];
-        const pin = rd.pinFirst && k === 0;
+        const pin = rd.pinFirst && k === 0;   // تبقى ظاهرة عند التسجيل، وتُكتب كأخواتها
         const on = sel && k >= sel.from && k <= sel.to;
         const hidd = hid && k >= hid.from && k <= hid.to && !pin;
         let sep = '';
         if (it.s !== prevS) { sep = `<span class="rv-surah-sep">سورة ${surahsNames[it.s]}</span>`; prevS = it.s; }
-        return `${sep}<span class="prep-ayah${on ? ' prep-sel' : ''}${rd.stumbled.has(k) ? ' ayah-stumbled' : ''}" id="rd-a-${k}" onclick="rdSelectAyah(${k})"><span class="at${pin ? ' ayah-blue' : ''}${hidd ? ' prep-hide' : ''}">${rdAyahText(it.s, it.a)}</span> <span class="circle-num prep-cn" onclick="rdCircleTap(${k}, event)">${it.a + 1}</span> </span>`;
+        return `${sep}<span class="prep-ayah${on ? ' prep-sel' : ''}${rd.stumbled.has(k) ? ' ayah-stumbled' : ''}" id="rd-a-${k}" onclick="rdSelectAyah(${k})"><span class="at${hidd ? ' prep-hide' : ''}">${rdAyahText(it.s, it.a)}</span> <span class="circle-num prep-cn" onclick="rdCircleTap(${k}, event)">${it.a + 1}</span> </span>`;
     };
     // التلوين المتناوب: دائماً في الحفظ (الأجزاء)، وفي بقية الصفحات عند تفعيل زر التفسير فقط
     const n = rd.items.length;
@@ -2809,8 +2747,9 @@ function rdRenderText() {
     } else {
         for (let k = 0; k < n; k++) html += one(k);
     }
-    if (rd.tail && !rd.hidden) html += `<span class="ayah-blue">${rd.tail}</span>`;
+    if (rd.tail && rd.showTail) html += `<span class="ayah-blue">${rd.tail}</span>`;
     el.innerHTML = html;
+    rdCtxBtns();
 }
 
 // ---------- صفّا الأزرار ----------
@@ -2969,13 +2908,6 @@ function rdPeek() {
     a.onended = next; a.onerror = fail;
     next();
     rdRenderBars();
-}
-
-function rdExpandCtx() {
-    if (!rd || !rd.lead || rd.lead.type !== 'ayah') { showToast("هذه هي الآية الأولى في السورة."); return; }
-    if (rd.lead.a - rd.ctx - 1 < 0) { showToast("هذه هي الآية الأولى في السورة."); return; }
-    rd.ctx++;
-    rdRefreshUI();
 }
 
 // ---------- النزول التلقائي أثناء صوت الشيخ أو «العرض» ----------
@@ -3220,8 +3152,6 @@ function rdSetHtml() {
         <div class="rd-rep-row">
             <span class="stepper"><button type="button" id="rd-rep-minus" onclick="rdRepStep(-1)" aria-label="إنقاص">−</button><span id="rd-rep-n" class="st-val">${userRep}</span><button type="button" id="rd-rep-plus" onclick="rdRepStep(1)" aria-label="زيادة">+</button></span>
         </div>
-        <div class="rd-set-lbl">سرعة النزول التلقائي أثناء «عرض التسجيل»</div>
-        <div class="rd-rep-row"><span id="speed-ctl" class="speed-ctl"><span class="stepper"><button type="button" id="speed-minus" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" id="speed-plus" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span></div>
         <div class="rd-set-lbl">طريقة التكرار</div>
         <div class="rd-pop-list">
             ${modes.map((m) => `<button type="button" id="rd-mode-${m[0]}" class="resume-btn rd-pop-item${userRepMode === m[0] ? ' on' : ''}" onclick="rdRepMode('${m[0]}')"><span class="rb-main">${m[1]}</span></button>`).join('')}
@@ -3464,9 +3394,9 @@ function rdStripGeom() {
     return { cur: cur / tot * 100, up };
 }
 const RD_ICONS = {
-    play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
+    play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 4.5v15L4 12z" fill="currentColor"/></svg>',
     pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>',
-    back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 4.5v15L4 12z" fill="currentColor"/></svg>'
+    back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>'
 };
 function rdStripTimerStop() { if (rdStripTimer) { clearInterval(rdStripTimer); rdStripTimer = null; } }
 function rdStripTick() {
@@ -3482,7 +3412,7 @@ function rdStripRender(show) {
     const on = rdPlaying && rdAudioKind === 'rec';
     el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : 'تشغيل العرض'}">${on ? RD_ICONS.pause : RD_ICONS.play}</button>`
         + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
-        + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i><u id="rs-head"></u></div></div>`
+        + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i></div></div>`
         + `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`;
     rdStripUpdate();
     if (!rdStripTimer) rdStripTimer = setInterval(rdStripTick, 100);
@@ -3493,8 +3423,6 @@ function rdStripUpdate() {
     const g = rdStripGeom();
     // الشريط يتقدم من اليمين كاتجاه القراءة؛ والمقطع الملوّن هو ما رجعنا عنه
     document.getElementById('rs-real').style.width = g.cur + '%';
-    const h = document.getElementById('rs-head');
-    h.style.right = g.cur + '%'; h.style.display = 'block';
     const lab = document.getElementById('rd-rp-n');
     if (g.up) {
         up.style.display = 'block'; up.style.right = g.up.from + '%'; up.style.width = g.up.w + '%';
@@ -3685,6 +3613,44 @@ function rdBackFromTafsir() {
 
 function rdEnd() {
     if (!rd) { showMainButtons(); return; }
+    if (rd.sig && !document.getElementById('rc-box')) { rdConfOpen(); return; }
+    rdEndNow();
+}
+
+// «تأكيد المراجعة»: الزائر قد يكتفي بالاطلاع، فلا يُحدَّث العدّاد إلا بتأكيده
+let rcVal = 0;
+function rdConfOpen() {
+    closeRdPop();
+    rcVal = schedGet(rd.sig).n;
+    const d = document.createElement('div');
+    d.id = 'rd-pop';
+    d.className = 'modal-overlay';      // بلا إغلاق بالنقر خارجها: لا بد من اختيار
+    d.innerHTML = `<div class="modal-box sd-box" id="rc-box">
+        <div class="modal-title">تأكيد المراجعة</div>
+        <div class="rd-set-lbl">مدة المراجعة بالأيام</div>
+        <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span id="rc-n">${rcVal}</span> يوم</span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
+        <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد المراجعة</button>
+        <button type="button" id="rc-skip" class="btn-secondary sd-ok" onclick="rdEndNow()">عدم المراجعة</button>
+        <button type="button" id="rc-back" class="btn-secondary sd-ok" onclick="closeRdPop()">الرجوع للمراجعة</button>
+    </div>`;
+    document.body.appendChild(d);
+}
+function rcStep(d) {
+    rcVal = Math.max(0, Math.min(365, rcVal + d));
+    const el = document.getElementById('rc-n');
+    if (el) el.textContent = rcVal;
+}
+function rcConfirm() {
+    if (rd && rd.sig) {
+        const m = lsGet(LS_KEYS.sched, {}) || {}, t = schedToday();
+        m[rd.sig] = { n: rcVal, d: t + rcVal, l: t };
+        lsSet(LS_KEYS.sched, m);
+    }
+    rdEndNow();
+}
+
+function rdEndNow() {
+    if (!rd) { showMainButtons(); return; }
     rdStopAudio(true);
     rdRecDiscard();
     const k = rd.kind;
@@ -3729,20 +3695,13 @@ function rdLoadAqal() {
             ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
             : "لا توجد آيات في عقال الآيات بعد.\nابدأ بمراجعة الراسخ، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
         rdOpen({ kind: 'aqal', items: [], title: 'سورة: ---', msg });
-        const ctx = document.getElementById('rd-ctx');
-        if (ctx) ctx.style.display = 'none';
         updateDueCounts();
         return;
     }
     const total = getAyatCount(item.surah, item.riwaya);
-    let tail = '';
-    if (item.ayah + 1 < total) {
-        const nt = getAyahText(item.riwaya, item.surah, item.ayah + 1);
-        if (nt) tail = nt.split(" ").slice(0, 3).join(" ") + " ...";
-    } else tail = "نهاية السورة...";
     rdOpen({
         kind: 'aqal', items: [{ s: item.surah, a: item.ayah }], lead: rdLeadForAqal(item.surah, item.ayah),
-        title: `سورة: ${surahsNames[item.surah]}`, tail
+        title: `سورة: ${surahsNames[item.surah]}`, tail: rdCtxTail({ s: item.surah, a: item.ayah })
     });
     updateDueCounts();
 }
@@ -3757,8 +3716,7 @@ function showReviewScreen(onlyKeys, scope) {
 
 // ---------- مراجعة وحدة (الجديد والراسخ) ----------
 
-// الآية السابقة/اللاحقة للمقطع بلون رمادي؛ ولا شيء إن كان المقطع أول السورة أو آخرها
-function rdCtxLead(it) { return it.a > 0 ? { type: 'ctx', s: it.s, a: it.a - 1 } : null; }
+// الآية اللاحقة للمقطع (تظهر بزر «الآية التالية» بالأزرق)؛ ولا شيء إن كان المقطع آخر السورة
 function rdCtxTail(it) {
     if (it.a + 1 >= (getAyatCount(it.s) || 0)) return '';
     const t = getAyahText(userRiwaya, it.s, it.a + 1);
@@ -3773,7 +3731,7 @@ function rdLeadFor(s, a) {
     return null;
 }
 
-// الآية الأولى من الوحدة مطلعاً أزرق يبقى ظاهراً عند التسجيل، ثم تُتلى بقية الآيات؛ وللوحدة ذات الآية الواحدة مطلع هو الآية السابقة
+// الآية الأولى من الوحدة تبقى ظاهرة عند التسجيل (وتُكتب كأخواتها)، ثم تُتلى بقية الآيات
 function startUnitReview(origin, segs) {
     const all = [];
     segs.forEach((g) => { for (let n = g.start; n <= g.end; n++) all.push({ s: g.surah, a: n - 1 }); });
@@ -3782,7 +3740,7 @@ function startUnitReview(origin, segs) {
     reviewOrigin = origin;
     rdOpen({
         kind: origin, items: all, pinFirst: all.length > 1,
-        lead: all.length > 1 ? rdCtxLead(all[0]) : rdLeadFor(all[0].s, all[0].a),
+        lead: rdLeadFor(all[0].s, all[0].a), sig: passSig(origin === 'new' ? 1 : 3, segs),
         tail: rdCtxTail(all[all.length - 1]),
         title: unitLabelOf(segs)
     });
@@ -3798,7 +3756,8 @@ function showPrepPage() {
     reviewOrigin = 'prep';
     rdOpen({
         kind: 'prep', items, cuts: prep.cuts.map((n) => n - prep.start),
-        lead: rdCtxLead(items[0]), tail: rdCtxTail(items[items.length - 1]),
+        lead: rdLeadFor(items[0].s, items[0].a), tail: rdCtxTail(items[items.length - 1]),
+        sig: passSig(4, [{ surah: prep.surah, start: prep.start, end: prep.end }]),
         title: `سورة ${surahsNames[prep.surah]} — الآيات ${prep.start} إلى ${prep.end}`
     });
 }
