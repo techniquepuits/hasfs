@@ -806,16 +806,20 @@ body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #
 .rd-wide .stepper .st-val { flex: 1 1 0; min-width: 0; padding: 0; }
 .rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-top: 8px; direction: rtl; }
 .rd-strip.hidden { display: none; }
-.rs-step { flex: none; width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
-.rs-bars { position: relative; flex: 1; min-width: 0; padding-top: 16px; }
-.rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 16px; direction: rtl; }
-.rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 12px; line-height: 14px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
-.rs-lab b { font-size: 12px; }
+.rs-step { flex: none; width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
+.rs-bars { position: relative; flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; }
+.rs-bars .rs-box { flex: 1; margin: 0; }
+.rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 13px; direction: rtl; }
+.rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 11px; line-height: 13px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
+.rs-lab b { font-size: 11px; }
 .rs-box { position: relative; height: 14px; border-radius: 7px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 2px; }
 .rs-box i { position: absolute; top: 0; bottom: 0; }
 #rs-real { right: 0; background: #1b4d3e; }
 #rs-up { background: #5eead4; }
 .rs-box u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
+body.dark-mode #rd-text .at { color: #4ade80; }
+body.dark-mode #rd-text .chunk-b .at { color: #bbf7d0; }
+body.dark-mode #rd-text .chunk-a, body.dark-mode #rd-text .chunk-b { background: transparent; }
 body.dark-mode .rs-step { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
 body.dark-mode .rs-lab { color: #99f6e4; }
 body.dark-mode .rs-box { background: #334155; }
@@ -823,8 +827,8 @@ body.dark-mode #rs-up { background: #2dd4bf; }
 body.dark-mode #rs-real { background: #0f766e; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
-#dark-mode-btn.rd-moon { background: #312e81 !important; border-color: #4f46e5 !important; color: #fde047 !important; opacity: 1; }
-body.dark-mode #dark-mode-btn.rd-moon { background: #1e1b4b !important; border-color: #6366f1 !important; color: #fde047 !important; }
+#dark-mode-btn.rd-moon { background: #283593 !important; border-color: #5c6bc0 !important; color: #fde047 !important; opacity: 1; }
+body.dark-mode #dark-mode-btn.rd-moon { background: #1a237e !important; border-color: #7986cb !important; color: #fde047 !important; }
 .hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
@@ -2716,7 +2720,7 @@ let rdRecT0 = 0, rdTick = null;
 let rdTafToken = 0;
 let rdScrollSaved = 0;
 let rdSheikhMode = false;     // وضعية الشيخ (زر الشيخ أصفر)
-let rdReplaying = false, rdReplayTimer = null, rdReplayPos = -1;
+let rdReplaying = false, rdReplayTimer = null, rdReplayPos = -1, rdRecEnded = false;
 let rdCancelArmed = false, rdCancelTimer = null;
 
 // نوع الجلسة ← سلوكها
@@ -2858,7 +2862,9 @@ function rdLeadHtml() {
     const L = rd.lead;
     if (!L) return '';
     let h = '';
-    if (L.type === 'ayah') {
+    if (L.type === 'ctx') {
+        h += `<span class="ayah-gray">${rdAyahText(L.s, L.a)} <span class="circle-num">${L.a + 1}</span> </span>`;
+    } else if (L.type === 'ayah') {
         for (let i = rd.ctx; i >= 1; i--) {
             const a = L.a - i;
             if (a >= 0) h += `<span class="ayah-gray">${rdAyahText(L.s, a)} <span class="circle-num">${a + 1}</span> </span>`;
@@ -2934,8 +2940,8 @@ function rdRenderBars() {
     document.getElementById('rd-pick').classList.toggle('hidden', !rd.pick);
     const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
     const B = (id, cls, fn, label, extra) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}"${extra || ''}>${label}</button></div>`;
-    const showLabel = recPaused || !recDone ? 'العرض' : (showOn ? 'توقيف العرض' : 'مواصلة العرض');
-    const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone ? 'rd-paused' : ''), 'rdShowBtn()', showLabel);
+    const showLabel = recPaused || !recDone ? 'العرض' : (showOn ? 'توقيف العرض' : (rdRecEnded ? 'العرض' : 'مواصلة العرض'));
+    const showBtn = B('rd-show', showOn ? 'rd-on' : (recDone && !rdRecEnded ? 'rd-paused' : ''), 'rdShowBtn()', showLabel);
     const backBtn = B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
     const cancelB = (label) => B('rd-cancel', rdCancelArmed ? 'rd-confirm' : '', 'rdCancelRec()', rdCancelArmed ? 'تأكيد الإلغاء؟' : label);
     const stepCell = (html) => `<div class="rd-cell rd-wide">${html}</div>`;
@@ -2960,7 +2966,7 @@ function rdRenderBars() {
             + cancelB('إلغاء التسجيل');
     } else if (recDone) {
         cols = '1fr 1fr 1fr';
-        html = showBtn + (showOn ? stepCell(rdSpeedHtml()) : B('rd-replay', 'rp-on', 'rdReplay()', rdReplaying ? '⟲ تعاد…' : 'إعادة')) + cancelB('إلغاء العرض');
+        html = showBtn + ((showOn || rdRecEnded) ? stepCell(rdSpeedHtml()) : B('rd-replay', 'rp-on', 'rdReplay()', rdReplaying ? '⟲ تعاد…' : 'إعادة')) + cancelB('إلغاء العرض');
     } else {
         html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
             + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
@@ -2969,7 +2975,7 @@ function rdRenderBars() {
     r1.style.gridTemplateColumns = cols;
     r1.innerHTML = html;
 
-    rdStripRender(recDone && !showOn && !none);
+    rdStripRender(recDone && !showOn && !rdRecEnded && !none);
 
     // السطر فوق الأزرار: زر «تعثر» للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
@@ -3431,7 +3437,7 @@ function rdRecDiscard() {
     if (rdRecState === 'recording' || rdRecState === 'paused') releaseWakeLock();
     rdRecTickStop();
     rdCancelDisarm();
-    rdReplayPos = -1;
+    rdReplayPos = -1; rdRecEnded = false;
     rdRecState = 'idle';
     rdRecAcc = 0; rdRecEnd = 0;
     rdRecChunks = [];
@@ -3666,6 +3672,7 @@ function rdPlayRec() {
     if (!rdRecUrl) return;
     rdStopAudio(true);
     const token = ++rdAudioToken;
+    rdRecEnded = false;
     rdPlaying = true;
     rdAudioKind = 'rec';
     acquireWakeLock();
@@ -3676,7 +3683,7 @@ function rdPlayRec() {
         rdStopAudio();
         showToast("تعذر تشغيل التسجيل.");
     };
-    a.onended = () => { if (token === rdAudioToken) { rdRecEnd = a.duration || a.currentTime || 0; rdStopAudio(); } };
+    a.onended = () => { if (token === rdAudioToken) { rdRecEnd = a.duration || a.currentTime || 0; rdRecEnded = true; rdStopAudio(); } };
     a.onerror = fail;
     const p = a.play();
     if (p && p.catch) p.catch(fail);
@@ -3916,6 +3923,13 @@ function showReviewScreen(onlyKeys, scope) {
 
 // ---------- مراجعة وحدة (الجديد والراسخ) ----------
 
+// الآية السابقة/اللاحقة للمقطع بلون رمادي؛ ولا شيء إن كان المقطع أول السورة أو آخرها
+function rdCtxLead(it) { return it.a > 0 ? { type: 'ctx', s: it.s, a: it.a - 1 } : null; }
+function rdCtxTail(it) {
+    if (it.a + 1 >= (getAyatCount(it.s) || 0)) return '';
+    const t = getAyahText(userRiwaya, it.s, it.a + 1);
+    return t ? `${t} <span class="circle-num">${it.a + 2}</span>` : '';
+}
 function rdLeadFor(s, a) {
     if (a > 0) return { type: 'ayah', s, a: a - 1 };
     const firstText = getAyahText(userRiwaya, s, 0) || "";
@@ -3935,7 +3949,8 @@ function startUnitReview(origin, segs) {
     reviewSig = origin === 'new' ? passSig(1, segs) : null;
     rdOpen({
         kind: origin, items: all, pinFirst: all.length > 1,
-        lead: all.length > 1 ? null : rdLeadFor(all[0].s, all[0].a),
+        lead: all.length > 1 ? rdCtxLead(all[0]) : rdLeadFor(all[0].s, all[0].a),
+        tail: rdCtxTail(all[all.length - 1]),
         title: unitLabelOf(segs)
     });
 }
@@ -3966,6 +3981,7 @@ function showPrepPage() {
     reviewSig = null;
     rdOpen({
         kind: 'prep', items, cuts: prep.cuts.map((n) => n - prep.start),
+        lead: rdCtxLead(items[0]), tail: rdCtxTail(items[items.length - 1]),
         title: `سورة ${surahsNames[prep.surah]} — الآيات ${prep.start} إلى ${prep.end}`
     });
 }
