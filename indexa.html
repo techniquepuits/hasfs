@@ -577,6 +577,14 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
     font-weight: bold;
 }
 .ayah-stumbled { border-bottom: 3px solid #d97706; }
+.ayah-stumbled .at { color: #dc2626 !important; }
+body.dark-mode .ayah-stumbled .at { color: #f87171 !important; }
+.rd-act { display: flex; gap: 8px; width: 100%; }
+.rd-act .hf-btn { flex: 1; min-height: 42px; padding: 8px 4px !important; }
+.rd-act .rd-stm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
+.rd-act .rd-stm.on { background: #fff !important; }
+body.dark-mode .rd-act .rd-stm { background: #450a0a !important; border-color: #f87171 !important; color: #fecaca !important; }
+body.dark-mode .rd-act .rd-stm.on { background: #1e293b !important; }
 .stats-line { display: inline-flex; align-items: center; gap: 7px; margin-inline-start: 4px; }
 .due-num { font-weight: bold; font-size: 17px; }
 .due-total { color: #1b4d3e; font-size: 20px; }
@@ -799,22 +807,21 @@ body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #
 .rd-wide .stepper .st-val { flex: 1 1 0; min-width: 0; padding: 0; }
 .rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-top: 8px; direction: rtl; }
 .rd-strip.hidden { display: none; }
-.rd-strip .rs-replay { width: auto; flex: none; min-width: 84px; min-height: 44px; padding: 8px 12px !important; }
 .rs-step { flex: none; width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
 .rs-bars { position: relative; flex: 1; min-width: 0; padding-top: 16px; }
 .rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 16px; direction: rtl; }
 .rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 12px; line-height: 14px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
 .rs-lab b { font-size: 12px; }
-.rs-track { position: relative; height: 9px; border-radius: 5px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 3px; }
-.rs-track i { position: absolute; top: 0; bottom: 0; }
-.rs-up i { background: #0d9488; border-radius: 5px; }
-.rs-real i { right: 0; background: #1b4d3e; }
-.rs-real u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
+.rs-box { position: relative; height: 20px; border-radius: 7px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 2px; }
+.rs-box i { position: absolute; }
+#rs-up { top: 0; height: 10px; background: #0d9488; }
+#rs-real { top: 10px; bottom: 0; right: 0; background: #1b4d3e; }
+.rs-box u { position: absolute; top: 0; bottom: 0; width: 3px; margin-right: -1px; background: #f59e0b; display: none; text-decoration: none; }
 body.dark-mode .rs-step { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
 body.dark-mode .rs-lab { color: #99f6e4; }
-body.dark-mode .rs-track { background: #334155; }
-body.dark-mode .rs-up i { background: #2dd4bf; }
-body.dark-mode .rs-real i { background: #86efac; }
+body.dark-mode .rs-box { background: #334155; }
+body.dark-mode #rs-up { background: #2dd4bf; }
+body.dark-mode #rs-real { background: #86efac; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
 #dark-mode-btn.rd-moon { background: #fde68a !important; border-color: #f59e0b !important; color: #92400e !important; opacity: 1; }
@@ -2954,7 +2961,7 @@ function rdRenderBars() {
             + cancelB('إلغاء التسجيل');
     } else if (recDone) {
         cols = '1fr 1fr 1fr';
-        html = showBtn + stepCell(rdSpeedHtml()) + cancelB('إلغاء العرض');
+        html = showBtn + (showOn ? stepCell(rdSpeedHtml()) : B('rd-replay', 'rp-on', 'rdReplay()', rdReplaying ? '⟲ تعاد…' : 'إعادة')) + cancelB('إلغاء العرض');
     } else {
         html = B('rd-sheikh', '', 'rdToggleSheikh()', 'الشيخ')
             + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
@@ -2970,7 +2977,12 @@ function rdRenderBars() {
     if (hint) {
         hint.classList.toggle('hidden', rd.pick);
         let h = '';
-        if (!rd.tafMode && stumbleAllowed() && rd.sel !== null && !rd.hidden) {
+        if (recDone && !showOn && rd.sel !== null && !rd.tafMode && !none) {
+            const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
+            h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
+                + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
+                + `</div>`;
+        } else if (!recDone && !rd.tafMode && stumbleAllowed() && rd.sel !== null && !rd.hidden) {
             h += `<button type="button" id="rd-stumble" class="btn-rate btn-forgot rd-stumble" onclick="rdMarkStumble()">${rd.stumbled.has(rd.sel) ? '✓ أُدرجت في عقال الآيات' : 'تعثر في هذه الآية'}</button>`;
         }
         hint.innerHTML = h;
@@ -2998,6 +3010,14 @@ function rdSelectAyah(k) {
     if (rd.pick) { openStopConfirm(k); return; }
     if (rdGuardHidden()) return;
     if (rd.tafMode) { rdOpenAyahTafsir(k); return; }
+    if (rdRecState === 'recorded') {   // بعد التسجيل: الضغط على آية يوقف العرض ويحدّدها (يظهر الشيخ والتعثر) ولا يمحو التسجيل
+        rdPeekStop(true);
+        rdHaltShow();
+        const u = rd.sel !== null ? rdUnitOf(rd.sel) : null, v = rdUnitOf(k);
+        rd.sel = (u && u.from === v.from && u.to === v.to) ? null : k;
+        rdRefreshUI();
+        return;
+    }
     rdStopAudio();
     rdRecDiscard();            // التسجيل مرتبط بما كان محدَّداً
     if (rd.sel !== null) {
@@ -3012,7 +3032,7 @@ function rdSelectAyah(k) {
 function rdCircleTap(k, ev) {
     if (ev && ev.stopPropagation) ev.stopPropagation();
     if (!rd) return;
-    if (rd.kind !== 'prep' || rd.pick || rd.tafMode) { rdSelectAyah(k); return; }
+    if (rd.kind !== 'prep' || rd.pick || rd.tafMode || rdRecState === 'recorded') { rdSelectAyah(k); return; }
     if (rdGuardHidden()) return;
     if (k >= rd.items.length - 1) return;      // آخر آية في المقطع نهايته أصلاً
     rdStopAudio();
@@ -3032,6 +3052,64 @@ function rdMarkStumble() {
     addStumbledAyah(it.s, it.a);
     rd.stumbled.add(rd.sel);
     rdRefreshUI();
+}
+
+function rdStumbleToggle() {
+    if (!rd || !stumbleAllowed() || rd.sel === null) return;
+    const k = rd.sel, it = rd.items[k];
+    if (!it) return;
+    const key = ayahKey(it.s, it.a);
+    if (!rd.stumbPrev) rd.stumbPrev = new Map();
+    const store = loadAyahStore(userRiwaya);
+    if (rd.stumbled.has(k)) {
+        const prev = rd.stumbPrev.get(k);
+        if (prev) store[key] = prev; else delete store[key];
+        saveAyahStore(userRiwaya, store);
+        rd.stumbled.delete(k);
+    } else {
+        rd.stumbPrev.set(k, store[key] ? Object.assign({}, store[key]) : null);
+        addStumbledAyah(it.s, it.a);
+        rd.stumbled.add(k);
+    }
+    rdRefreshUI();
+}
+
+// «الشيخ» في المراجعة بعد التسجيل: يقرأ الآية المحدَّدة (أو الجزء) مرة واحدة بالقارئ المختار، بمشغّل مستقل لا يمسّ التسجيل
+let rdPeekAudio = null, rdPeekToken = 0;
+function rdPeekStop(silent) {
+    rdPeekToken++;
+    if (rdPeekAudio) {
+        rdPeekAudio.onended = null; rdPeekAudio.onerror = null;
+        try { rdPeekAudio.pause(); } catch (e) {}
+        rdPeekAudio = null;
+        if (!silent) rdRenderBars();
+    }
+}
+function rdPeek() {
+    if (!rd || rd.sel === null) return;
+    if (rdPeekAudio) { rdPeekStop(); return; }
+    if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    const sc = rdScope(), urls = [];
+    for (let k = sc.from; k <= sc.to; k++) {
+        const it = rd.items[k], x = it ? ayahAudioUrls(userRiwaya, it.s, it.a) : null;
+        if (x) urls.push(...x);
+    }
+    if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    const token = ++rdPeekToken, a = new Audio();
+    rdPeekAudio = a;
+    try { a.playbackRate = userRate; a.preservesPitch = true; } catch (e) {}
+    let i = 0;
+    const fail = () => { if (token !== rdPeekToken) return; rdPeekStop(); showToast("تعذر تشغيل صوت الشيخ."); };
+    const next = () => {
+        if (token !== rdPeekToken) return;
+        if (i >= urls.length) { rdPeekStop(); return; }
+        a.src = urls[i++];
+        const p = a.play();
+        if (p && p.catch) p.catch(fail);
+    };
+    a.onended = next; a.onerror = fail;
+    next();
+    rdRenderBars();
 }
 
 function rdExpandCtx() {
@@ -3115,6 +3193,7 @@ function rdScrollSync() {
 // ---------- صوت الشيخ ----------
 
 function rdStopAudio(silent) {
+    rdPeekStop(true);
     rdReplayClear();
     rdAudioToken++;
     if (rdAudio) {
@@ -3459,9 +3538,11 @@ function rdShowBtn() {
     if (!rd || !rd.items.length) return;
     if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
     if (rdRecState === 'recorded') {
-        if (rdReplaying) rdReplayEnd();
-        else if (rdPlaying && rdAudioKind === 'rec') rdPauseShow();
-        else if (rdAudio && rdAudioKind === 'rec') rdResumeShow();
+        if (rdReplaying) { rdReplayEnd(); return; }
+        if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
+        rdPeekStop(true);
+        if (rd.sel !== null) { rd.sel = null; rdRenderText(); }   // نزول التحديد عند مواصلة العرض
+        if (rdAudio && rdAudioKind === 'rec') rdResumeShow();
         else rdPlayRec();
         return;
     }
@@ -3520,6 +3601,7 @@ function rdReplayAnchor() {
 }
 function rdReplay() {
     if (rdRecState !== 'recorded') return;
+    rdPeekStop(true);
     rdReplayPos = rdReplayAnchor();
     rdReplayClear();
     if (!rdAudio || rdAudioKind !== 'rec') rdPlayRec();
@@ -3536,10 +3618,20 @@ function rdReplay() {
     rdRenderBars();
     rdScrollSync();
 }
+// إيقاف العرض (أو الإعادة الجارية) عند نقطة التوقف الأصلية
+function rdHaltShow() {
+    if (rdReplaying && rdAudio && rdAudioKind === 'rec' && rdReplayPos >= 0) {
+        const pos = rdReplayPos;
+        rdReplayClear();
+        try { rdAudio.currentTime = pos; } catch (e) {}
+    }
+    if (rdPlaying && rdAudioKind === 'rec') rdPauseShow();
+}
 // «مواصلة العرض» أثناء الإعادة: نوقف الإعادة ونكمل من نقطة التوقف الأصلية
 function rdReplayEnd() {
     const pos = rdReplayPos;
     rdReplayClear();
+    if (rd.sel !== null) { rd.sel = null; rdRenderText(); }
     if (rdAudio && rdAudioKind === 'rec' && pos >= 0) { try { rdAudio.currentTime = pos; } catch (e) {} }
     if (rdAudio && !rdPlaying) rdResumeShow();
     else { rdRenderBars(); rdScrollSync(); }
@@ -3557,10 +3649,9 @@ function rdStripRender(show) {
     el.classList.toggle('hidden', !show);
     if (!show) { el.innerHTML = ''; return; }
     const g = rdStripGeom();
-    el.innerHTML = `<button type="button" id="rd-replay" class="btn-secondary hf-btn rp-on rs-replay" onclick="rdReplay()">${rdReplaying ? '⟲ تعاد…' : 'إعادة'}</button>`
-        + `<button type="button" id="rd-rp-plus" class="rs-step" onclick="rdReplayStep(1)" aria-label="أكثر">+</button>`
+    el.innerHTML = `<button type="button" id="rd-rp-plus" class="rs-step" onclick="rdReplayStep(1)" aria-label="أكثر">+</button>`
         + `<div class="rs-bars" dir="ltr" title="مدة الإعادة بالثواني"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"><b>${g.n}</b> s</span></div>`
-        + `<div class="rs-track rs-up"><i id="rs-up"></i></div><div class="rs-track rs-real"><i id="rs-real"></i><u id="rs-head"></u></div></div>`
+        + `<div class="rs-box"><i id="rs-up"></i><i id="rs-real"></i><u id="rs-head"></u></div></div>`
         + `<button type="button" id="rd-rp-minus" class="rs-step" onclick="rdReplayStep(-1)" aria-label="أقل">−</button>`;
     rdStripUpdate();
 }
