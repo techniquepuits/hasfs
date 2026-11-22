@@ -584,15 +584,16 @@ body.dark-mode .cm-name { background: #1e293b; }
 /* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
 .sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; box-sizing: border-box; border-radius: 9px; border: 1.5px solid; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #fff; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
 .sd-btn.sd-g { background: #15803d; border-color: #166534; }
-.sd-btn.sd-o { background: #c2410c; border-color: #9a3412; }
 .sd-btn.sd-r { background: #b91c1c; border-color: #991b1b; }
 body.dark-mode .sd-btn.sd-g { background: #166534; border-color: #4ade80; }
-body.dark-mode .sd-btn.sd-o { background: #9a3412; border-color: #fb923c; }
 body.dark-mode .sd-btn.sd-r { background: #991b1b; border-color: #f87171; }
 .sd-step { margin: 6px 0 4px; }
 .sd-step .stepper { width: 100%; height: 54px; }
 .sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
 .sd-step .stepper .st-val { flex: 1.4 1 0; min-width: 0; padding: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.sd-box { position: relative; }
+.rc-x { position: absolute; top: 6px; left: 8px; width: 40px; height: 40px; border: none; background: transparent; color: #64748b; font-size: 30px; line-height: 1; cursor: pointer; padding: 0; touch-action: manipulation; font-family: inherit; }
+body.dark-mode .rc-x { color: #cbd5e1; }
 .sd-ok { margin-top: 12px !important; width: 100% !important; }
 .sd-box .sd-ok + .sd-ok { margin-top: 8px !important; }
 .rd-ctxrow { display: flex; justify-content: center; flex: none; }
@@ -600,15 +601,13 @@ body.dark-mode .sd-btn.sd-r { background: #991b1b; border-color: #f87171; }
 .rd-ctxbtn { background: transparent; border: 1px solid rgba(148, 163, 184, 0.7); color: #94a3b8; opacity: 0.8; border-radius: 14px; padding: 3px 16px; font-size: 13px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
 .rd-ctxbtn.hidden { display: none; }
 .rd-speed-wrap.hidden { display: none; }
-.rd-speed-wrap { position: sticky; bottom: -14px; height: 0; flex: none; margin-top: auto; z-index: 6; }
-.rd-speed-wrap .speed-ctl { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.95; box-shadow: 0 1px 6px rgba(0,0,0,0.3); border-radius: 12px 12px 0 0; }
-.rd-speed-wrap .stepper { height: 48px; border-bottom: none; border-radius: 12px 12px 0 0; }
-.rd-speed-wrap .stepper button { width: 58px; font-size: 28px; }
-.rd-speed-wrap .stepper .st-val { min-width: 54px; font-size: 20px; }
+.rd-speed-wrap { position: relative; top: -8px; height: 0; flex: none; z-index: 8; }
+.rd-speed-wrap .speed-ctl { position: absolute; top: 0; left: 50%; transform: translate(-50%, calc(-50% - 1px)); opacity: 0.97; box-shadow: 0 1px 6px rgba(0,0,0,0.35); border-radius: 10px; }
+.rd-speed-wrap .stepper { height: 34px; border-radius: 10px; }
+.rd-speed-wrap .stepper button { width: 44px; font-size: 22px; }
+.rd-speed-wrap .stepper .st-val { min-width: 42px; font-size: 17px; }
 .due-badge { display: inline-block; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #dc2626; color: #fff; font: bold 13px/22px sans-serif; font-style: normal; text-align: center; vertical-align: middle; margin-inline-end: 8px; }
-.ps-f-due { background: #ffedd5 !important; border-color: #ea580c !important; color: #9a3412 !important; }
 .ps-f-red { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; }
-body.dark-mode .ps-f-due { background: #7c2d12 !important; border-color: #fb923c !important; color: #ffedd5 !important; }
 body.dark-mode .ps-f-red { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
 .resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
 .resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
@@ -832,6 +831,15 @@ body.dark-mode #dark-mode-btn.rd-moonbar { background: #1a237e !important; borde
 .rd-page > .exercise-box { margin-bottom: 8px !important; }
 .rd-page > .rd-mid { margin-bottom: 8px; }
 .rd-page > .rd-top { margin-bottom: 10px; }
+.ag-grid { display: grid; gap: 8px; padding: 2px; }
+.ag-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; padding: 6px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
+.ag-btn .ag-s { font-size: 13px; line-height: 1.3; text-align: center; }
+.ag-btn .ag-n { font-size: 17px; font-weight: bold; }
+.ag-btn.ag-due { background: rgba(220, 38, 38, 0.18); border-color: #dc2626; color: #7f1d1d; }
+body.dark-mode .ag-btn { background: #1e293b; border-color: #475569; color: #e2e8f0; }
+body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color: #f87171; color: #fee2e2; }
+.rd-delrow { margin: 8px 14px 0; flex: none; }
+.rd-delrow button { width: 100%; padding: 11px 6px; font-size: 15px; font-weight: bold; font-family: inherit; border-radius: 10px; }
 .rd-page > #rd-row1 { margin: 0; }
 .rd-page .rd-bar .hf-btn { border-left-width: 1.5px; }
 /* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
@@ -1387,8 +1395,9 @@ async function saveSettingsAndReturn() {
 
 // عند القدوم من نهاية الجلسة: نعرض فقط آيات التعثر في تلك الجلسة (مجموعة مفاتيح «سورة:آية»)؛ null = كل الآيات
 let reviewOnlyKeys = null;
-let reviewScope = 'all';        // 'all' كل القرآن | 'surah' سورة واحدة | 'session' آيات تعثرت فيها هذه الجلسة
+let reviewScope = 'all';        // 'all' كل القرآن | 'surah' سورة واحدة | 'session' آيات هذه الجلسة | 'single' آية اختارها المستعمل
 let reviewSurahIdx = null;
+let reviewSingle = null;        // مفتاح الآية المختارة من القائمة الكاملة
 
 // إحصاء الآيات المستحقة الآن: لكل القرآن ولكل سورة، مصنفةً حسب آخر تقييم
 function computeDueStats() {
@@ -1446,12 +1455,44 @@ function showReviewSelect() {
             <div class="u-start">
                 <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
             </div>
-            <div class="u-mid"></div>
+            <div class="u-mid"><button type="button" id="rv-all-btn" class="btn-home btn-end-session" onclick="showAyahGrid()">عرض كل الآيات</button></div>
             <div class="u-end"><button class="btn-home btn-end-session" onclick="showMainButtons()">إنهاء الجلسة</button></div>
         </div>
     `;
     renderInContainer(html);
     applyTheme();
+}
+
+// «قائمة آيات التعثر»: زر لكل آية (3 في كل سطر)، أبيض، وأحمر شبه شفاف إن حان موعد مراجعتها؛ يختار المستعمل ما يراجعه
+const AG_COLS = 3;
+function showAyahGrid() {
+    reviewOnlyKeys = null; reviewScope = 'all'; reviewSingle = null;
+    const store = loadAyahStore(userRiwaya), now = Date.now(), list = [];
+    for (const k in store) {
+        const rec = store[k];
+        if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
+        const p = k.split(':'), s = Number(p[0]), a = Number(p[1]);
+        if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, userRiwaya)) continue;
+        list.push({ k, s, a, due: isDue(rec, now) });
+    }
+    list.sort((x, y) => x.s - y.s || x.a - y.a);
+    const cells = list.map((o) => `<button type="button" class="ag-btn${o.due ? ' ag-due' : ''}" data-k="${o.k}" onclick="startReviewOne('${o.k}')"><span class="ag-s">${surahsNames[o.s]}</span><span class="ag-n">${o.a + 1}</span></button>`).join('');
+    const html = `
+        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="surah-title select-title"><span id="ag-title">قائمة آيات التعثر</span></div>
+            <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
+                ${list.length ? `<div class="ag-grid" style="grid-template-columns: repeat(${AG_COLS}, 1fr);">${cells}</div>` : `<div class="rv-empty">لا توجد آيات في قائمة التعثر بعد.</div>`}
+            </div>
+        </div>
+        ${hfUtilRow('رجوع', 'showReviewSelect()', '')}
+    `;
+    renderInContainer(html);
+    applyTheme();
+}
+function startReviewOne(k) {
+    reviewOnlyKeys = null; reviewScope = 'single'; reviewSingle = k;
+    reviewedThisSession = 0; lastReviewedKey = null;
+    rdLoadAqal();
 }
 
 function startReviewAll() { showReviewScreen(null, 'all'); }
@@ -2062,7 +2103,7 @@ function schedGet(sig) {
 function schedRemain(sig) { const r = schedGet(sig); return isNaN(r.d) ? 0 : r.d - schedToday(); }
 function schedCls(sig) {
     const r = schedGet(sig), rem = schedRemain(sig);
-    return rem <= 0 ? 'sd-r' : (rem <= r.n / 4 ? 'sd-o' : 'sd-g');
+    return rem <= 0 ? 'sd-r' : 'sd-g';   // أخضر: بقي وقت · أحمر: حان الوقت
 }
 function schedBtnHtml(k, sig) {
     return `<span id="sd-${k}" class="sd-btn ${schedCls(sig)}" title="عدد الأيام المتبقية للمراجعة"><span dir="ltr">${schedRemain(sig)}</span></span>`;
@@ -2081,8 +2122,8 @@ function lastPassIndex(rank, segsOf) {
     return segsOf.findIndex((segs) => segs.some((g) => g.surah === l.s && l.a >= g.start && l.a <= g.end));
 }
 
-let psFilter = 'all';          // الكل ← المستحق (أحمر + برتقالي) ← الأحمر
-const PS_FILTERS = { all: 'الكل', due: 'المستحق', red: 'الأحمر' };
+let psFilter = 'all';          // الكل ← المستحق (الأحمر)
+const PS_FILTERS = { all: 'الكل', red: 'المستحق' };
 function renderPassageList(o) {
     try { rdTeardown(); } catch (e) {}
     rd = null;
@@ -2118,8 +2159,8 @@ function psFilterApply() {
     let shown = 0;
     rows.forEach((r) => {
         const b = r.querySelector('.sd-btn');
-        const red = !!b && b.classList.contains('sd-r'), due = red || (!!b && b.classList.contains('sd-o'));
-        const ok = psFilter === 'all' || (psFilter === 'due' ? due : red);
+        const red = !!b && b.classList.contains('sd-r');
+        const ok = psFilter === 'all' || red;
         r.classList.toggle('hidden', !ok);
         if (ok) shown++;
     });
@@ -2130,7 +2171,7 @@ function psFilterApply() {
     psBadge();
 }
 function psFilterCycle() {
-    psFilter = psFilter === 'all' ? 'due' : (psFilter === 'due' ? 'red' : 'all');
+    psFilter = psFilter === 'all' ? 'red' : 'all';
     psFilterApply();
     const l = document.getElementById('ps-list');
     if (l) l.scrollTop = 0;
@@ -2595,7 +2636,7 @@ function rdOpen(cfg) {
     const K = RD_KINDS[cfg.kind];
     const n = cfg.items.length;
     rd = {
-        kind: cfg.kind, items: cfg.items, lead: cfg.lead || null, sig: cfg.sig || '', showLead: false, showTail: false,
+        kind: cfg.kind, items: cfg.items, lead: cfg.lead || null, near: cfg.near || null, sig: cfg.sig || '', showLead: false, showTail: false,
         cuts: (cfg.cuts || []).slice(), title: cfg.title || '', tail: cfg.tail || '', msg: cfg.msg || '',
         sel: null, startHidden: K.startHidden, revealed: false,
         hidden: K.startHidden, recScope: K.startHidden && n ? { from: 0, to: n - 1 } : null,
@@ -2629,14 +2670,15 @@ function rdRenderPage(keep) {
             <div class="rd-ctxrow"><button type="button" id="rd-lead-btn" class="rd-ctxbtn" onclick="rdToggleCtx('lead')"></button></div>
             <div id="rd-text" class="continuous-quran-text" style="text-align: right; font-size: 21px; line-height: 3.2;"></div>
             <div class="rd-ctxrow rd-ctxtail"><button type="button" id="rd-tail-btn" class="rd-ctxbtn" onclick="rdToggleCtx('tail')"></button></div>
-            <div class="rd-speed-wrap hidden"><span id="speed-ctl" class="speed-ctl"><span class="stepper"><button type="button" id="speed-minus" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" id="speed-plus" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span></div>
         </div>
+        <div class="rd-speed-wrap hidden"><span id="speed-ctl" class="speed-ctl"><span class="stepper"><button type="button" id="speed-minus" onclick="changeScrollSpeed(-1)" aria-label="أبطأ">−</button><span id="speed-val" class="st-val speed-val">${scrollLevel}</span><button type="button" id="speed-plus" onclick="changeScrollSpeed(1)" aria-label="أسرع">+</button></span></span></div>
         <div id="rd-rate" class="rating-buttons hidden">
             <button class="btn-rate btn-forgot" onclick="rdRate('forgot')">نسيت</button>
             <button class="btn-rate btn-hard" onclick="rdRate('hard')">صعب</button>
             <button class="btn-rate btn-good" onclick="rdRate('good')">جيد</button>
             <button class="btn-rate btn-easy" onclick="rdRate('easy')">سهل</button>
         </div>
+        <div id="rd-delrow" class="rd-delrow hidden"><button type="button" id="rd-del" class="btn-secondary" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button></div>
         <div id="rd-mid" class="rd-mid">
             <div id="rd-hint" class="rd-hint"></div>
             <div id="rd-strip" class="rd-strip hidden"></div>
@@ -2689,12 +2731,17 @@ function rdGuardHidden() {
 
 function rdAyahText(s, a) { return getAyahText(userRiwaya, s, a) || ''; }
 
+function rdLeadPart(L, id) {
+    if (L.type === 'ayah') return `<span id="${id}" class="ayah-blue">${rdAyahText(L.s, L.a)}</span> <span class="circle-num">${L.a + 1}</span> `;
+    if (L.type === 'basmala') return `<span id="${id}" class="ayah-blue">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span> `;
+    return `<span id="${id}" class="ayah-blue">${L.text}</span> `;
+}
+// عقال الآيات: الآية السابقة مباشرةً (near) تظهر دائماً، والتي قبلها (lead) بزر «الآية السابقة»
 function rdLeadHtml() {
-    const L = rd.lead;
-    if (!L || !rd.showLead) return '';
-    if (L.type === 'ayah') return `<span id="rd-lead" class="ayah-blue">${rdAyahText(L.s, L.a)}</span> <span class="circle-num">${L.a + 1}</span> `;
-    if (L.type === 'basmala') return `<span id="rd-lead" class="ayah-blue">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span> `;
-    return `<span id="rd-lead" class="ayah-blue">${L.text}</span> `;
+    let h = '';
+    if (rd.lead && rd.showLead) h += rdLeadPart(rd.lead, rd.near ? 'rd-lead2' : 'rd-lead');
+    if (rd.near) h += rdLeadPart(rd.near, 'rd-lead');
+    return h;
 }
 
 // زرّا «الآية السابقة» و«الآية التالية»: خافتان، يُظهر الضغط الآية بالأزرق وإعادته تُخفيها
@@ -2773,11 +2820,15 @@ function rdRenderBars() {
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار الثلاثة ثابتة دائماً؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل / التفسير مفعَّل
     const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
-    r1.innerHTML = B('rd-sheikh', sheikhPlaying ? 'rd-on' : '', 'rdToggleSheikh()', 'الشيخ')
+    const aqal = rd.kind === 'aqal';
+    // عقال الآيات: زرّان فقط [تسجيل][العرض] (بلا شيخ ولا تفسير ولا مشغّل)
+    r1.innerHTML = aqal
+        ? B('rd-rec', recOn ? 'rd-on' : '', 'rdRecBtn()', 'تسجيل') + B('rd-show', showOn ? 'rd-on' : '', 'rdShowBtn()', 'العرض')
+        : B('rd-sheikh', sheikhPlaying ? 'rd-on' : '', 'rdToggleSheikh()', 'الشيخ')
         + B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
         + (revealOnly ? B('rd-show', '', 'rdShowBtn()', 'العرض') : B('rd-taf', rd.tafMode ? 'rd-on' : '', 'rdToggleTafsir()', 'التفسير'));
 
-    rdStripRender(recDone && !none);
+    rdStripRender(recDone && !none && !aqal);
 
     // المساحة فوق الأزرار: عبارة التفسير / عدّاد التسجيل / عرض ومواصلة / الشيخ وتعثر للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
@@ -2790,7 +2841,7 @@ function rdRenderBars() {
         } else if (recPaused) {
             h = `<div class="rd-act"><button type="button" id="rd-show" class="btn-secondary hf-btn" onclick="rdShowBtn()">عرض التسجيل</button>`
                 + `<button type="button" id="rd-resume" class="btn-secondary hf-btn" onclick="rdRecResume()">مواصلة التسجيل</button></div>`;
-        } else if (recDone && !showOn && rd.sel !== null && !none) {
+        } else if (recDone && !showOn && rd.sel !== null && !none && !aqal) {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
             h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
                 + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
@@ -2800,13 +2851,16 @@ function rdRenderBars() {
     }
     // أزرار التقييم في عقال الآيات بعد إظهار الآية
     const rate = document.getElementById('rd-rate');
-    if (rate) rate.classList.toggle('hidden', !(rd.kind === 'aqal' && rd.items.length && !rd.hidden));
+    const showRate = rd.kind === 'aqal' && rd.items.length && !rd.hidden;
+    if (rate) rate.classList.toggle('hidden', !showRate);
+    const dr = document.getElementById('rd-delrow');
+    if (dr) dr.classList.toggle('hidden', !showRate);
 }
 
 // عدّاد سرعة النزول: لا يظهر إلا أثناء «عرض التسجيل» (لا مع الشيخ ولا بلا صوت)
 function rdSpeedVis() {
     const w = document.querySelector('.rd-speed-wrap');
-    if (w) w.classList.toggle('hidden', !(rd && rdPlaying && rdAudioKind === 'rec'));
+    if (w) w.classList.toggle('hidden', !(rd && rd.kind !== 'aqal' && rdPlaying && rdAudioKind === 'rec'));
 }
 setInterval(rdSpeedVis, 200);
 
@@ -2979,7 +3033,7 @@ function rdScrollFrame(ts) {
 }
 function rdScrollSync() {
     const box = document.getElementById('exercise-container');
-    const want = !!(rdPlaying && box && document.getElementById('rd-text'));
+    const want = !!(rdPlaying && rd && rd.kind !== 'aqal' && box && document.getElementById('rd-text'));
     if (want && !rdScrollOn) {
         rdScrollOn = true; rdScrollLast = 0; rdScrollPos = box.scrollTop;
         if (!box._rdHold) {
@@ -3248,6 +3302,7 @@ function rdRecDiscard() {
 
 async function rdRecBtn() {
     if (!rd || !rd.items.length || rdRecStarting) return;
+    if (rd.kind === 'aqal' && rdRecState === 'recording') { rdRecStop(false); return; }   // عقال الآيات: الضغط يوقف التسجيل
     if (rdRecState === 'recording') {          // إيقاف مؤقت: النقطة تتجمّد والمؤقت يقف
         try { if (rdRecorder && rdRecorder.pause) rdRecorder.pause(); } catch (e) {}
         rdRecAcc += Date.now() - rdRecT0;
@@ -3256,7 +3311,7 @@ async function rdRecBtn() {
         rdRefreshUI();
         return;
     }
-    if (rdRecState === 'paused' || rdRecState === 'recorded') { rdCancelRec(); return; }   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
+    if ((rdRecState === 'paused' || rdRecState === 'recorded') && rd.kind !== 'aqal') { rdCancelRec(); return; }   // (في عقال الآيات يبدأ تسجيلاً جديداً)   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
     if (rd.tafMode) rd.tafMode = false;
     rdStopAudio(true);
     rdRecDiscard();
@@ -3333,6 +3388,12 @@ function rdRecResume() {
 function rdShowBtn() {
     if (!rd || !rd.items.length) return;
     if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
+    if (rd.kind === 'aqal') {     // يُظهر الآية، ويعيد التسجيل كله من أوله إن وُجد (الضغط مرة ثانية يعيده)
+        rd.hidden = false; rd.revealed = true;
+        if (rdRecState === 'recorded') { rdStopAudio(true); rd.sel = null; rdRefreshUI(); rdPlayRec(); }
+        else rdRefreshUI();
+        return;
+    }
     if (rdRecState === 'recorded') {
         if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
         rdPeekStop(true);
@@ -3636,12 +3697,12 @@ function rdConfOpen() {
     d.id = 'rd-pop';
     d.className = 'modal-overlay';      // بلا إغلاق بالنقر خارجها: لا بد من اختيار
     d.innerHTML = `<div class="modal-box sd-box" id="rc-box">
+        <button type="button" id="rc-x" class="rc-x" onclick="closeRdPop()" aria-label="إغلاق والرجوع للمراجعة">&times;</button>
         <div class="modal-title">تأكيد المراجعة</div>
         <div class="rd-set-lbl">مدة المراجعة بالأيام</div>
         <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span>يوم</span><span id="rc-n">${rcVal}</span></span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
         <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد المراجعة</button>
         <button type="button" id="rc-skip" class="btn-secondary sd-ok" onclick="rdEndNow()">عدم المراجعة</button>
-        <button type="button" id="rc-back" class="btn-secondary sd-ok" onclick="closeRdPop()">الرجوع للمراجعة</button>
     </div>`;
     document.body.appendChild(d);
 }
@@ -3670,10 +3731,12 @@ function rdEndNow() {
 }
 
 function leaveReviewScreen() {
+    const fromGrid = reviewScope === 'single';
     reviewOnlyKeys = null;
     reviewScope = 'all';
     rdTeardown();
     rd = null;
+    if (fromGrid) { showAyahGrid(); return; }
     showReviewSelect();
 }
 
@@ -3683,6 +3746,19 @@ function rdRate(ratingType) {
     if (!rd || rd.kind !== 'aqal' || !currentReviewItem) return;
     onAyahRated(currentReviewItem, ratingType);
     reviewedThisSession++;
+    if (reviewScope === 'single') { leaveReviewScreen(); return; }
+    rdLoadAqal();
+}
+
+// «حذف الآية من قائمة التعثر»
+function rdDelStumble() {
+    if (!rd || rd.kind !== 'aqal' || !currentReviewItem) return;
+    const store = loadAyahStore(currentReviewItem.riwaya);
+    delete store[ayahKey(currentReviewItem.surah, currentReviewItem.ayah)];
+    saveAyahStore(currentReviewItem.riwaya, store);
+    showToast("حُذفت الآية من قائمة التعثر.");
+    if (reviewScope === 'single') { leaveReviewScreen(); return; }
+    lastReviewedKey = null;
     rdLoadAqal();
 }
 
@@ -3694,7 +3770,12 @@ function rdLeadForAqal(s, a) {
 }
 
 function rdLoadAqal() {
-    const item = pickNextAyahForReview(lastReviewedKey);
+    let item;
+    if (reviewScope === 'single') {      // آية اختارها المستعمل بنفسه من «قائمة آيات التعثر»
+        const p = String(reviewSingle).split(':'), s = Number(p[0]), a = Number(p[1]);
+        item = loadAyahStore(userRiwaya)[reviewSingle] ? { riwaya: userRiwaya, surah: s, ayah: a, key: reviewSingle } : null;
+        if (!item) { reviewScope = 'all'; rd = null; showAyahGrid(); return; }
+    } else item = pickNextAyahForReview(lastReviewedKey);
     currentReviewItem = item;
     if (!item) {
         const hasAny = Object.keys(loadAyahStore(userRiwaya)).length > 0;
@@ -3710,7 +3791,8 @@ function rdLoadAqal() {
     }
     const total = getAyatCount(item.surah, item.riwaya);
     rdOpen({
-        kind: 'aqal', items: [{ s: item.surah, a: item.ayah }], lead: rdLeadForAqal(item.surah, item.ayah),
+        kind: 'aqal', items: [{ s: item.surah, a: item.ayah }], near: rdLeadForAqal(item.surah, item.ayah),
+        lead: item.ayah > 0 ? rdLeadForAqal(item.surah, item.ayah - 1) : null,
         title: `سورة: ${surahsNames[item.surah]}`, tail: rdCtxTail({ s: item.surah, a: item.ayah })
     });
     updateDueCounts();
