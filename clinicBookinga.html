@@ -109,7 +109,7 @@
   html[dir="ltr"] .services li::before{right:auto;left:4px}
 
   /* موقعنا */
-  .contact{margin-top:26px;margin-bottom:8px;text-align:center}
+  .contact{margin-top:16px;margin-bottom:8px}
   .contact .phone-row{margin-top:14px}
   .phone-row{
     display:flex;
@@ -331,7 +331,12 @@
   .pick-confirm{display:none;margin-top:22px;text-align:center}
   .pick-confirm.show{display:block}
   .pick-line{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
-  .loc-wrap{margin-top:18px;text-align:center}
+  .note-sep{border:none;border-top:1px solid #b8c2bc;margin:14px 24px}
+  #bookBtn.booked{background:#d9dedb;color:#4a5750;box-shadow:none}
+  #bookBtn.booked:active{background:#cbd2ce}
+  #bookBtn .sub{display:block;margin-top:6px;font-size:13px;font-weight:400;line-height:1.5}
+  #bookBtn.booked{padding:14px 20px}
+  .ticket-foot .btn{padding:14px;font-size:17px}
   .slots-empty{
     text-align:center;
     color:var(--muted);
@@ -478,7 +483,7 @@
   }
   #cancelView{display:none;margin-top:40px;text-align:center}
   #ticket.cancelling #cancelView{display:block}
-  #ticket.cancelling .mine,#ticket.cancelling .confirm-notes,#ticket.cancelling .loc-wrap,#ticket.cancelling .ticket-foot{display:none}
+  #ticket.cancelling .mine,#ticket.cancelling .confirm-notes,#ticket.cancelling .ticket-foot{display:none}
   .cancel-explain{font-size:17px;line-height:1.9;color:var(--text);margin-bottom:4px;font-weight:700}
   .cancel-explain.second{margin-bottom:28px}
   #cancelView .btn{box-shadow:none;color:var(--green-dark);padding:15px;font-size:17px}
@@ -488,7 +493,7 @@
   .foot-row{display:flex;justify-content:center;gap:10px}
   .foot-row .cancel-booking.small{margin:0}
   .foot-row .back{padding:7px 22px;font-size:13px;border-radius:10px}
-  .ticket-foot .cancel-note{margin-bottom:8px}
+  
   .ticket-title{
     text-align:center;
     color:var(--green-dark);
@@ -522,6 +527,81 @@
     color:var(--text);
     direction:ltr;
   }
+
+  /* التذكرة: تمتلئ الصفحة، وتتوزّع الفراغات تلقائياً بحسب ارتفاع الشاشة */
+  #ticket:not(.cancelling) .mine.show{
+    display:flex;flex-direction:column;justify-content:space-evenly;
+    flex:1;gap:8px;margin-top:0;padding:6px 0;
+  }
+  #ticket .mine > *{margin-top:0 !important}
+  #ticket .ticket-title{font-size:21px;padding-bottom:8px}
+  #ticket .info-line{font-size:16px}
+  #ticket .mine .code-box{padding:10px 10px 8px}
+  #ticket .ticket-notes{margin-top:10px;padding-bottom:14px}
+  #ticket .note-sep{margin:10px 24px}
+  #ticket .legal-note,#ticket .cancel-note{font-size:13px;line-height:1.6}
+  #ticket .cancel-note{margin-bottom:8px}
+  @media (max-height:700px){
+    #ticket .mine .code-num{font-size:38px}
+    #ticket .mine .code-box{padding:6px 10px}
+    #ticket .ticket-bar svg{height:28px}
+    #ticket .ticket-bar .digits{display:none}
+    #ticket .ticket-foot .btn{padding:11px;font-size:16px}
+    #ticket .step-foot{padding-top:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  }
+  @media (max-height:640px){
+    #ticket .ticket-title{font-size:18px;padding-bottom:5px}
+    #ticket .info-line{font-size:14.5px}
+    #ticket .mine .code-num{font-size:32px}
+    #ticket .note-sep{margin:6px 24px}
+    #ticket .legal-note,#ticket .cancel-note{font-size:12px;line-height:1.5}
+  }
+  @media (max-height:580px){
+    #ticket .ticket-bar{display:none}
+  }
+  @media (max-height:500px){
+    #ticket .clinic-card{padding:8px 20px 6px;margin-bottom:4px}
+    #ticket .clinic-card h1{font-size:20px}
+    #ticket .clinic-card p{display:none}
+    #ticket .mine .code-hint{display:none}
+    #ticket .mine .code-num{font-size:28px}
+    #ticket .ticket-notes{padding-bottom:8px;margin-top:4px}
+  }
+
+  /* زر الموقع: بعرض الشاشة وبشكل ثانوي */
+  .loc-open{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px;font-size:16px;border-radius:12px;
+    background:#f3f8f5;box-shadow:none;
+  }
+  .loc-open:active{background:#e3f0e8}
+  /* الصفحة الرئيسية: تتكيّف لتظهر كل الأزرار دون تمرير */
+  @media (max-height:720px){
+    .services li{padding-top:8px;padding-bottom:8px}
+    .services ul{margin-top:6px}
+    .contact{margin-top:10px}
+    .cta{padding-top:12px}
+  }
+  @media (max-height:580px){
+    #home .clinic-card p{display:none}
+    #home .clinic-card{padding:12px 20px 8px;margin-bottom:6px}
+    .services li{padding-top:5px;padding-bottom:5px;font-size:15px}
+    .sec-title{margin-top:2px}
+    .loc-open{padding:10px}
+    #bookBtn{padding:15px;font-size:18px}
+    #bookBtn.booked{padding:10px 20px}
+  }
+  @media (max-height:500px){
+    .services li{padding-top:3px;padding-bottom:3px}
+    #home .clinic-card .lang-toggle-btn{padding:0 14px}
+  }
+
+  /* الصفحة الرئيسية: الفراغات متساوية بين الهيدر والخدمات والموقع والحجز */
+  #home .page-content-padding{justify-content:space-evenly;gap:10px}
+  #home .contact{margin-top:0;margin-bottom:0}
+  #home .cta{margin-top:0;padding-top:0;padding-bottom:0}
+  #home .services ul{margin-top:8px}
+  #home{padding-bottom:10px}
 </style>
 </head>
 <body>
@@ -541,11 +621,14 @@
     </section>
 
     <section class="contact" id="contactBox">
-      <button class="back" data-goto="loc" data-i="locBtn"></button>
+      <button class="back loc-open" data-goto="loc">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        <span data-i="locBtn"></span>
+      </button>
     </section>
 
     <div class="cta" id="homeCta">
-      <button class="btn" id="bookBtn" data-i="book"></button>
+      <button class="btn" id="bookBtn"></button>
     </div>
   </div>
 </div>
@@ -614,18 +697,17 @@
       </div>
     </div>
 
-    <div class="confirm-notes">
+    <div class="confirm-notes ticket-notes">
       <p class="legal-note" data-i="legalNote"></p>
-    </div>
-    <div class="loc-wrap">
-      <button class="back" data-goto="loc" data-i="locBtn"></button>
-    </div>
-
-    <div class="step-foot ticket-foot">
+      <hr class="note-sep">
       <p class="cancel-note" data-i="cancelNote"></p>
       <div class="foot-row" id="footRow">
         <button class="cancel-booking small" id="cancelBookBtn" data-i="cancelBooking"></button>
       </div>
+    </div>
+
+    <div class="step-foot ticket-foot">
+      <button class="btn" id="homeBtn" data-goto="home" data-i="backHome"></button>
     </div>
 
     <div id="cancelView">
@@ -660,7 +742,7 @@
       phone:"هاتف العيادة",
       book:"احجز موعداً لدى العيادة",
       back:"رجوع",
-      cancelTop:"إلغاء الحجز",
+      cancelTop:"العودة إلى الرئيسية",
       bookClinicTitle:"حجز موعد لدى العيادة",
       step1Label:"الخدمة",
       step2Label:"الموعد",
@@ -681,6 +763,9 @@
       timeLabel:"الوقت",
       codeLabel:"رمز الحجز",
       cancelBooking:"إلغاء الحجز",
+      backHome:"العودة إلى الصفحة الرئيسية",
+      showTicket:"اضغط لإظهار التذكرة",
+      apptLabel:"الموعد",
       cancelNote:"في حال تعذّر حضوركم، يرجى إلغاء الحجز ليستفيد منه مريض آخر.",
       confirmCancel:"تأكيد الإلغاء",
       cancelExplain1:"بإلغائكم هذا الحجز ستفقدون دوركم.",
@@ -702,7 +787,7 @@
       phone:"Téléphone de la clinique",
       book:"Prendre rendez-vous",
       back:"Retour",
-      cancelTop:"Annuler",
+      cancelTop:"Retour à l'accueil",
       bookClinicTitle:"Prendre rendez-vous",
       step1Label:"Service",
       step2Label:"RDV",
@@ -723,6 +808,9 @@
       timeLabel:"Horaire",
       codeLabel:"Code de réservation",
       cancelBooking:"Annuler la réservation",
+      backHome:"Retour à l'accueil",
+      showTicket:"Appuyez pour afficher le ticket",
+      apptLabel:"Rendez-vous",
       cancelNote:"En cas d'empêchement, merci d'annuler votre réservation afin qu'un autre patient puisse en profiter.",
       confirmCancel:"Confirmer l'annulation",
       cancelExplain1:"En annulant cette réservation, vous perdez votre tour.",
@@ -787,21 +875,22 @@
   /* ---------- التنقل ---------- */
   var pages = ["home","service","book","ticket","loc"];
   function show(id){
-    /* متى وُجد موعد لا يُرى إلا التذكرة (ومنها صفحة الموقع)، ولا يُعاد الحجز قبل الإلغاء */
+    /* متى وُجد موعد لا تُفتح صفحة الحجز قبل إلغائه */
     if(booking){
-      if(id !== "loc") id = "ticket";
+      if(id === "book") id = "ticket";
     }else{
       if(id === "ticket") id = "home";
     }
     pages.forEach(function(p){
       $(p).classList.toggle("active", p === id);
     });
+    if(id === "home") renderHome();
     if(id === "loc") ensureMap($("pageLoc"));
     if(id === "ticket"){ cancelAsk = false; syncTicket(); }
     window.scrollTo(0,0);
   }
   function goTo(id){
-    history.pushState({v:id}, "", "#" + id);
+    try{ history.pushState({v:id}, "", "#" + id); }catch(e){}
     show(id);
   }
   document.querySelectorAll("[data-goto]").forEach(function(b){
@@ -872,7 +961,7 @@
     box.querySelector(".zo").addEventListener("click", function(){ setMapZoom(mapZoom - 1); });
   }
   buildLoc($("pageLoc"));
-  $("locBack").addEventListener("click", function(){ goTo(booking ? "ticket" : "home"); });
+  $("locBack").addEventListener("click", function(){ goTo("home"); });
 
   /* ---------- إلغاء الموعد من التذكرة ---------- */
   var cancelAsk = false;   // هل ظهر خياراً التأكيد والاحتفاظ؟
@@ -947,7 +1036,23 @@
   });
 
   /* فتح الحجز: يُحدَّد "اليوم" تلقائياً */
+  function renderHome(){
+    var T = TR[lang], b = $("bookBtn");
+    b.textContent = "";
+    if(booking){
+      b.classList.add("booked");
+      b.appendChild(document.createTextNode(T.showTicket));
+      var sub = document.createElement("span");
+      sub.className = "sub";
+      sub.textContent = T.apptLabel + ": " + dateFmt(new Date(booking.ts)) + " · " + timeText(booking.slot);
+      b.appendChild(sub);
+    }else{
+      b.classList.remove("booked");
+      b.textContent = T.book;
+    }
+  }
   $("bookBtn").addEventListener("click", function(){
+    if(booking){ goTo("ticket"); return; }
     curDay = 0;
     curSlot = -1;
     document.querySelectorAll(".tab").forEach(function(x, idx){x.classList.toggle("active", idx === 0)});
@@ -1052,6 +1157,7 @@
     renderSlots();
     renderConfirm();
     renderTicket();
+    renderHome();
   }
   document.querySelectorAll(".lang-toggle-btn").forEach(function(b){
     b.addEventListener("click", function(){
@@ -1061,9 +1167,9 @@
 
   loadBooking();
   applyLang("ar");
-  /* صفحة الافتتاح: التذكرة إن وُجد موعد، وإلا الصفحة الرئيسية */
-  history.replaceState({v: booking ? "ticket" : "home"}, "", "#" + (booking ? "ticket" : "home"));
-  show(booking ? "ticket" : "home");
+  /* صفحة الافتتاح دائماً هي الصفحة الرئيسية (زرّها يوصل إلى التذكرة إن وُجد موعد) */
+  try{ history.replaceState({v:"home"}, "", "#home"); }catch(e){}
+  show("home");
 </script>
 </body>
 </html>
