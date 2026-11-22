@@ -845,6 +845,11 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
 .rs-step { border-radius: 14px; }
+.rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; border: 1.5px solid #99f6e4; background: linear-gradient(180deg, #f0fdfa, #ccfbf1); box-shadow: 0 2px 8px rgba(13,148,136,0.18); }
+.rd-strip.hidden { margin-top: 0; padding: 0; border: 0; box-shadow: none; }
+body.dark-mode .rd-strip { border-color: #0f766e; background: linear-gradient(180deg, #1e293b, #0f2f2d); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.rs-step.rs-wide { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.rs-step.rs-wide svg { width: 16px; height: 16px; }
 .rs-step.rs-resume { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center; background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
 body.dark-mode .rs-step.rs-resume { background: #450a0a; border-color: #f87171; color: #fecaca; }
 .rec-dot { width: 11px; height: 11px; border-radius: 50%; background: #dc2626; flex: none; }
@@ -3537,7 +3542,8 @@ function rdStripRender(show) {
     el.classList.toggle('hidden', !show);
     if (!show) { el.innerHTML = ''; rdStripTimerStop(); return; }
     const on = rdPlaying && rdAudioKind === 'rec';
-    el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : (rdRecState === 'paused' ? 'عرض التسجيل' : 'تشغيل العرض')}">${on ? RD_ICONS.pause : RD_ICONS.play}</button>`
+    const pz = rdRecState === 'paused';
+    el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play${pz ? ' rs-wide' : ''}" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : (pz ? 'عرض التسجيل' : 'تشغيل العرض')}">${on ? RD_ICONS.pause : RD_ICONS.play}${pz ? '<span>العرض</span>' : ''}</button>`
         + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
         + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i></div></div>`
         + (rdRecState === 'paused'
