@@ -592,10 +592,11 @@ body.dark-mode .sd-btn.sd-r { background: #991b1b; border-color: #f87171; }
 .sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
 .sd-step .stepper .st-val { flex: 1.4 1 0; min-width: 0; padding: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .sd-box { position: relative; }
+.rc-two { display: flex; gap: 10px; margin-top: 14px; }
+.rc-two button { flex: 1; padding: 14px 6px; font-size: 16px; font-weight: bold; font-family: inherit; border-radius: 12px; }
 .rc-x { position: absolute; top: 6px; left: 8px; width: 40px; height: 40px; border: none; background: transparent; color: #64748b; font-size: 30px; line-height: 1; cursor: pointer; padding: 0; touch-action: manipulation; font-family: inherit; }
 body.dark-mode .rc-x { color: #cbd5e1; }
 .sd-ok { margin-top: 12px !important; width: 100% !important; }
-.sd-box .sd-ok + .sd-ok { margin-top: 8px !important; }
 .rd-ctxrow { display: flex; justify-content: center; flex: none; }
 .rd-ctxtail { padding-bottom: 38px; }
 .rd-ctxbtn { background: transparent; border: 1px solid rgba(148, 163, 184, 0.7); color: #94a3b8; opacity: 0.8; border-radius: 14px; padding: 3px 16px; font-size: 13px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
@@ -607,8 +608,6 @@ body.dark-mode .rc-x { color: #cbd5e1; }
 .rd-speed-wrap .stepper button { width: 44px; font-size: 22px; }
 .rd-speed-wrap .stepper .st-val { min-width: 42px; font-size: 17px; }
 .due-badge { display: inline-block; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #dc2626; color: #fff; font: bold 13px/22px sans-serif; font-style: normal; text-align: center; vertical-align: middle; margin-inline-end: 8px; }
-.ps-f-red { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; }
-body.dark-mode .ps-f-red { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; }
 .resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
 .resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
 .resume-btn.cm-r4 { background: #fecdd3; border-color: #fb7185; color: #881337; }
@@ -642,8 +641,6 @@ body.dark-mode .resume-btn .rb-sub { color: #cbd5e1 !important; }
 .stepper button { width: 38px; border: none; background: transparent; color: #1b4d3e; font-size: 22px; font-weight: bold; font-family: inherit; cursor: pointer; padding: 0; touch-action: manipulation; }
 .stepper button:active { background: #dbe4ee; }
 .stepper .st-val { min-width: 50px; padding: 0 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #1b4d3e; border-left: 1.5px solid #cbd5e1; border-right: 1.5px solid #cbd5e1; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.stepper.sm button { width: 28px; font-size: 18px; }
-.stepper.sm .st-val { min-width: 32px; padding: 0 4px; font-size: 15px; }
 body.dark-mode .stepper { background: #334155 !important; border-color: #64748b !important; }
 body.dark-mode .stepper button, body.dark-mode .stepper .st-val { color: #e2e8f0 !important; }
 body.dark-mode .stepper .st-val { border-color: #64748b !important; }
@@ -793,7 +790,6 @@ body.dark-mode #rs-real { background: #0f766e; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; box-shadow: inset 0 0 0 1.5px #f87171; }
 #dark-mode-btn.rd-moon { background: #283593 !important; border-color: #5c6bc0 !important; color: #fde047 !important; opacity: 1; }
 body.dark-mode #dark-mode-btn.rd-moon { background: #1a237e !important; border-color: #7986cb !important; color: #fde047 !important; }
-.hf-btn.rd-gear { font-size: 17px !important; line-height: 1.3 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .rd-cell .hf-btn { width: 100%; white-space: nowrap; }
@@ -832,14 +828,15 @@ body.dark-mode #dark-mode-btn.rd-moonbar { background: #1a237e !important; borde
 .rd-page > .rd-mid { margin-bottom: 8px; }
 .rd-page > .rd-top { margin-bottom: 10px; }
 .ag-grid { display: grid; gap: 8px; padding: 2px; }
-.ag-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; padding: 6px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
+.rd-pop-list.pg-row { display: flex; flex-direction: row; gap: 8px; }
+.rd-pop-list.pg-row .rd-pop-item { flex: 1; text-align: center; justify-content: center; padding: 10px 4px; }
+.pg-sub { display: block; font-size: 12px; font-weight: normal; opacity: 0.75; margin-top: 2px; }
+.ag-btn { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 5px; min-height: 58px; padding: 6px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
 .ag-btn .ag-s { font-size: 13px; line-height: 1.3; text-align: center; }
 .ag-btn .ag-n { font-size: 17px; font-weight: bold; }
 .ag-btn.ag-due { background: rgba(220, 38, 38, 0.18); border-color: #dc2626; color: #7f1d1d; }
 body.dark-mode .ag-btn { background: #1e293b; border-color: #475569; color: #e2e8f0; }
 body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color: #f87171; color: #fee2e2; }
-.rd-delrow { margin: 8px 14px 0; flex: none; }
-.rd-delrow button { width: 100%; padding: 11px 6px; font-size: 15px; font-weight: bold; font-family: inherit; border-radius: 10px; }
 .rd-page > #rd-row1 { margin: 0; }
 .rd-page .rd-bar .hf-btn { border-left-width: 1.5px; }
 /* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
@@ -847,8 +844,15 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 #rd-text .ayah-blue { font-weight: normal; }
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
-.rd-rectime { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 42px; }
-.rs-step { border-radius: 0; }
+.rs-step { border-radius: 14px; }
+.rs-step.rs-resume { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center; background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+body.dark-mode .rs-step.rs-resume { background: #450a0a; border-color: #f87171; color: #fecaca; }
+.rec-dot { width: 11px; height: 11px; border-radius: 50%; background: #dc2626; flex: none; }
+body.dark-mode .rec-dot { background: #f87171; }
+.rd-recbox { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 44px; box-sizing: border-box; border: 2px solid #dc2626; border-radius: 12px; background: rgba(220, 38, 38, 0.08); color: #dc2626; font-family: inherit; cursor: pointer; padding: 4px 10px; touch-action: manipulation; }
+.rd-recbox .rd-recmsg { font-size: 14px; font-weight: bold; color: #dc2626; }
+body.dark-mode .rd-recbox { border-color: #f87171; background: rgba(248, 113, 113, 0.12); }
+body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { color: #fca5a5; }
 .rs-play { color: #115e59; }
 </style>
 </head>
@@ -892,6 +896,7 @@ const TAFSIR_IDX_KEY = "ibnbadis.taf.idx";
 // مفاتيح localStorage
 const LS_KEYS = {
     settings: "ibnbadis.settings",
+    aqalmode: "ibnbadis.aqalmode.v1",   // طريقة مراجعة عقال الآيات: all | due | random
     migrated: "ibnbadis.migrated",
     ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
     midrev: "ibnbadis.midrev.v1",     // «المراجعة المتوسطة»: [{riwaya, segs:[{surah,start,end}]}]
@@ -1427,9 +1432,27 @@ function dueNumsHtml(c) {
 }
 
 // صفحة بداية عقال الآيات: كل القرآن + السور التي فيها آيات مستحقة
+function aqalMode() { const m = lsGet(LS_KEYS.aqalmode, 'random'); return (m === 'all' || m === 'due') ? m : 'random'; }
+function aqalSetMode(m) {
+    lsSet(LS_KEYS.aqalmode, m === 'all' || m === 'due' ? m : 'random');
+    pgPopClose();
+    showReviewSelect();
+}
+function aqalSettingsOpen() {
+    const m = aqalMode();
+    const opts = [['all', 'كل الآيات', 'تختار بنفسك من قائمة التعثر كلها'], ['due', 'المستحقة فقط', 'تختار بنفسك من الآيات التي حان موعدها'], ['random', 'اختيار التطبيق', 'يختار لك التطبيق آية بحسب الأولوية']];
+    pgPopOpen(`<div class="modal-title">الإعدادات</div><div class="rd-set-lbl">طريقة المراجعة</div>
+        <div class="rd-pop-list">${opts.map((o) => `<button type="button" id="aq-mode-${o[0]}" class="resume-btn rd-pop-item${m === o[0] ? ' on' : ''}" onclick="aqalSetMode('${o[0]}')"><span class="rb-main">${o[1]}<small class="pg-sub">${o[2]}</small></span></button>`).join('')}</div>`);
+}
+
+// عقال الآيات: الصفحة تتبع الطريقة المختارة في الإعدادات (كل الآيات / المستحقة بيدك، أو اختيار التطبيق)
 function showReviewSelect() {
-    reviewOnlyKeys = null;
-    reviewScope = 'all';
+    reviewOnlyKeys = null; reviewScope = 'all'; reviewSingle = null;
+    const m = aqalMode();
+    if (m === 'random') showAqalRandom(); else showAyahGrid(m === 'due');
+}
+
+function showAqalRandom() {
     const st = computeDueStats();
     const rows = Object.keys(st.per).map(Number).sort((a, b) => a - b).map(sIdx =>
         `<button type="button" class="rv-row" onclick="startReviewSurah(${sIdx})">
@@ -1438,7 +1461,7 @@ function showReviewSelect() {
         </button>`).join('');
     const emptyNote = st.all.total === 0
         ? `<div class="rv-empty">لا توجد آيات مستحقة للمراجعة الآن.</div>` : '';
-    const html = `
+    hfPage('aqalSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title select-title">اختر ما تريد مراجعته</div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
@@ -1449,45 +1472,33 @@ function showReviewSelect() {
                 ${rows}
                 ${emptyNote}
             </div>
-        </div>
-
-        <div id="util-row" class="util-row">
-            <div class="u-start">
-                <button id="dark-mode-btn" class="btn-home btn-end-session btn-theme" onclick="toggleDarkMode()" title="${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}">${isDarkMode ? 'الوضع العادي' : 'الوضع الليلي'}</button>
-            </div>
-            <div class="u-mid"><button type="button" id="rv-all-btn" class="btn-home btn-end-session" onclick="showAyahGrid()">عرض كل الآيات</button></div>
-            <div class="u-end"><button class="btn-home btn-end-session" onclick="showMainButtons()">إنهاء الجلسة</button></div>
-        </div>
-    `;
-    renderInContainer(html);
-    applyTheme();
+        </div>`);
 }
 
-// «قائمة آيات التعثر»: زر لكل آية (3 في كل سطر)، أبيض، وأحمر شبه شفاف إن حان موعد مراجعتها؛ يختار المستعمل ما يراجعه
+// «قائمة آيات التعثر»: زر لكل آية (3 في كل سطر: السورة والرقم في سطر واحد)، أبيض، وأحمر شبه شفاف إن حان موعد مراجعتها؛ يختار المستعمل ما يراجعه
 const AG_COLS = 3;
-function showAyahGrid() {
+function showAyahGrid(dueOnly) {
     reviewOnlyKeys = null; reviewScope = 'all'; reviewSingle = null;
+    if (dueOnly === undefined) dueOnly = aqalMode() === 'due';
     const store = loadAyahStore(userRiwaya), now = Date.now(), list = [];
     for (const k in store) {
         const rec = store[k];
         if (!rec || !Number.isFinite(rec.d) || !Number.isFinite(rec.t)) continue;
         const p = k.split(':'), s = Number(p[0]), a = Number(p[1]);
         if (!Number.isInteger(s) || !Number.isInteger(a) || a < 0 || a >= getAyatCount(s, userRiwaya)) continue;
-        list.push({ k, s, a, due: isDue(rec, now) });
+        const due = isDue(rec, now);
+        if (dueOnly && !due) continue;
+        list.push({ k, s, a, due });
     }
     list.sort((x, y) => x.s - y.s || x.a - y.a);
-    const cells = list.map((o) => `<button type="button" class="ag-btn${o.due ? ' ag-due' : ''}" data-k="${o.k}" onclick="startReviewOne('${o.k}')"><span class="ag-s">${surahsNames[o.s]}</span><span class="ag-n">${o.a + 1}</span></button>`).join('');
-    const html = `
+    const cells = list.map((o) => `<button type="button" class="ag-btn${o.due ? ' ag-due' : ''}" data-k="${o.k}" onclick="startReviewOne('${o.k}')"><span class="ag-s">${surahsNames[o.s]}</span> <span class="ag-n">${o.a + 1}</span></button>`).join('');
+    hfPage('aqalSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title"><span id="ag-title">قائمة آيات التعثر</span></div>
+            <div class="surah-title select-title"><span id="ag-title">${dueOnly ? 'الآيات المستحقة' : 'قائمة آيات التعثر'}</span></div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
-                ${list.length ? `<div class="ag-grid" style="grid-template-columns: repeat(${AG_COLS}, 1fr);">${cells}</div>` : `<div class="rv-empty">لا توجد آيات في قائمة التعثر بعد.</div>`}
+                ${list.length ? `<div class="ag-grid" style="grid-template-columns: repeat(${AG_COLS}, 1fr);">${cells}</div>` : `<div class="rv-empty">${dueOnly ? 'لا توجد آيات مستحقة الآن.' : 'لا توجد آيات في قائمة التعثر بعد.'}</div>`}
             </div>
-        </div>
-        ${hfUtilRow('رجوع', 'showReviewSelect()', '')}
-    `;
-    renderInContainer(html);
-    applyTheme();
+        </div>`);
 }
 function startReviewOne(k) {
     reviewOnlyKeys = null; reviewScope = 'single'; reviewSingle = k;
@@ -2065,7 +2076,7 @@ function showNewReviewList() {
     const li = lastPassIndex(1, newList.map((p) => p.segs));
     renderPassageList({
         items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li, sig: passSig(1, p.segs), sched: passSig(1, p.segs) })),
-        startFn: 'startNewPassage', title: 'اختر المقطع الذي تريد مراجعته',
+        startFn: 'startNewPassage', kind: 'new', title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «الجديد» بعد.<br>صنّف ما حفظتَه حديثاً من «تصنيف القرآن» باختيار «جديد».'
     });
 }
@@ -2123,7 +2134,6 @@ function lastPassIndex(rank, segsOf) {
 }
 
 let psFilter = 'all';          // الكل ← المستحق (الأحمر)
-const PS_FILTERS = { all: 'الكل', red: 'المستحق' };
 function renderPassageList(o) {
     try { rdTeardown(); } catch (e) {}
     rd = null;
@@ -2133,16 +2143,14 @@ function renderPassageList(o) {
         const btn = `<button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span></button>`;
         return `<div class="ps-row" id="psr-${k}">${btn}${it.sched ? schedBtnHtml(k, it.sched) : ''}</div>`;
     }).join('');
-    const filterBtn = rows ? `<button type="button" id="ps-filter" class="btn-home btn-end-session" onclick="psFilterCycle()"></button>` : '';
+    psKind = o.kind || psKind;
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title select-title"><i class="due-badge hidden" id="due-ttl" title="عدد الوحدات التي حان موعد مراجعتها"></i><span>${o.title}</span></div>
             <div class="surah-list-container" id="ps-list" style="flex: 1; min-height: 0; max-height: none;">${rows || `<div class="nr-empty">${o.empty}</div>`}<div id="ps-none" class="nr-empty hidden">لا توجد مقاطع بهذا التصنيف.</div></div>
         </div>
-        ${hfUtilRow('رجوع', 'showMainButtons()', filterBtn)}
     `;
-    renderInContainer(html);
-    applyTheme();
+    hfPage('psSettingsOpen()', 'showMainButtons()', html);
     psFilterApply();
     try { const l = document.querySelector('.ps-btn.last'); if (l) l.scrollIntoView({ block: 'center' }); } catch (e) {}
 }
@@ -2166,15 +2174,29 @@ function psFilterApply() {
     });
     const none = document.getElementById('ps-none');
     if (none) none.classList.toggle('hidden', shown > 0 || !rows.length);
-    const f = document.getElementById('ps-filter');
-    if (f) { f.textContent = PS_FILTERS[psFilter]; f.className = 'btn-home btn-end-session ps-f-' + psFilter; }
     psBadge();
 }
-function psFilterCycle() {
-    psFilter = psFilter === 'all' ? 'red' : 'all';
+let psKind = 'prog';
+function psSetFilter(f) {
+    psFilter = f === 'red' ? 'red' : 'all';
+    pgPopClose();
     psFilterApply();
     const l = document.getElementById('ps-list');
     if (l) l.scrollTop = 0;
+}
+function psGoKind(k) {
+    pgPopClose();
+    if (k === psKind) return;
+    if (k === 'new') showNewReviewList(); else if (k === 'rasikh') showRasikhList(); else showProgList();
+}
+// إعدادات القوائم: العرض (الكل/المستحق) والنوع (قيد الحفظ/جديد/راسخ) دون الرجوع إلى الرئيسية
+function psSettingsOpen() {
+    const f = (id, cur, lab, fn) => `<button type="button" id="${id}" class="resume-btn rd-pop-item${cur ? ' on' : ''}" onclick="${fn}"><span class="rb-main">${lab}</span></button>`;
+    pgPopOpen(`<div class="modal-title">الإعدادات</div>
+        <div class="rd-set-lbl">العرض</div>
+        <div class="rd-pop-list pg-row">${f('ps-set-all', psFilter === 'all', 'الكل', "psSetFilter('all')")}${f('ps-set-red', psFilter === 'red', 'المستحق', "psSetFilter('red')")}</div>
+        <div class="rd-set-lbl">النوع</div>
+        <div class="rd-pop-list pg-row">${f('ps-k-prog', psKind === 'prog', 'قيد الحفظ', "psGoKind('prog')")}${f('ps-k-new', psKind === 'new', 'جديد', "psGoKind('new')")}${f('ps-k-rasikh', psKind === 'rasikh', 'راسخ', "psGoKind('rasikh')")}</div>`);
 }
 
 // مقاطع «قيد الحفظ»: كل مقطع مصنَّف في سورة واحدة (يُقصّ مما صار في درجة أخرى)
@@ -2190,7 +2212,7 @@ function showProgList() {
     const li = lastPassIndex(4, progList.map((g) => [g]));
     renderPassageList({
         items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li, sched: passSig(4, [g]) })),
-        startFn: 'startProgPassage',
+        startFn: 'startProgPassage', kind: 'prog',
         title: 'اختر المقطع الذي تحفظه',
         empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «قيد الحفظ».'
     });
@@ -2238,7 +2260,7 @@ function showRasikhList() {
     const li = lastPassIndex(3, rasikhList.map((p) => p.segs));
     renderPassageList({
         items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li, sched: passSig(3, p.segs) })),
-        startFn: 'startRasikhPassage',
+        startFn: 'startRasikhPassage', kind: 'rasikh',
         title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «الراسخ» بعد.<br>صنّف ما حفظتَه من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «راسخ».'
     });
@@ -2266,6 +2288,32 @@ let prepStartStr = "";
 let prepEndStr = "";
 
 // ---------- أدوات مشتركة ----------
+
+// الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات][العودة]
+function hfTopBar(settingsFn, backFn) {
+    return `<div id="rd-top" class="rd-bar rd-top">
+        <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
+        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn" onclick="${settingsFn}">الإعدادات</button></div>
+        <div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">العودة</button></div>
+    </div>`;
+}
+function hfPage(settingsFn, backFn, bodyHtml) {
+    renderInContainer(hfTopBar(settingsFn, backFn) + bodyHtml);
+    const wc = document.querySelector('#main-container .welcome-container');
+    if (wc) wc.classList.add('rd-page');
+    applyTheme();
+}
+// نافذة إعدادات الصفحات (× لإغلاقها)
+function pgPopClose() { const d = document.getElementById('pg-pop'); if (d) d.remove(); }
+function pgPopOpen(inner) {
+    pgPopClose();
+    const d = document.createElement('div');
+    d.id = 'pg-pop';
+    d.className = 'modal-overlay';
+    d.onclick = (e) => { if (e.target === d) pgPopClose(); };
+    d.innerHTML = `<div class="modal-box sd-box" id="pg-box"><button type="button" id="pg-x" class="rc-x" onclick="pgPopClose()" aria-label="إغلاق">&times;</button>${inner}</div>`;
+    document.body.appendChild(d);
+}
 
 function hfUtilRow(endLabel, endOnclick, midHtml) {
     return `
@@ -2660,7 +2708,7 @@ function rdRenderPage(keep) {
         <div id="rd-top" class="rd-bar rd-top">
             <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
             <div class="rd-cell"><button type="button" id="rd-settings" class="btn-secondary hf-btn" onclick="rdOpenSettings()">الإعدادات</button></div>
-            <div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="rdEnd()">إنهاء الجلسة</button></div>
+            <div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="rdEnd()">العودة</button></div>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
             <div class="rd-head">
@@ -2678,7 +2726,6 @@ function rdRenderPage(keep) {
             <button class="btn-rate btn-good" onclick="rdRate('good')">جيد</button>
             <button class="btn-rate btn-easy" onclick="rdRate('easy')">سهل</button>
         </div>
-        <div id="rd-delrow" class="rd-delrow hidden"><button type="button" id="rd-del" class="btn-secondary" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button></div>
         <div id="rd-mid" class="rd-mid">
             <div id="rd-hint" class="rd-hint"></div>
             <div id="rd-strip" class="rd-strip hidden"></div>
@@ -2828,7 +2875,7 @@ function rdRenderBars() {
         + B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
         + (revealOnly ? B('rd-show', '', 'rdShowBtn()', 'العرض') : B('rd-taf', rd.tafMode ? 'rd-on' : '', 'rdToggleTafsir()', 'التفسير'));
 
-    rdStripRender(recDone && !none && !aqal);
+    rdStripRender((recDone || recPaused) && !none && !aqal);
 
     // المساحة فوق الأزرار: عبارة التفسير / عدّاد التسجيل / عرض ومواصلة / الشيخ وتعثر للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
@@ -2837,10 +2884,7 @@ function rdRenderBars() {
         if (rd.tafMode && !none) {
             h = `<div id="rd-taf-note" class="rd-note">اضغط على آية لتفسيرها</div>`;
         } else if (recOn) {
-            h = `<div class="rd-rectime"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span></div>`;
-        } else if (recPaused) {
-            h = `<div class="rd-act"><button type="button" id="rd-show" class="btn-secondary hf-btn" onclick="rdShowBtn()">عرض التسجيل</button>`
-                + `<button type="button" id="rd-resume" class="btn-secondary hf-btn" onclick="rdRecResume()">مواصلة التسجيل</button></div>`;
+            h = `<button type="button" id="rd-recbox" class="rd-recbox" onclick="rdRecBtn()"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span class="rd-recmsg">اضغط لوقف التسجيل</span></button>`;
         } else if (recDone && !showOn && rd.sel !== null && !none && !aqal) {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
             h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
@@ -2853,8 +2897,6 @@ function rdRenderBars() {
     const rate = document.getElementById('rd-rate');
     const showRate = rd.kind === 'aqal' && rd.items.length && !rd.hidden;
     if (rate) rate.classList.toggle('hidden', !showRate);
-    const dr = document.getElementById('rd-delrow');
-    if (dr) dr.classList.toggle('hidden', !showRate);
 }
 
 // عدّاد سرعة النزول: لا يظهر إلا أثناء «عرض التسجيل» (لا مع الشيخ ولا بلا صوت)
@@ -2880,6 +2922,7 @@ function rdRecTickStop() { if (rdTick) { clearInterval(rdTick); rdTick = null; }
 function rdSelectAyah(k) {
     if (!rd) return;
     if (rdGuardHidden()) return;
+    if (rdRecState === 'paused') return;      // التسجيل موقوف بانتظار العرض أو المواصلة: لا نمحوه بضغطة على آية
     if (rd.tafMode) { rdOpenAyahTafsir(k); return; }
     if (rdRecState === 'recorded') {   // بعد التسجيل: الضغط على آية يوقف العرض ويحدّدها (يظهر الشيخ والتعثر) ولا يمحو التسجيل
         rdPeekStop(true);
@@ -3225,6 +3268,16 @@ function rdSetHtml() {
 
 function rdOpenSettings() {
     if (!rd) return;
+    if (rd.kind === 'aqal') {     // عقال الآيات: لا شيخ؛ الإعدادات فيها حذف الآية من قائمة التعثر فقط
+        closeRdPop();
+        const q = document.createElement('div');
+        q.id = 'rd-pop';
+        q.className = 'modal-overlay';
+        q.onclick = (e) => { if (e.target === q) rdSetDone(); };
+        q.innerHTML = `<div class="modal-box sd-box rd-set-box" id="rd-set-box"><button type="button" id="rd-set-x" class="rc-x" onclick="rdSetDone()" aria-label="إغلاق">&times;</button><div class="modal-title">الإعدادات</div><button type="button" id="rd-del" class="btn-secondary sd-ok" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button></div>`;
+        document.body.appendChild(q);
+        return;
+    }
     if (rdPlaying && rdAudioKind === 'sheikh') { rdSheikhPos = null; rdStopAudio(true); }
     closeRdPop();
     const d = document.createElement('div');
@@ -3303,11 +3356,12 @@ function rdRecDiscard() {
 async function rdRecBtn() {
     if (!rd || !rd.items.length || rdRecStarting) return;
     if (rd.kind === 'aqal' && rdRecState === 'recording') { rdRecStop(false); return; }   // عقال الآيات: الضغط يوقف التسجيل
-    if (rdRecState === 'recording') {          // إيقاف مؤقت: النقطة تتجمّد والمؤقت يقف
+    if (rdRecState === 'recording') {          // إيقاف التسجيل: تظهر الآيات مباشرة ويظهر المشغّل [عرض][شريط][مواصلة التسجيل]
         try { if (rdRecorder && rdRecorder.pause) rdRecorder.pause(); } catch (e) {}
         rdRecAcc += Date.now() - rdRecT0;
         rdRecState = 'paused';
         rdRecTickStop();
+        rd.hidden = false;
         rdRefreshUI();
         return;
     }
@@ -3378,6 +3432,8 @@ function rdRecResume() {
     if (rdRecState !== 'paused') return;
     try { if (rdRecorder && rdRecorder.resume) rdRecorder.resume(); } catch (e) {}
     rdRecState = 'recording';
+    rd.hidden = true;
+    rd.sel = null;
     rdCancelDisarm();
     rdRecTickStart();
     rdRefreshUI();
@@ -3481,10 +3537,12 @@ function rdStripRender(show) {
     el.classList.toggle('hidden', !show);
     if (!show) { el.innerHTML = ''; rdStripTimerStop(); return; }
     const on = rdPlaying && rdAudioKind === 'rec';
-    el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : 'تشغيل العرض'}">${on ? RD_ICONS.pause : RD_ICONS.play}</button>`
+    el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : (rdRecState === 'paused' ? 'عرض التسجيل' : 'تشغيل العرض')}">${on ? RD_ICONS.pause : RD_ICONS.play}</button>`
         + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
         + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i></div></div>`
-        + `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`;
+        + (rdRecState === 'paused'
+            ? `<button type="button" id="rd-resume" class="rs-step rs-resume" onclick="rdRecResume()" aria-label="مواصلة التسجيل"><span class="rec-dot"></span><span>مواصلة</span></button>`
+            : `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`);
     rdStripUpdate();
     if (!rdStripTimer) rdStripTimer = setInterval(rdStripTick, 100);
 }
@@ -3699,12 +3757,17 @@ function rdConfOpen() {
     d.innerHTML = `<div class="modal-box sd-box" id="rc-box">
         <button type="button" id="rc-x" class="rc-x" onclick="closeRdPop()" aria-label="إغلاق والرجوع للمراجعة">&times;</button>
         <div class="modal-title">تأكيد المراجعة</div>
-        <div class="rd-set-lbl">مدة المراجعة بالأيام</div>
-        <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span>يوم</span><span id="rc-n">${rcVal}</span></span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
-        <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد المراجعة</button>
-        <button type="button" id="rc-skip" class="btn-secondary sd-ok" onclick="rdEndNow()">عدم المراجعة</button>
+        <div id="rc-body"><div class="rc-two"><button type="button" id="rc-done" class="btn-main" onclick="rcDone()">تمت المراجعة</button><button type="button" id="rc-skip" class="btn-secondary" onclick="rdEndNow()">تخطي</button></div></div>
     </div>`;
     document.body.appendChild(d);
+}
+// بعد «تمت المراجعة»: مدة المراجعة بالأيام ثم التأكيد
+function rcDone() {
+    const b = document.getElementById('rc-body');
+    if (!b) return;
+    b.innerHTML = `<div class="rd-set-lbl">مدة المراجعة بالأيام</div>
+        <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span>يوم</span><span id="rc-n">${rcVal}</span></span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
+        <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد</button>`;
 }
 function rcStep(d) {
     rcVal = Math.max(0, Math.min(365, rcVal + d));
@@ -3736,7 +3799,7 @@ function leaveReviewScreen() {
     reviewScope = 'all';
     rdTeardown();
     rd = null;
-    if (fromGrid) { showAyahGrid(); return; }
+    if (fromGrid) { showReviewSelect(); return; }
     showReviewSelect();
 }
 
@@ -3752,6 +3815,7 @@ function rdRate(ratingType) {
 
 // «حذف الآية من قائمة التعثر»
 function rdDelStumble() {
+    closeRdPop();
     if (!rd || rd.kind !== 'aqal' || !currentReviewItem) return;
     const store = loadAyahStore(currentReviewItem.riwaya);
     delete store[ayahKey(currentReviewItem.surah, currentReviewItem.ayah)];
@@ -3774,7 +3838,7 @@ function rdLoadAqal() {
     if (reviewScope === 'single') {      // آية اختارها المستعمل بنفسه من «قائمة آيات التعثر»
         const p = String(reviewSingle).split(':'), s = Number(p[0]), a = Number(p[1]);
         item = loadAyahStore(userRiwaya)[reviewSingle] ? { riwaya: userRiwaya, surah: s, ayah: a, key: reviewSingle } : null;
-        if (!item) { reviewScope = 'all'; rd = null; showAyahGrid(); return; }
+        if (!item) { reviewScope = 'all'; rd = null; showReviewSelect(); return; }
     } else item = pickNextAyahForReview(lastReviewedKey);
     currentReviewItem = item;
     if (!item) {
