@@ -582,11 +582,11 @@ body.dark-mode .cm-name { background: #1e293b; }
 .ps-row { position: relative; margin-bottom: 5px; }
 .ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 68px; box-sizing: border-box; }
 /* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
-.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; box-sizing: border-box; border-radius: 9px; border: 1.5px solid; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #fff; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
-.sd-btn.sd-g { background: #15803d; border-color: #166534; }
-.sd-btn.sd-r { background: #b91c1c; border-color: #991b1b; }
-body.dark-mode .sd-btn.sd-g { background: #166534; border-color: #4ade80; }
-body.dark-mode .sd-btn.sd-r { background: #991b1b; border-color: #f87171; }
+.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; box-sizing: border-box; border-radius: 9px; border: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #14532d; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
+.sd-btn.sd-g { background: rgba(34,197,94,0.32); color: #14532d; }
+.sd-btn.sd-r { background: rgba(249,115,22,0.30); color: #7c2d12; }
+body.dark-mode .sd-btn.sd-g { background: rgba(34,197,94,0.30); color: #bbf7d0; }
+body.dark-mode .sd-btn.sd-r { background: rgba(249,115,22,0.32); color: #fed7aa; }
 .sd-step { margin: 6px 0 4px; }
 .sd-step .stepper { width: 100%; height: 54px; }
 .sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
@@ -608,18 +608,14 @@ body.dark-mode .rc-x { color: #cbd5e1; }
 .rd-speed-wrap .stepper button { width: 44px; font-size: 22px; }
 .rd-speed-wrap .stepper .st-val { min-width: 42px; font-size: 17px; }
 .due-badge { display: inline-block; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #dc2626; color: #fff; font: bold 13px/22px sans-serif; font-style: normal; text-align: center; vertical-align: middle; margin-inline-end: 8px; }
-.resume-btn.cm-r1 { background: #e9d5ff; border-color: #c084fc; color: #3b0764; }
-.resume-btn.cm-r3 { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
-.resume-btn.cm-r4 { background: #fecdd3; border-color: #fb7185; color: #881337; }
-.resume-btn.last.cm-r1 { background: #4c1d95; border-color: #4c1d95; color: #fff; font-weight: bold; }
+.resume-btn.cm-r3 { background: rgba(34,197,94,0.26); border-color: rgba(22,163,74,0.5); color: #14532d; }
+.resume-btn.cm-r4 { background: rgba(59,130,246,0.24); border-color: rgba(37,99,235,0.5); color: #1e3a8a; }
 .resume-btn.last.cm-r3 { background: #14532d; border-color: #14532d; color: #fff; font-weight: bold; }
-.resume-btn.last.cm-r4 { background: #881337; border-color: #881337; color: #fff; font-weight: bold; }
-body.dark-mode .resume-btn.cm-r1 { background: #5b21b6 !important; border-color: #8b5cf6 !important; color: #fff !important; }
-body.dark-mode .resume-btn.cm-r3 { background: #166534 !important; border-color: #22c55e !important; color: #fff !important; }
-body.dark-mode .resume-btn.cm-r4 { background: #9f1239 !important; border-color: #f43f5e !important; color: #fff !important; }
-body.dark-mode .resume-btn.last.cm-r1 { background: #1e0b3d !important; border-color: #a78bfa !important; }
+.resume-btn.last.cm-r4 { background: #1e3a8a; border-color: #1e3a8a; color: #fff; font-weight: bold; }
+body.dark-mode .resume-btn.cm-r3 { background: rgba(34,197,94,0.30) !important; border-color: rgba(74,222,128,0.6) !important; color: #fff !important; }
+body.dark-mode .resume-btn.cm-r4 { background: rgba(59,130,246,0.34) !important; border-color: rgba(96,165,250,0.6) !important; color: #fff !important; }
 body.dark-mode .resume-btn.last.cm-r3 { background: #052e16 !important; border-color: #4ade80 !important; }
-body.dark-mode .resume-btn.last.cm-r4 { background: #4c0519 !important; border-color: #fb7185 !important; }
+body.dark-mode .resume-btn.last.cm-r4 { background: #172554 !important; border-color: #60a5fa !important; }
 .resume-btn .rb-sub { font-size: 12.5px; font-weight: normal; color: #475569; }
 body.dark-mode .resume-btn { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
 body.dark-mode .resume-btn .rb-sub { color: #cbd5e1 !important; }
@@ -681,17 +677,14 @@ body.dark-mode .rv-surah-sep { color: #6ee7b7; }
 .cm-ayahs { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 2px 8px; }
 .cm-a { flex: 0 0 auto; min-width: 36px; height: 34px; padding: 0 4px; font-family: inherit; font-size: 13px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer; }
 .cm-r0 { background: #fff; }
-.cm-r1 { background: #e9d5ff; border-color: #c084fc; }
-.cm-r3 { background: #bbf7d0; border-color: #4ade80; }
-.cm-r4 { background: #fecdd3; border-color: #fb7185; }
+.cm-r3 { background: rgba(34,197,94,0.26); border-color: rgba(22,163,74,0.5); }
+.cm-r4 { background: rgba(59,130,246,0.24); border-color: rgba(37,99,235,0.5); }
 .cm-a.cut { color: #fff; font-weight: bold; border-width: 2px; }
-.cm-a.cut.cm-r1 { background: #4c1d95; border-color: #4c1d95; }
 .cm-a.cut.cm-r3 { background: #14532d; border-color: #14532d; }
-.cm-a.cut.cm-r4 { background: #881337; border-color: #881337; }
+.cm-a.cut.cm-r4 { background: #1e3a8a; border-color: #1e3a8a; }
 body.dark-mode .cm-a.cut { background: #020617; color: #fff; }
-body.dark-mode .cm-a.cut.cm-r1 { background: #020617; border-color: #a78bfa; }
 body.dark-mode .cm-a.cut.cm-r3 { background: #020617; border-color: #4ade80; }
-body.dark-mode .cm-a.cut.cm-r4 { background: #020617; border-color: #fb7185; }
+body.dark-mode .cm-a.cut.cm-r4 { background: #020617; border-color: #60a5fa; }
 .cm-a.cut.sel, body.dark-mode .cm-a.cut.sel { background: #fde047 !important; border-color: #eab308 !important; color: #422006 !important; }
 .cm-a.sel { background: #fde047; border-color: #eab308; color: #422006; }
 .cm-pick { flex: 1 1 0; min-width: 0; height: 38px; padding: 0 2px; font-family: inherit; font-size: clamp(11px, 3.2vw, 14px); font-weight: bold; border-radius: 10px; border: 1.5px solid #94a3b8; color: #1e293b; cursor: pointer; white-space: nowrap; }
@@ -701,13 +694,12 @@ body.dark-mode .cm-a.cut.cm-r4 { background: #020617; border-color: #fb7185; }
 body.dark-mode .cm-mkbtn { background: #1e293b; border-color: #475569; color: #cbd5e1; }
 body.dark-mode .cm-mkbtn.on { border-color: #f87171; color: #f87171; background: #2a1215; }
 body.dark-mode .cm-a.mk, body.dark-mode .cm-a.mk.cut, body.dark-mode .cm-a.mk.sel { border: 2px solid #f87171 !important; }
-.cm-pick.cm-r1 { border-color: #c084fc; }.cm-pick.cm-r3 { border-color: #4ade80; }.cm-pick.cm-r4 { border-color: #fb7185; }
+.cm-pick.cm-r3 { border-color: #4ade80; }.cm-pick.cm-r4 { border-color: #60a5fa; }
 .cm-legend, .cm-status { flex: none; }
 body.dark-mode .cm-legend, body.dark-mode .cm-status, body.dark-mode .cm-name { color: #cbd5e1; }
 body.dark-mode .cm-a { background: #1e293b; border-color: #475569; color: #e2e8f0; }
-body.dark-mode .cm-r1 { background: #5b21b6; border-color: #8b5cf6; }
-body.dark-mode .cm-r3 { background: #166534; border-color: #22c55e; }
-body.dark-mode .cm-r4 { background: #9f1239; border-color: #f43f5e; }
+body.dark-mode .cm-r3 { background: rgba(34,197,94,0.30); border-color: rgba(74,222,128,0.6); }
+body.dark-mode .cm-r4 { background: rgba(59,130,246,0.34); border-color: rgba(96,165,250,0.6); }
 body.dark-mode .cm-r0 { background: #1e293b; }
 body.dark-mode .cm-a.sel { background: #facc15; border-color: #eab308; color: #422006; }
 body.dark-mode .cm-pick { color: #f1f5f9; }
@@ -762,8 +754,6 @@ body.dark-mode .rd-hint { color: #cbd5e1; }
 .rd-msg { white-space: pre-line; text-align: center; font-size: 18px; line-height: 2; color: #475569; padding: 18px 6px; }
 body.dark-mode .rd-msg { color: #cbd5e1; }
 .rd-hint:empty { display: none; }
-.rd-fab-wrap { position: sticky; top: 0; height: 0; flex: none; align-self: stretch; z-index: 6; margin: 0 0 -8px !important; }
-.rd-moon { position: absolute; left: 0; top: -6px; }
 .hf-btn.rd-back { background: #e2e8f0 !important; border-color: #94a3b8 !important; color: #334155 !important; }
 body.dark-mode .hf-btn.rd-back { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
 .rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; direction: rtl; }
@@ -788,8 +778,6 @@ body.dark-mode #rs-up { background: #2dd4bf; }
 body.dark-mode #rs-real { background: #0f766e; }
 .hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; box-shadow: inset 0 0 0 1.5px #dc2626; position: relative; z-index: 2; }
 body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; box-shadow: inset 0 0 0 1.5px #f87171; }
-#dark-mode-btn.rd-moon { background: #283593 !important; border-color: #5c6bc0 !important; color: #fde047 !important; opacity: 1; }
-body.dark-mode #dark-mode-btn.rd-moon { background: #1a237e !important; border-color: #7986cb !important; color: #fde047 !important; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .rd-cell .hf-btn { width: 100%; white-space: nowrap; }
@@ -845,9 +833,9 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
 .rs-step { border-radius: 14px; }
-.rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; border: 1.5px solid #99f6e4; background: linear-gradient(180deg, #f0fdfa, #ccfbf1); box-shadow: 0 2px 8px rgba(13,148,136,0.18); }
+.rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: linear-gradient(180deg, #ffffff, #f1f5f9); box-shadow: 0 2px 8px rgba(15,23,42,0.10); }
 .rd-strip.hidden { margin-top: 0; padding: 0; border: 0; box-shadow: none; }
-body.dark-mode .rd-strip { border-color: #0f766e; background: linear-gradient(180deg, #1e293b, #0f2f2d); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+body.dark-mode .rd-strip { border-color: #334155; background: linear-gradient(180deg, #1e293b, #172033); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .rs-step.rs-wide { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 .rs-step.rs-wide svg { width: 16px; height: 16px; }
 .rs-step.rs-resume { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center; background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
@@ -906,9 +894,9 @@ const LS_KEYS = {
     ayahs: (riwaya) => "ibnbadis.ayahs.v1." + riwaya,   // قائمة عقال الآيات: {"سورة:آية": {d: صعوبة, t: آخر مراجعة}}
     midrev: "ibnbadis.midrev.v1",     // «المراجعة المتوسطة»: [{riwaya, segs:[{surah,start,end}]}]
     active: (riwaya) => "ibnbadis.active.v1." + riwaya,   // الآيات المفعَّلة في المراجعة اليومية: {"سورة": [[بداية,نهاية],...]}
-    newrev: "ibnbadis.newrev.v1",     // قائمة «مراجعة الحفظ الجديد»: [{riwaya, surah, start, end, t}] الأحدث أخيراً
+    newrev: "ibnbadis.newrev.v1",     // قديم («الجديد» أُلغي): يُنقل إلى prog عند التحميل
     cuts: (riwaya) => "ibnbadis.cuts.v1." + riwaya,   // فواصل الأجزاء داخل المقطع الواحد: {"سورة": [آخر آية في الجزء,...]}
-    prog: "ibnbadis.prog.v1",         // مقاطع «قيد الحفظ» (يحفظها الآن ولم تدخل «الجديد» بعد): [{riwaya, surah, start, end}]
+    prog: "ibnbadis.prog.v1",         // مقاطع «قيد الحفظ» (يحفظها الآن): [{riwaya, surah, start, end}]
     sched: "ibnbadis.sched.v1",       // جدولة المراجعة اليدوية لكل مقطع: {"رواية:درجة:...": {n: المدة التي اختارها بالأيام, d: رقم يوم الاستحقاق, l: رقم يوم آخر تأكيد}}
     lastpass: "ibnbadis.lastpass.v1", // آخر مقطع فُتح في كل قائمة: {"رواية:درجة": {s, a}} (أول آية فيه)
     prep: "ibnbadis.prep.v2",        // المقطع الأخير في «الحفظ مع الشيخ»: {riwaya, surah, start, end, cuts[]}
@@ -983,15 +971,17 @@ let userRate = 1;
 let userRep = 1;          // عدد تكرارات قراءة الشيخ
 let userRepMode = 'ayah';  // ayah: كل آية بعدد التكرار ثم التالية | all: المقطع كله | part: الجزء الملوَّن المحدَّد فقط
 
-// «المتوسط» أُلغي: ما صُنِّف فيه سابقاً ينتقل إلى «الجديد» (مع عدّاد مراجعاته)
+// «المتوسط» و«الجديد» أُلغيا: ما صُنِّف فيهما سابقاً ينتقل إلى «قيد الحفظ»
 function migrateMidToNew() {
+    const out = [];
     const ml = lsGet(LS_KEYS.midrev, []);
-    if (!Array.isArray(ml) || !ml.length) return;
+    if (Array.isArray(ml)) ml.forEach((u) => (u.segs || []).forEach((g) => out.push({ riwaya: u.riwaya, surah: g.surah, start: g.start, end: g.end })));
     const nl = lsGet(LS_KEYS.newrev, []);
-    const out = Array.isArray(nl) ? nl : [];
-    ml.forEach((u) => (u.segs || []).forEach((g) => out.push({ riwaya: u.riwaya, surah: g.surah, start: g.start, end: g.end })));
-    lsSet(LS_KEYS.newrev, out);
+    if (Array.isArray(nl)) nl.forEach((e) => out.push({ riwaya: e.riwaya, surah: e.surah, start: e.start, end: e.end }));
+    if (!out.length) return;
+    lsSet(LS_KEYS.prog, progLoad().concat(out));
     lsSet(LS_KEYS.midrev, []);
+    lsSet(LS_KEYS.newrev, []);
 }
 
 function loadSettings() {
@@ -1274,8 +1264,7 @@ function showMainButtons() {
                 </div>
                 <div class="menu-item menu-row3">
                     <button class="btn-main" id="menu-prog-btn" onclick="showProgList()"><span id="menu-prog-lab">قيد الحفظ</span></button>
-                    <button class="btn-main" onclick="showNewReviewList()">جديد</button>
-                    <button class="btn-main" onclick="showRasikhList()">راسخ</button>
+                    <button class="btn-main" onclick="showRasikhList()">المحفوظ</button>
                 </div>
                 <div class="menu-item">
                     <button class="btn-secondary" onclick="showReviewSelect()" style="width: 100%;">عقال الآيات</button>
@@ -1750,8 +1739,7 @@ function activeAdd(riwaya, segs) {
 // الجديد (مقاطع «مراجعة الجديد»)، وإلا غير مصنف. التصنيف الجديد يقتطع الآيات من درجتها السابقة.
 // ==========================================================
 const CLS_CATS = {
-    rasikh: { name: 'الراسخ', rank: 3 },
-    new: { name: 'الجديد', rank: 1 },
+    rasikh: { name: 'المحفوظ', rank: 3 },
     prog: { name: 'قيد الحفظ', rank: 4 },
     none: { name: 'غير مصنف', rank: 0 }
 };
@@ -1777,12 +1765,6 @@ function clsRemove(surah, start, end) {
         if (r.length) act[k] = mergeRanges(r); else delete act[k];
         lsSet(LS_KEYS.active(rw), act);
     }
-    const nl = [];
-    newReviewLoad().forEach((e) => {
-        if (e.riwaya !== rw || e.surah !== surah) { nl.push(e); return; }
-        subRange(e.start, e.end, start, end).forEach(([a, b]) => nl.push(Object.assign({}, e, { start: a, end: b })));
-    });
-    lsSet(LS_KEYS.newrev, nl);
     const pl = [];
     progLoad().forEach((e) => {
         if (e.riwaya !== rw || e.surah !== surah) { pl.push(e); return; }
@@ -1797,15 +1779,14 @@ function clsRemove(surah, start, end) {
     }
 }
 
-// رتبة كل آية (0 غير مصنف، 1 جديد، 3 راسخ، 4 قيد الحفظ) لكل السور
+// رتبة كل آية (0 غير مصنف، 3 محفوظ، 4 قيد الحفظ) لكل السور
 function clsRanks() {
     const rw = userRiwaya, arr = {};
     const get = (s) => arr[s] || (arr[s] = new Uint8Array((getAyatCount(s) || 0) + 2));
     const mark = (s, a, b, v) => { const x = get(s); for (let n = Math.max(1, a); n <= Math.min(b, x.length - 2); n++) if (x[n] < v) x[n] = v; };
     const act = activeLoad(rw);
     Object.keys(act).forEach((k) => (act[k] || []).forEach(([a, b]) => mark(Number(k), a, b, 3)));
-    newReviewLoad().forEach((e) => { if (e.riwaya === rw) mark(e.surah, e.start, e.end, 1); });
-    // «قيد الحفظ» أضعف الدرجات عند التداخل: لا يظهر إلا حيث لا درجة أخرى (مثلاً بعد انتقال المقطع إلى «الجديد»)
+    // «قيد الحفظ» أضعف الدرجات عند التداخل: لا يظهر إلا حيث لا درجة أخرى
     progLoad().forEach((e) => {
         if (e.riwaya !== rw) return;
         const x = get(e.surah);
@@ -1833,7 +1814,6 @@ function clsAssignRange(cat, s1, a1, s2, b2) {
     }
     segs.forEach((g) => clsRemove(g.surah, g.start, g.end));
     if (cat === 'rasikh') activeAdd(rw, segs);
-    else if (cat === 'new') { const l = newReviewLoad(); segs.forEach((g) => l.push({ riwaya: rw, surah: g.surah, start: g.start, end: g.end })); lsSet(LS_KEYS.newrev, l); }
     else if (cat === 'prog') { const l = progLoad(); segs.forEach((g) => l.push({ riwaya: rw, surah: g.surah, start: g.start, end: g.end })); lsSet(LS_KEYS.prog, l); }
     const R1 = clsRanks();
     prevEnds.forEach(([q, n, x]) => { if (R1.get(q)[n] === x && clsNextRank(R1, q, n) === x) clsAddCut(q, n); });
@@ -1923,22 +1903,21 @@ function showClassifyPage() {
     clsOpen = new Set([0]); clsLast = null;
     clsA = null; clsB = null; clsScroll = 0;
     if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
-    const html = `
+    hfPage('clsSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
-            <div class="rd-fab-wrap"><button type="button" id="dark-mode-btn" class="hf-small rd-moon" onclick="toggleDarkMode()" aria-label="الوضع الليلي">${isDarkMode ? '☀️' : '☾'}</button></div>
-            <div class="surah-title select-title" style="padding-left: 40px;">تصنيف القرآن حسب درجة الحفظ</div>
-            <div class="cm-legend cm-marks">${['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<button type="button" id="cm-mk-${k}" class="cm-mkbtn${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button>`).join('')}</div>
-            <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r1" onclick="clsApply('new')">جديد</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">راسخ</button></div>
+            <div class="surah-title select-title">تصنيف القرآن حسب درجة الحفظ</div>
+            <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">المحفوظ</button></div>
             <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
         </div>
-        <div id="cls-row" class="hf-grid3" style="grid-template-columns: repeat(4, 1fr);">
-            <div class="rd-cell cls-text-cell hidden" id="cls-text-cell" style="grid-column: 1 / span 3;"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">نص الآية</button></div>
-            <div class="rd-cell" style="grid-column: 4;"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="showMainButtons()">العودة</button></div>
-        </div>
-    `;
-    renderInContainer(html);
-    applyTheme();
+        <div id="cls-row" class="hf-grid3" style="grid-template-columns: 1fr;">
+            <div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>
+        </div>`);
+}
+// إعدادات التصنيف: حدّ المقطع (صفحة/ثمن/ربع/نصف/حزب) يُضع عليه إطار أحمر
+function clsSettingsOpen() {
+    pgPopOpen(`<div class="modal-title">الإعدادات</div><div class="rd-set-lbl">إطار أحمر على نهاية</div>
+        <div class="cm-legend cm-marks">${['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<button type="button" id="cm-mk-${k}" class="cm-mkbtn${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button>`).join('')}</div>`);
 }
 
 function clsCloseText() { const d = document.getElementById('cls-txt-pop'); if (d) d.remove(); }
@@ -1992,7 +1971,7 @@ function clsSetMark(k) {
         return;
     }
     clsMark = clsMark === k ? null : k;
-    document.querySelectorAll('.cm-mkbtn').forEach((b) => b.classList.toggle('on', b.id === 'cm-mk-' + clsMark));
+    pgPopClose();
     const mk = clsMarkSet(), off = clsOffsets();
     document.querySelectorAll('#cm-map .cm-a').forEach((e) => e.classList.toggle('mk', !!mk && mk.has(off[+e.dataset.s] + +e.dataset.a)));
 }
@@ -2000,7 +1979,7 @@ function clsSetMark(k) {
 // ضغطة في أي مكان من الشاشة: تلغي التحديد الكامل (الأصفر)، وأزرار الدرجات في الأعلى تصنّفه
 function clsGlobalTap(ev) {
     const t = ev.target;
-    if (t.closest && (t.closest('.cm-pick') || t.closest('.cm-mkbtn') || t.closest('.cm-name'))) return;
+    if (t.closest && (t.closest('.cm-pick') || t.closest('.cm-name'))) return;
     if (clsA && clsB) { clsA = null; clsB = null; clsPaint(); return; }
     clsTap(ev);
 }
@@ -2063,32 +2042,11 @@ function clsApply(cat) {
 // لا تعثّر ولا عقال آيات هنا، ولا يتغير موضع التوقف الخاص بالمراجعة اليومية.
 // ==========================================================
 let newReviewMode = false;
-let reviewOrigin = 'new';        // قائمة الرجوع: 'new' أو 'rasikh'
-
-function newReviewLoad() {
-    const l = lsGet(LS_KEYS.newrev, []);
-    return Array.isArray(l) ? l : [];
-}
+let reviewOrigin = 'rasikh';     // قائمة الرجوع
 
 function unitLabelOf(segs) {
     const f = segs[0], l = segs[segs.length - 1];
     return f.surah === l.surah ? `${surahsNames[f.surah]} — من ${f.start} إلى ${l.end}` : `من ${surahsNames[f.surah]} ${f.start} إلى ${surahsNames[l.surah]} ${l.end}`;
-}
-
-let newList = [];
-function showNewReviewList() {
-    newList = rankPassages(1);
-    const li = lastPassIndex(1, newList.map((p) => p.segs));
-    renderPassageList({
-        items: newList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r1', last: i === li, sig: passSig(1, p.segs), sched: passSig(1, p.segs) })),
-        startFn: 'startNewPassage', kind: 'new', title: 'اختر المقطع الذي تريد مراجعته',
-        empty: 'لا توجد مقاطع في «الجديد» بعد.<br>صنّف ما حفظتَه حديثاً من «تصنيف القرآن» باختيار «جديد».'
-    });
-}
-
-function startNewPassage(k) {
-    const p = newList[k];
-    if (p) { lastPassSet(1, p.segs[0].surah, p.segs[0].start); startUnitReview('new', p.segs); }
 }
 
 // ---------- قائمتا «الحفظ مع الشيخ» و«مراجعة الراسخ»: المقاطع المصنَّفة ----------
@@ -2103,7 +2061,7 @@ function passChanged() {
     Object.keys(lp).forEach((k) => { if (k.startsWith(pre)) delete lp[k]; });
     lsSet(LS_KEYS.lastpass, lp);
     const ok = new Set();
-    [1, 3, 4].forEach((r) => rankPassages(r).forEach((p) => (r === 4 ? p.segs.map((g) => [g]) : [p.segs]).forEach((sg) => ok.add(passSig(r, sg)))));
+    [3, 4].forEach((r) => rankPassages(r).forEach((p) => (r === 4 ? p.segs.map((g) => [g]) : [p.segs]).forEach((sg) => ok.add(passSig(r, sg)))));
     const sc = lsGet(LS_KEYS.sched, {}) || {};
     Object.keys(sc).forEach((k) => { if (k.startsWith(pre) && !ok.has(k)) delete sc[k]; });
     lsSet(LS_KEYS.sched, sc);
@@ -2192,16 +2150,16 @@ function psSetFilter(f) {
 function psGoKind(k) {
     pgPopClose();
     if (k === psKind) return;
-    if (k === 'new') showNewReviewList(); else if (k === 'rasikh') showRasikhList(); else showProgList();
+    if (k === 'rasikh') showRasikhList(); else showProgList();
 }
-// إعدادات القوائم: العرض (الكل/المستحق) والنوع (قيد الحفظ/جديد/راسخ) دون الرجوع إلى الرئيسية
+// إعدادات القوائم: العرض (الكل/المستحق) والنوع (قيد الحفظ/المحفوظ) دون الرجوع إلى الرئيسية
 function psSettingsOpen() {
     const f = (id, cur, lab, fn) => `<button type="button" id="${id}" class="resume-btn rd-pop-item${cur ? ' on' : ''}" onclick="${fn}"><span class="rb-main">${lab}</span></button>`;
     pgPopOpen(`<div class="modal-title">الإعدادات</div>
         <div class="rd-set-lbl">العرض</div>
         <div class="rd-pop-list pg-row">${f('ps-set-all', psFilter === 'all', 'الكل', "psSetFilter('all')")}${f('ps-set-red', psFilter === 'red', 'المستحق', "psSetFilter('red')")}</div>
         <div class="rd-set-lbl">النوع</div>
-        <div class="rd-pop-list pg-row">${f('ps-k-prog', psKind === 'prog', 'قيد الحفظ', "psGoKind('prog')")}${f('ps-k-new', psKind === 'new', 'جديد', "psGoKind('new')")}${f('ps-k-rasikh', psKind === 'rasikh', 'راسخ', "psGoKind('rasikh')")}</div>`);
+        <div class="rd-pop-list pg-row">${f('ps-k-prog', psKind === 'prog', 'قيد الحفظ', "psGoKind('prog')")}${f('ps-k-rasikh', psKind === 'rasikh', 'المحفوظ', "psGoKind('rasikh')")}</div>`);
 }
 
 // مقاطع «قيد الحفظ»: كل مقطع مصنَّف في سورة واحدة (يُقصّ مما صار في درجة أخرى)
@@ -2219,7 +2177,7 @@ function showProgList() {
         items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li, sched: passSig(4, [g]) })),
         startFn: 'startProgPassage', kind: 'prog',
         title: 'اختر المقطع الذي تحفظه',
-        empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «قيد الحفظ».'
+        empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «تصنيف القرآن» باختيار «قيد الحفظ».'
     });
 }
 
@@ -2267,7 +2225,7 @@ function showRasikhList() {
         items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li, sched: passSig(3, p.segs) })),
         startFn: 'startRasikhPassage', kind: 'rasikh',
         title: 'اختر المقطع الذي تريد مراجعته',
-        empty: 'لا توجد مقاطع في «الراسخ» بعد.<br>صنّف ما حفظتَه من «الإعدادات ← تصنيف القرآن حسب درجة الحفظ» باختيار «راسخ».'
+        empty: 'لا توجد مقاطع في «المحفوظ» بعد.<br>صنّف ما حفظتَه من «تصنيف القرآن» باختيار «المحفوظ».'
     });
 }
 
@@ -2650,7 +2608,6 @@ let rdCancelArmed = false, rdCancelTimer = null;
 // نوع الجلسة ← سلوكها
 const RD_KINDS = {
     prep:   { startHidden: false, stumble: false },
-    new:    { startHidden: false, stumble: false },
     rasikh: { startHidden: false, stumble: true },
     aqal:   { startHidden: true,  stumble: false }
 };
@@ -3795,7 +3752,7 @@ function rdEndNow() {
     rdRecDiscard();
     const k = rd.kind;
     if (k === 'prep') { rdTeardown(); rd = null; showProgList(); return; }
-    if (k === 'new' || k === 'rasikh') { leaveNewReview(); return; }
+    if (k === 'rasikh') { leaveNewReview(); return; }
     leaveReviewScreen();
 }
 
@@ -3854,7 +3811,7 @@ function rdLoadAqal() {
         else if (reviewOnlyKeys) msg = "أنهيتَ مراجعة الآيات التي تعثرت فيها في هذه الجلسة.\nيمكنك العودة إلى القائمة الرئيسية.";
         else msg = hasAny
             ? "لا توجد آيات مستحقة للمراجعة الآن.\nارجع لاحقاً؛ تظهر الآية هنا عندما يحين وقت مراجعتها."
-            : "لا توجد آيات في عقال الآيات بعد.\nابدأ بمراجعة الراسخ، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
+            : "لا توجد آيات في عقال الآيات بعد.\nابدأ بمراجعة المحفوظ، وعندما تتعثر في آية اضغط عليها ثم «تعثر» لتُضاف إلى هنا.";
         rdOpen({ kind: 'aqal', items: [], title: 'سورة: ---', msg });
         updateDueCounts();
         return;
@@ -3902,7 +3859,7 @@ function startUnitReview(origin, segs) {
     reviewOrigin = origin;
     rdOpen({
         kind: origin, items: all,
-        lead: rdLeadFor(all[0].s, all[0].a), sig: passSig(origin === 'new' ? 1 : 3, segs),
+        lead: rdLeadFor(all[0].s, all[0].a), sig: passSig(3, segs),
         tail: rdCtxTail(all[all.length - 1]),
         title: unitLabelOf(segs)
     });
@@ -3934,7 +3891,7 @@ function leaveNewReview() {
     const keys = reviewOrigin === 'rasikh' ? sessionStumbleKeys() : [];
     rdTeardown();
     rd = null;
-    if (reviewOrigin === 'rasikh') showRasikhList(); else showNewReviewList();
+    showRasikhList();
     if (keys.length) showStumbleReviewPrompt(keys);
 }
 
