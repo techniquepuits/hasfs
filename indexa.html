@@ -896,6 +896,10 @@ body.dark-mode .rs-lab { color: #c5cae9; }
 .rd-pillrow { display: flex; justify-content: center; flex-shrink: 0; }
 .rd-pillrow:empty { display: none; }
 .rd-sname { width: 50% !important; min-height: 34px; padding: 4px 6px !important; font-size: 14px !important; border: 0 !important; border-radius: 3px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* الجولة 90 */
+.hf-btn.tb-btn.rd-sname { border: 0 !important; box-shadow: none; }
+.rs-step { display: flex; align-items: center; justify-content: center; line-height: 0; }
+.rs-step svg { display: block; }
 </style>
 </head>
 <body>
@@ -2892,10 +2896,10 @@ function rdRenderBars() {
     if (tt) tt.classList.toggle('on', !!rd.tafMode);
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
-    // زر اسم الشيخ (نصف العرض): يظهر بعد بدء القراءة (وفي عقال الآيات دائماً لأن «حذف الآية» في نافذته)؛ يوقف القراءة ويفتح التغيير
+    // زر اسم الشيخ (نصف العرض، بلا إطار): لا يظهر في أي صفحة إلا بعد الضغط على «الشيخ» العلوي، ويبقى بعد توقف القراءة؛ يوقف القراءة ويفتح التغيير
     const pr = document.getElementById('rd-pillrow');
     if (pr) {
-        const pillShow = !none && recOn === false && !recPaused && !recDone && !rd.tafMode && (sheikhPlaying || rd.pillOn || rd.kind === 'aqal');
+        const pillShow = !none && recOn === false && !recPaused && !recDone && !rd.tafMode && (sheikhPlaying || rd.pillOn);
         const nm = (SHEIKH_RECITERS.find((r) => r.id === userSheikh) || SHEIKH_RECITERS[0]).name.replace(/\s*[(（].*$/, '');
         pr.innerHTML = pillShow ? `<button type="button" id="rd-sname" class="btn-secondary hf-btn tb-btn rd-sname${sheikhPlaying ? ' on' : ''}" onclick="rdOpenSettings()">${nm}</button>` : '';
     }
@@ -3290,7 +3294,7 @@ function rdSetHtml() {
             <span class="stepper"><button type="button" id="rd-rep-minus" onclick="rdRepStep(-1)" aria-label="إنقاص">−</button><span id="rd-rep-n" class="st-val">${userRep}</span><button type="button" id="rd-rep-plus" onclick="rdRepStep(1)" aria-label="زيادة">+</button></span>
         </div>
         ${rd && rd.kind === 'aqal' ? `<div class="rd-set-lbl">قائمة التعثر</div><button type="button" id="rd-del" class="btn-secondary hf-btn rd-delbtn" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button>` : ''}
-        <div class="modal-actions"><button type="button" class="btn-start-review" id="rd-set-done" onclick="rdSetDone()">تم</button></div>`;
+        <div class="modal-actions"><button type="button" class="btn-start-review" id="rd-set-done" onclick="rdSetConfirm()">تأكيد</button></div>`;
 }
 
 function rdOpenSettings() {
@@ -3323,6 +3327,12 @@ function rdRepStep(delta) {
     userRep = Math.max(1, Math.min(30, userRep + delta));
     saveSettings();
     rdSetRefresh();
+}
+
+// «تأكيد»: يغلق النافذة ويبدأ الشيخ القراءة مباشرة بالإعدادات الجديدة
+function rdSetConfirm() {
+    rdSetDone();
+    if (rd && rd.items.length && !(rdPlaying && rdAudioKind === 'sheikh')) rdToggleSheikh();
 }
 
 function rdSetDone() {
