@@ -855,6 +855,44 @@ body.dark-mode .rec-dot { background: #f87171; }
 body.dark-mode .rd-recbox { border-color: #f87171; background: rgba(248, 113, 113, 0.12); }
 body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { color: #fca5a5; }
 .rs-play { color: #115e59; }
+
+/* ===== الجولة 86: لمسة جمالية موحّدة للأزرار ===== */
+.rd-bar { gap: 8px; box-sizing: border-box; }
+.rd-bar .rd-cell + .rd-cell { margin-inline-start: 0; }
+.rd-bar .hf-btn { border-radius: 12px !important; border-width: 0 !important; }
+.rd-page > .rd-top { padding: 10px 12px 0; margin-bottom: 10px; }
+.rd-page > #rd-row1, .rd-page > .rd-bot { padding: 0 12px 10px; }
+.rd-top.has-home { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.5fr); }
+.hf-btn.tb-btn { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
+.hf-btn.tb-btn.on { background: #283593 !important; color: #fff !important; }
+body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
+body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; color: #fff !important; }
+.rd-bot .hf-btn:not(.rd-on):not(.rd-confirm):not(.rd-back), #rd-row1 .hf-btn:not(.rd-on):not(.rd-confirm):not(.rd-back), .rd-showhint { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
+body.dark-mode .rd-bot .hf-btn:not(.rd-on):not(.rd-confirm):not(.rd-back), body.dark-mode #rd-row1 .hf-btn:not(.rd-on):not(.rd-confirm):not(.rd-back), body.dark-mode .rd-showhint { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
+.rd-bot .hf-btn.rd-back, #rd-row1 .hf-btn.rd-back { background: rgba(100, 116, 139, 0.2) !important; color: #334155 !important; }
+body.dark-mode .rd-bot .hf-btn.rd-back, body.dark-mode #rd-row1 .hf-btn.rd-back { background: rgba(148, 163, 184, 0.2) !important; color: #e2e8f0 !important; }
+.rd-homebtn .mi, .rd-homebtn svg { width: 20px; height: 20px; }
+.app-riwaya { font-size: 13px; font-weight: 700; color: #7a9a90; margin: 2px 0 0; }
+body.dark-mode .app-riwaya { color: #94a3b8 !important; }
+.menu-head { padding-bottom: clamp(14px, 3.2vh, 30px); }
+.welcome-riwaya { margin-bottom: 35px; }
+/* مشغّل التسجيل: خلفية رمادية دافئة، وزر العرض الرئيسي مصمت */
+.rd-strip { background: #f3f0ea; border: 1px solid #e0dacd; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.rs-step { border: 0; background: rgba(40, 53, 147, 0.14); color: #283593; }
+.rs-step.rs-play { background: #283593; color: #fff; }
+.rs-step.rs-resume { background: #fee2e2; color: #b91c1c; border: 0; }
+.rs-box { background: #d6d9e8; }
+#rs-real { background: #283593; }
+#rs-up { background: #9fa8da; }
+.rs-lab { color: #3949ab; }
+body.dark-mode .rd-strip { background: #1f2630; border-color: #323c4a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+body.dark-mode .rs-step { background: rgba(159, 168, 218, 0.2); color: #c5cae9; }
+body.dark-mode .rs-step.rs-play { background: #3949ab; color: #fff; }
+body.dark-mode .rs-step.rs-resume { background: #5b1a1a; color: #fecaca; }
+body.dark-mode .rs-box { background: #334155; }
+body.dark-mode #rs-real { background: #5c6bc0; }
+body.dark-mode #rs-up { background: #c5cae9; }
+body.dark-mode .rs-lab { color: #c5cae9; }
 </style>
 </head>
 <body>
@@ -1205,6 +1243,9 @@ function toggleDarkMode() {
 
 }
 
+// سطر الرواية المختارة (مصدر واحد؛ تغييرها من الإعدادات فقط)
+function riwayaLine() { return 'برواية ' + (userRiwaya === 1 ? 'حفص عن عاصم' : 'ورش عن نافع'); }
+
 function showWelcomeScreen() {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     const welcomeScreenHTML = `
@@ -1214,7 +1255,8 @@ function showWelcomeScreen() {
         <div id="welcome-screen" class="home-content">
             <div class="app-icon">📖</div>
             <div class="app-title">ابن باديس</div>
-            <div class="app-slogan">تثبيت حفظ القرآن الكريم</div>
+            <div class="app-slogan" style="margin-bottom: 4px;">تثبيت حفظ القرآن الكريم</div>
+            <div class="app-riwaya welcome-riwaya" id="welcome-riwaya">${riwayaLine()}</div>
             <button class="btn-main" onclick="handleStartAppProcess()">ابدأ الان</button>
             <button id="install-app-btn" class="btn-install" style="display: none; margin-top: 12px;" onclick="installAppToDevice()">📥 تنزيل وتثبيت التطبيق</button>
         </div>
@@ -1265,6 +1307,7 @@ function showMainButtons() {
                 <div class="app-icon" style="font-size: 40px; margin-bottom: 5px;">📖</div>
                 <div class="app-title" style="font-size: 24px; margin-bottom: 2px;">ابن باديس</div>
                 <div class="app-slogan" style="font-size: 13px; margin-bottom: 0;">تثبيت حفظ القرآن الكريم</div>
+                <div class="app-riwaya" id="menu-riwaya">${riwayaLine()}</div>
             </div>
 
             <div class="menu-buttons">
@@ -2674,10 +2717,11 @@ function rdRenderPage(keep) {
     if (!rd) return;
     const aq = rd.kind === 'aqal';
     const html = `
-        <div id="rd-top" class="rd-bar rd-top">
+        <div id="rd-top" class="rd-bar rd-top has-home">
             <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
             <div class="rd-cell"><button type="button" id="rd-settings" class="btn-secondary hf-btn tb-btn" onclick="rdOpenSettings()">الإعدادات</button></div>
             <div class="rd-cell"><button type="button" id="rd-taf" class="btn-secondary hf-btn tb-btn" onclick="rdToggleTafsir()">التفسير</button></div>
+            <div class="rd-cell"><button type="button" id="rd-home" class="btn-secondary hf-btn tb-btn rd-homebtn" onclick="goHomeNow()" aria-label="الرئيسية" title="الرئيسية">${RD_ICONS.home}</button></div>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
             <div class="rd-head">
@@ -3483,8 +3527,14 @@ function rdStripGeom() {
 const RD_ICONS = {
     play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 4.5v15L4 12z" fill="currentColor"/></svg>',
     pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>',
-    back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>'
+    back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
+    home: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z" fill="currentColor"/></svg>'
 };
+// «الرئيسية»: خروج مباشر من القارئ إلى القائمة الرئيسية (بلا تأكيد مراجعة)
+function goHomeNow() {
+    if (rd) { try { rdStopAudio(true); rdRecDiscard(); } catch (e) {} }
+    showMainButtons();
+}
 function rdStripTimerStop() { if (rdStripTimer) { clearInterval(rdStripTimer); rdStripTimer = null; } }
 function rdStripTick() {
     if (!document.getElementById('rs-real')) { rdStripTimerStop(); return; }
