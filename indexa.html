@@ -836,7 +836,7 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 /* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
 #rd-text, #rd-text .prep-ayah, #rd-text .at, #rd-text .ayah-blue, #rd-text .rv-surah-sep { font-family: 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif; }
 #rd-text .ayah-blue { font-weight: normal; }
-.rd-showhint { width: 100%; min-height: 44px; border-radius: 14px !important; }
+.rd-showhint { width: 100%; min-height: 44px; border-radius: 0 !important; }
 .rd-delbtn { width: 100%; margin: 6px 0 10px; border-radius: 12px !important; color: #b91c1c !important; }
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
@@ -857,12 +857,13 @@ body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { colo
 .rs-play { color: #115e59; }
 
 /* ===== الجولة 86: لمسة جمالية موحّدة للأزرار ===== */
-.rd-bar { gap: 8px; box-sizing: border-box; }
+.rd-bar { gap: 4px; box-sizing: border-box; }
 .rd-bar .rd-cell + .rd-cell { margin-inline-start: 0; }
-.rd-bar .hf-btn { border-radius: 12px !important; border-width: 0 !important; }
+.rd-bar .hf-btn { border-radius: 0 !important; border-width: 0 !important; }
 .rd-page > .rd-top { padding: 10px 12px 0; margin-bottom: 10px; }
 .rd-page > #rd-row1, .rd-page > .rd-bot { padding: 0 12px 10px; }
-.rd-top.has-home { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.5fr); }
+.rd-top.has-moon { grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); }
+.rd-top.has-home { grid-template-columns: minmax(0, 0.5fr) repeat(2, minmax(0, 1fr)) minmax(0, 0.5fr); }
 .hf-btn.tb-btn { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
 .hf-btn.tb-btn.on { background: #283593 !important; color: #fff !important; }
 body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
@@ -1208,12 +1209,12 @@ function fitDarkBtn() {
     const btn = document.getElementById('dark-mode-btn');
     if (!btn) return;
     if (btn.classList.contains('hf-small')) { btn.textContent = isDarkMode ? '☀️' : '☾'; return; }
-    if (btn.classList.contains('rd-moonbar')) {   // شريط القارئ: الأيقونة ثم الاسم، والاسم يسقط إن ضاق الزر
+    if (btn.classList.contains('rd-moonbar')) {   // أزرار الأشرطة: أيقونة فقط (هلال/شمس)
         const nm = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
         btn.title = nm;
         btn.classList.toggle('on', !!isDarkMode);
-        btn.innerHTML = `<span class="mi">${isDarkMode ? '☀' : '☾'}</span><span class="ml">${nm}</span>`;
-        if (btn.scrollWidth > btn.clientWidth + 1) btn.querySelector('.ml').remove();
+        btn.setAttribute('aria-label', nm);
+        btn.innerHTML = `<span class="mi">${isDarkMode ? '☀' : '☾'}</span>`;
         return;
     }
     const full = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
@@ -2303,7 +2304,7 @@ let prepEndStr = "";
 
 // الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات]؛ و«العودة» دائماً في الأسفل
 function hfTopBar(settingsFn) {
-    return `<div id="rd-top" class="rd-bar rd-top">
+    return `<div id="rd-top" class="rd-bar rd-top has-moon">
         <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
         <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}">الإعدادات</button></div>
     </div>`;
