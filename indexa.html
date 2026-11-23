@@ -831,11 +831,13 @@ body.dark-mode #dark-mode-btn.rd-moonbar .mi { color: #fde047; }
 .ag-btn.ag-due { background: rgba(220, 38, 38, 0.18); border-color: #dc2626; color: #7f1d1d; }
 body.dark-mode .ag-btn { background: #1e293b; border-color: #475569; color: #e2e8f0; }
 body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color: #f87171; color: #fee2e2; }
-.rd-page > #rd-row1 { margin: 0; }
+.rd-page > #rd-row1, .rd-page > .rd-bot { margin: 0; }
 .rd-page .rd-bar .hf-btn { border-left-width: 1.5px; }
 /* خط واحد لنص الآيات، والمطلع/الخاتمة بالأزرق بالوزن نفسه */
 #rd-text, #rd-text .prep-ayah, #rd-text .at, #rd-text .ayah-blue, #rd-text .rv-surah-sep { font-family: 'Amiri Quran', 'Amiri', 'Traditional Arabic', serif; }
 #rd-text .ayah-blue { font-weight: normal; }
+.rd-showhint { width: 100%; min-height: 44px; border-radius: 14px !important; }
+.rd-delbtn { width: 100%; margin: 6px 0 10px; border-radius: 12px !important; color: #b91c1c !important; }
 .rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
 body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
 .rs-step { border-radius: 14px; }
@@ -1916,10 +1918,7 @@ function showClassifyPage() {
             <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">المحفوظ</button></div>
             <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
-        </div>
-        <div id="cls-row" class="hf-grid3" style="grid-template-columns: 1fr;">
-            <div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>
-        </div>`);
+        </div>`, '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>');
 }
 // إعدادات التصنيف: حدّ المقطع (صفحة/ثمن/ربع/نصف/حزب) يُضع عليه إطار أحمر
 function clsSettingsOpen() {
@@ -2259,16 +2258,15 @@ let prepEndStr = "";
 
 // ---------- أدوات مشتركة ----------
 
-// الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات][العودة]
-function hfTopBar(settingsFn, backFn) {
+// الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات]؛ و«العودة» دائماً في الأسفل
+function hfTopBar(settingsFn) {
     return `<div id="rd-top" class="rd-bar rd-top">
         <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
         <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}">الإعدادات</button></div>
-        <div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn tb-btn" onclick="${backFn}">العودة</button></div>
     </div>`;
 }
-function hfPage(settingsFn, backFn, bodyHtml) {
-    renderInContainer(hfTopBar(settingsFn, backFn) + bodyHtml);
+function hfPage(settingsFn, backFn, bodyHtml, extraBottom) {
+    renderInContainer(hfTopBar(settingsFn) + bodyHtml + `<div id="pg-bottom" class="rd-bar rd-bot">${extraBottom || ''}<div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">العودة</button></div></div>`);
     const wc = document.querySelector('#main-container .welcome-container');
     if (wc) wc.classList.add('rd-page');
     applyTheme();
@@ -2679,7 +2677,7 @@ function rdRenderPage(keep) {
         <div id="rd-top" class="rd-bar rd-top">
             <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
             <div class="rd-cell"><button type="button" id="rd-settings" class="btn-secondary hf-btn tb-btn" onclick="rdOpenSettings()">الإعدادات</button></div>
-            <div class="rd-cell">${aq ? '<button type="button" id="rd-end" class="btn-secondary hf-btn tb-btn" onclick="rdEnd()">العودة</button>' : '<button type="button" id="rd-taf" class="btn-secondary hf-btn tb-btn" onclick="rdToggleTafsir()">التفسير</button>'}</div>
+            <div class="rd-cell"><button type="button" id="rd-taf" class="btn-secondary hf-btn tb-btn" onclick="rdToggleTafsir()">التفسير</button></div>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
             <div class="rd-head">
@@ -2786,6 +2784,8 @@ function rdRenderText() {
     if (!el || !rd) return;
     const T = document.getElementById('rd-title');
     if (T) T.textContent = rd.title;
+    // الخلفيات الملوَّنة (الأجزاء/التفسير/التحديد) تمتد على عرض السطر كله، فيُضبط النص بين الحدّين حينها فقط
+    el.style.textAlign = (rd.kind === 'prep' || rd.tafMode || rd.sel !== null) ? 'justify' : 'right';
     if (!rd.items.length) { el.innerHTML = `<div class="rd-msg">${rd.msg}</div>`; rdCtxBtns(); return; }
     const sel = rd.sel !== null ? rdUnitOf(rd.sel) : null;
     const hid = (rd.hidden && rd.recScope) ? rd.recScope : null;
@@ -2831,23 +2831,22 @@ function rdRenderBars() {
     const recPaused = rdRecState === 'paused';
     const recDone = rdRecState === 'recorded';
     const none = !rd.items.length;
+    const aqalHid = rd.kind === 'aqal' && rd.hidden && rdRecState === 'idle' && !none;
 
-    r1.classList.toggle('hidden', none);
+    r1.classList.remove('hidden');
     rdSpeedVis();
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
     const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
-    const aqal = rd.kind === 'aqal';
-    // عقال الآيات: زرّان فقط [تسجيل][العرض] (بلا شيخ ولا تفسير ولا مشغّل)
-    r1.innerHTML = aqal
-        ? B('rd-rec', recOn ? 'rd-on' : '', 'rdRecBtn()', 'تسجيل') + B('rd-show', showOn ? 'rd-on' : '', 'rdShowBtn()', 'العرض')
+    r1.innerHTML = none
+        ? B('rd-end', 'rd-back', 'rdEnd()', 'العودة')
         : B('rd-sheikh', sheikhPlaying ? 'rd-on' : '', 'rdToggleSheikh()', 'الشيخ')
         + B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
         + B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
     const tt = document.getElementById('rd-taf');
     if (tt) tt.classList.toggle('on', !!rd.tafMode);
 
-    rdStripRender((recDone || recPaused) && !none && !aqal);
+    rdStripRender((recDone || recPaused) && !none);
 
     // المساحة فوق الأزرار: عبارة التفسير / عدّاد التسجيل / عرض ومواصلة / الشيخ وتعثر للآية المحدَّدة
     const hint = document.getElementById('rd-hint');
@@ -2857,7 +2856,9 @@ function rdRenderBars() {
             h = `<div id="rd-taf-note" class="rd-note">اضغط على آية لتفسيرها</div>`;
         } else if (recOn) {
             h = `<button type="button" id="rd-recbox" class="rd-recbox" onclick="rdRecBtn()"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span class="rd-recmsg">اضغط لوقف التسجيل</span></button>`;
-        } else if (recDone && !showOn && rd.sel !== null && !none && !aqal) {
+        } else if (aqalHid) {
+            h = `<button type="button" id="rd-show" class="btn-secondary hf-btn rd-showhint" onclick="rdShowBtn()">العرض</button>`;
+        } else if (recDone && !showOn && rd.sel !== null && !none && rd.kind !== 'aqal') {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
             h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
                 + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
@@ -3122,7 +3123,7 @@ function rdToggleSheikh() {
         rdStopAudio();
         return;
     }
-    if (rdGuardHidden()) return;
+    if (rd.kind !== 'aqal' && rdGuardHidden()) return;
     if (rdRecState !== 'idle') { showToast("ألغِ التسجيل أولاً (اضغط «تسجيل»)."); return; }
     if (rd.tafMode) { rd.tafMode = false; rdRefreshUI(); }
     if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
@@ -3232,26 +3233,15 @@ function rdSetHtml() {
         <div class="rd-rep-row">
             <span class="stepper"><button type="button" id="rd-rep-minus" onclick="rdRepStep(-1)" aria-label="إنقاص">−</button><span id="rd-rep-n" class="st-val">${userRep}</span><button type="button" id="rd-rep-plus" onclick="rdRepStep(1)" aria-label="زيادة">+</button></span>
         </div>
-        <div class="rd-set-lbl">طريقة التكرار</div>
+        ${rd && rd.kind === 'aqal' ? `<div class="rd-set-lbl">قائمة التعثر</div><button type="button" id="rd-del" class="btn-secondary hf-btn rd-delbtn" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button>` : `<div class="rd-set-lbl">طريقة التكرار</div>
         <div class="rd-pop-list">
             ${modes.map((m) => `<button type="button" id="rd-mode-${m[0]}" class="resume-btn rd-pop-item${userRepMode === m[0] ? ' on' : ''}" onclick="rdRepMode('${m[0]}')"><span class="rb-main">${m[1]}</span></button>`).join('')}
-        </div>
+        </div>`}
         <div class="modal-actions"><button type="button" class="btn-start-review" id="rd-set-done" onclick="rdSetDone()">تم</button></div>`;
 }
 
 function rdOpenSettings() {
     if (!rd) return;
-    if (rd.kind === 'aqal') {     // عقال الآيات: لا شيخ؛ الإعدادات فيها حذف الآية من قائمة التعثر فقط
-        closeRdPop();
-        const q = document.createElement('div');
-        q.id = 'rd-pop';
-        q.className = 'modal-overlay';
-        q.onclick = (e) => { if (e.target === q) rdSetDone(); };
-        q.innerHTML = `<div class="modal-box sd-box rd-set-box" id="rd-set-box"><button type="button" id="rd-set-x" class="rc-x" onclick="rdSetDone()" aria-label="إغلاق">&times;</button><div class="modal-title">الإعدادات</div><button type="button" id="rd-del" class="btn-secondary sd-ok" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button></div>`;
-        document.body.appendChild(q);
-        tbSetOn(true);
-        return;
-    }
     if (rdPlaying && rdAudioKind === 'sheikh') { rdSheikhPos = null; rdStopAudio(true); }
     closeRdPop();
     const d = document.createElement('div');
@@ -3330,17 +3320,17 @@ function rdRecDiscard() {
 
 async function rdRecBtn() {
     if (!rd || !rd.items.length || rdRecStarting) return;
-    if (rd.kind === 'aqal' && rdRecState === 'recording') { rdRecStop(false); return; }   // عقال الآيات: الضغط يوقف التسجيل
     if (rdRecState === 'recording') {          // إيقاف التسجيل: تظهر الآيات مباشرة ويظهر المشغّل [عرض][شريط][مواصلة التسجيل]
         try { if (rdRecorder && rdRecorder.pause) rdRecorder.pause(); } catch (e) {}
         rdRecAcc += Date.now() - rdRecT0;
         rdRecState = 'paused';
         rdRecTickStop();
         rd.hidden = false;
+        rd.revealed = true;
         rdRefreshUI();
         return;
     }
-    if ((rdRecState === 'paused' || rdRecState === 'recorded') && rd.kind !== 'aqal') { rdCancelRec(); return; }   // (في عقال الآيات يبدأ تسجيلاً جديداً)   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
+    if (rdRecState === 'paused' || rdRecState === 'recorded') { rdCancelRec(); return; }   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
     if (rd.tafMode) rd.tafMode = false;
     rdStopAudio(true);
     rdRecDiscard();
@@ -3419,12 +3409,7 @@ function rdRecResume() {
 function rdShowBtn() {
     if (!rd || !rd.items.length) return;
     if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
-    if (rd.kind === 'aqal') {     // يُظهر الآية، ويعيد التسجيل كله من أوله إن وُجد (الضغط مرة ثانية يعيده)
-        rd.hidden = false; rd.revealed = true;
-        if (rdRecState === 'recorded') { rdStopAudio(true); rd.sel = null; rdRefreshUI(); rdPlayRec(); }
-        else rdRefreshUI();
-        return;
-    }
+    if (rd.kind === 'aqal' && rdRecState === 'idle') { rd.hidden = false; rd.revealed = true; rdRefreshUI(); return; }   // عقال الآيات: يُظهر الآية فقط
     if (rdRecState === 'recorded') {
         if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
         rdPeekStop(true);
