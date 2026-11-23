@@ -803,9 +803,15 @@ body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #
 .rd-bar .hf-btn { border-radius: 0 !important; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .rd-top { margin-bottom: 8px; }
 .rd-top .rd-cell .hf-btn { min-height: 42px; padding: 8px 2px !important; font-size: 14px !important; }
-#dark-mode-btn.rd-moonbar { background: #283593 !important; border-color: #5c6bc0 !important; color: #fff !important; }
-#dark-mode-btn.rd-moonbar .mi { color: #fde047; font-size: 18px; line-height: 1; }
-body.dark-mode #dark-mode-btn.rd-moonbar { background: #1a237e !important; border-color: #7986cb !important; }
+/* أزرار الشريط العلوي: نيلي شبه شفاف، ويصير داكناً عند تفعيله */
+.hf-btn.tb-btn { background: rgba(40, 53, 147, 0.13) !important; border: 1.5px solid rgba(40, 53, 147, 0.4) !important; color: #283593 !important; }
+.hf-btn.tb-btn.on { background: #283593 !important; border-color: #1a237e !important; color: #fff !important; }
+body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.2) !important; border-color: rgba(159, 168, 218, 0.5) !important; color: #c5cae9 !important; }
+body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; border-color: #9fa8da !important; color: #fff !important; }
+#dark-mode-btn.rd-moonbar .mi { color: #b45309; }
+#dark-mode-btn.rd-moonbar.on .mi { color: #fde047; }
+#dark-mode-btn.rd-moonbar .mi { font-size: 18px; line-height: 1; }
+body.dark-mode #dark-mode-btn.rd-moonbar .mi { color: #fde047; }
 .rd-mid { min-height: 44px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex-shrink: 0; margin-bottom: 8px; }
 .rd-act .hf-btn { border-radius: 0 !important; }
 .rd-act .hf-btn + .hf-btn { margin-inline-start: -1.5px; }
@@ -1165,6 +1171,7 @@ function fitDarkBtn() {
     if (btn.classList.contains('rd-moonbar')) {   // شريط القارئ: الأيقونة ثم الاسم، والاسم يسقط إن ضاق الزر
         const nm = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
         btn.title = nm;
+        btn.classList.toggle('on', !!isDarkMode);
         btn.innerHTML = `<span class="mi">${isDarkMode ? '☀' : '☾'}</span><span class="ml">${nm}</span>`;
         if (btn.scrollWidth > btn.clientWidth + 1) btn.querySelector('.ml').remove();
         return;
@@ -2131,7 +2138,7 @@ function psFilterApply() {
     rows.forEach((r) => {
         const b = r.querySelector('.sd-btn');
         const red = !!b && b.classList.contains('sd-r');
-        const ok = psFilter === 'all' || red;
+        const ok = psKind === 'prog' || psFilter === 'all' || red;
         r.classList.toggle('hidden', !ok);
         if (ok) shown++;
     });
@@ -2156,8 +2163,8 @@ function psGoKind(k) {
 function psSettingsOpen() {
     const f = (id, cur, lab, fn) => `<button type="button" id="${id}" class="resume-btn rd-pop-item${cur ? ' on' : ''}" onclick="${fn}"><span class="rb-main">${lab}</span></button>`;
     pgPopOpen(`<div class="modal-title">الإعدادات</div>
-        <div class="rd-set-lbl">العرض</div>
-        <div class="rd-pop-list pg-row">${f('ps-set-all', psFilter === 'all', 'الكل', "psSetFilter('all')")}${f('ps-set-red', psFilter === 'red', 'المستحق', "psSetFilter('red')")}</div>
+        ${psKind === 'prog' ? '' : `<div class="rd-set-lbl">العرض</div>
+        <div class="rd-pop-list pg-row">${f('ps-set-all', psFilter === 'all', 'الكل', "psSetFilter('all')")}${f('ps-set-red', psFilter === 'red', 'المستحق', "psSetFilter('red')")}</div>`}
         <div class="rd-set-lbl">النوع</div>
         <div class="rd-pop-list pg-row">${f('ps-k-prog', psKind === 'prog', 'قيد الحفظ', "psGoKind('prog')")}${f('ps-k-rasikh', psKind === 'rasikh', 'المحفوظ', "psGoKind('rasikh')")}</div>`);
 }
@@ -2174,7 +2181,7 @@ function showProgList() {
     progList = progPassages();
     const li = lastPassIndex(4, progList.map((g) => [g]));
     renderPassageList({
-        items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li, sched: passSig(4, [g]) })),
+        items: progList.map((g, i) => ({ label: `${surahsNames[g.surah]} — من ${g.start} إلى ${g.end}`, cls: 'cm-r4', last: i === li })),
         startFn: 'startProgPassage', kind: 'prog',
         title: 'اختر المقطع الذي تحفظه',
         empty: 'لا توجد مقاطع «قيد الحفظ» بعد.<br>صنّف ما تحفظه الآن من «تصنيف القرآن» باختيار «قيد الحفظ».'
@@ -2255,9 +2262,9 @@ let prepEndStr = "";
 // الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات][العودة]
 function hfTopBar(settingsFn, backFn) {
     return `<div id="rd-top" class="rd-bar rd-top">
-        <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
-        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn" onclick="${settingsFn}">الإعدادات</button></div>
-        <div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">العودة</button></div>
+        <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
+        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}">الإعدادات</button></div>
+        <div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn tb-btn" onclick="${backFn}">العودة</button></div>
     </div>`;
 }
 function hfPage(settingsFn, backFn, bodyHtml) {
@@ -2267,7 +2274,8 @@ function hfPage(settingsFn, backFn, bodyHtml) {
     applyTheme();
 }
 // نافذة إعدادات الصفحات (× لإغلاقها)
-function pgPopClose() { const d = document.getElementById('pg-pop'); if (d) d.remove(); }
+function tbSetOn(v) { document.querySelectorAll('#rd-settings, #pg-settings').forEach((b) => b.classList.toggle('on', v)); }
+function pgPopClose() { const d = document.getElementById('pg-pop'); if (d) d.remove(); tbSetOn(false); }
 function pgPopOpen(inner) {
     pgPopClose();
     const d = document.createElement('div');
@@ -2276,6 +2284,7 @@ function pgPopOpen(inner) {
     d.onclick = (e) => { if (e.target === d) pgPopClose(); };
     d.innerHTML = `<div class="modal-box sd-box" id="pg-box"><button type="button" id="pg-x" class="rc-x" onclick="pgPopClose()" aria-label="إغلاق">&times;</button>${inner}</div>`;
     document.body.appendChild(d);
+    tbSetOn(true);
 }
 
 function hfUtilRow(endLabel, endOnclick, midHtml) {
@@ -2668,9 +2677,9 @@ function rdRenderPage(keep) {
     const aq = rd.kind === 'aqal';
     const html = `
         <div id="rd-top" class="rd-bar rd-top">
-            <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
-            <div class="rd-cell"><button type="button" id="rd-settings" class="btn-secondary hf-btn" onclick="rdOpenSettings()">الإعدادات</button></div>
-            <div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back" onclick="rdEnd()">العودة</button></div>
+            <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
+            <div class="rd-cell"><button type="button" id="rd-settings" class="btn-secondary hf-btn tb-btn" onclick="rdOpenSettings()">الإعدادات</button></div>
+            <div class="rd-cell">${aq ? '<button type="button" id="rd-end" class="btn-secondary hf-btn tb-btn" onclick="rdEnd()">العودة</button>' : '<button type="button" id="rd-taf" class="btn-secondary hf-btn tb-btn" onclick="rdToggleTafsir()">التفسير</button>'}</div>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
             <div class="rd-head">
@@ -2825,9 +2834,8 @@ function rdRenderBars() {
 
     r1.classList.toggle('hidden', none);
     rdSpeedVis();
-    const revealOnly = rd.hidden && rdRecState === 'idle';   // الصفحات التي تبدأ مخفية: «العرض» يُظهر الآيات
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
-    // الأزرار الثلاثة ثابتة دائماً؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل / التفسير مفعَّل
+    // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
     const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
     const aqal = rd.kind === 'aqal';
     // عقال الآيات: زرّان فقط [تسجيل][العرض] (بلا شيخ ولا تفسير ولا مشغّل)
@@ -2835,7 +2843,9 @@ function rdRenderBars() {
         ? B('rd-rec', recOn ? 'rd-on' : '', 'rdRecBtn()', 'تسجيل') + B('rd-show', showOn ? 'rd-on' : '', 'rdShowBtn()', 'العرض')
         : B('rd-sheikh', sheikhPlaying ? 'rd-on' : '', 'rdToggleSheikh()', 'الشيخ')
         + B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
-        + (revealOnly ? B('rd-show', '', 'rdShowBtn()', 'العرض') : B('rd-taf', rd.tafMode ? 'rd-on' : '', 'rdToggleTafsir()', 'التفسير'));
+        + B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
+    const tt = document.getElementById('rd-taf');
+    if (tt) tt.classList.toggle('on', !!rd.tafMode);
 
     rdStripRender((recDone || recPaused) && !none && !aqal);
 
@@ -2908,7 +2918,7 @@ function rdSelectAyah(k) {
 function rdCircleTap(k, ev) {
     if (ev && ev.stopPropagation) ev.stopPropagation();
     if (!rd) return;
-    if (rd.kind !== 'prep' || rd.tafMode || rdRecState === 'recorded') { rdSelectAyah(k); return; }
+    if (rd.kind !== 'prep' || rd.tafMode) { rdSelectAyah(k); return; }
     if (rdGuardHidden()) return;
     if (k >= rd.items.length - 1) return;      // آخر آية في المقطع نهايته أصلاً
     rdStopAudio();
@@ -3207,6 +3217,7 @@ function rdPlayQueue(urls) {
 function closeRdPop() {
     const d = document.getElementById('rd-pop');
     if (d) d.remove();
+    tbSetOn(false);
 }
 
 function rdSetHtml() {
@@ -3238,6 +3249,7 @@ function rdOpenSettings() {
         q.onclick = (e) => { if (e.target === q) rdSetDone(); };
         q.innerHTML = `<div class="modal-box sd-box rd-set-box" id="rd-set-box"><button type="button" id="rd-set-x" class="rc-x" onclick="rdSetDone()" aria-label="إغلاق">&times;</button><div class="modal-title">الإعدادات</div><button type="button" id="rd-del" class="btn-secondary sd-ok" onclick="rdDelStumble()">حذف الآية من قائمة التعثر</button></div>`;
         document.body.appendChild(q);
+        tbSetOn(true);
         return;
     }
     if (rdPlaying && rdAudioKind === 'sheikh') { rdSheikhPos = null; rdStopAudio(true); }
@@ -3248,6 +3260,7 @@ function rdOpenSettings() {
     d.onclick = (e) => { if (e.target === d) rdSetDone(); };
     d.innerHTML = `<div class="modal-box rd-set-box" id="rd-set-box">${rdSetHtml()}</div>`;
     document.body.appendChild(d);
+    tbSetOn(true);
     rdRenderBars();
 }
 
@@ -3876,7 +3889,6 @@ function showPrepPage() {
     rdOpen({
         kind: 'prep', items, cuts: prep.cuts.map((n) => n - prep.start),
         lead: rdLeadFor(items[0].s, items[0].a), tail: rdCtxTail(items[items.length - 1]),
-        sig: passSig(4, [{ surah: prep.surah, start: prep.start, end: prep.end }]),
         title: `سورة ${surahsNames[prep.surah]} — الآيات ${prep.start} إلى ${prep.end}`
     });
 }
