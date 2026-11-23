@@ -64,12 +64,12 @@
     background:transparent;
     color:rgba(255,255,255,.9);
     font-family:"Segoe UI",Tahoma,sans-serif;
-    font-size:14px;
-    font-weight:700;
+    font-size:11.5px;
+    font-weight:600;
     cursor:pointer;
-    padding:2px 16px;
+    padding:3px 14px;
     border-radius:999px;
-    letter-spacing:1px;
+    letter-spacing:.2px;
     transition:background .2s;
   }
   .lang-toggle-btn:active{background:rgba(255,255,255,.2)}
@@ -537,7 +537,7 @@
   }
   #ticket.cancelling .ticket-card{display:none}
   #ticket .ticket-card .code-box{background:rgba(31,138,76,.14);border-color:rgba(31,138,76,.38)}
-  #ticket .ticket-card .ticket-bar{background:rgba(31,138,76,.14);border-color:rgba(31,138,76,.38)}
+  #ticket .ticket-card .ticket-bar{background:none;border:1px solid rgba(31,138,76,.18);box-shadow:none}
   #ticket .ticket-card .ticket-title{
     border-bottom:none;background:#f8efcc;
     margin:0 -14px;padding:13px 14px 11px;border-radius:17px 17px 0 0;
@@ -666,7 +666,7 @@
   <div class="clinic-card">
     <h1 data-i="clinic"></h1>
     <p data-i="tag"></p>
-    <button class="lang-toggle-btn">FR</button>
+    <button class="lang-toggle-btn">Français</button>
   </div>
 
   <div class="page-content-padding">
@@ -731,7 +731,7 @@
   <div class="clinic-card">
     <h1 data-i="clinic"></h1>
     <p data-i="tag"></p>
-    <button class="lang-toggle-btn">FR</button>
+    <button class="lang-toggle-btn">Français</button>
   </div>
 
   <div class="page-content-padding">
@@ -1211,7 +1211,7 @@
       if(TR[l][key]) el.textContent = TR[l][key];
     });
     document.querySelectorAll(".lang-toggle-btn").forEach(function(b){
-      b.textContent = (l === "ar") ? "FR" : "ع";
+      b.textContent = (l === "ar") ? "Français" : "العربية";
     });
     renderServices();
     renderServiceDetail();
