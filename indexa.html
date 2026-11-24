@@ -893,13 +893,14 @@ body.dark-mode .rs-lab { color: #c5cae9; }
 
 /* الجولة 88 */
 #rd-row1.rd-two { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
-.rd-pillrow { display: flex; justify-content: center; flex-shrink: 0; }
-.rd-pillrow:empty { display: none; }
-.rd-sname { width: 50% !important; min-height: 34px; padding: 4px 6px !important; font-size: 14px !important; border: 0 !important; border-radius: 3px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* الجولة 90 */
 .hf-btn.tb-btn.rd-sname { border: 0 !important; box-shadow: none; }
 .rs-step { display: flex; align-items: center; justify-content: center; line-height: 0; }
 .rs-step svg { display: block; }
+#rd-row1 .rd-sname { min-height: 50px; font-size: 16px !important; }
+.rd-act { justify-content: center; }
+.rd-act .hf-btn { flex: 0 0 50%; border: 0 !important; }
+.rd-act .rd-stm.on { background: #fecaca !important; color: #7f1d1d !important; }
+body.dark-mode .rd-act .rd-stm.on { background: #7f1d1d !important; color: #fee2e2 !important; }
 </style>
 </head>
 <body>
@@ -2744,7 +2745,6 @@ function rdRenderPage(keep) {
             <button class="btn-rate btn-easy" onclick="rdRate('easy')">سهل</button>
         </div>
         <div id="rd-mid" class="rd-mid">
-            <div id="rd-pillrow" class="rd-pillrow"></div>
             <div id="rd-hint" class="rd-hint"></div>
             <div id="rd-strip" class="rd-strip hidden"></div>
         </div>
@@ -2887,23 +2887,19 @@ function rdRenderBars() {
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
     const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
+    // أثناء قراءة الشيخ يحلّ زر اسمه (بلا إطار) محلّ «تسجيل» و«العودة»؛ وبتوقف القراءة يعودان
+    const shName = (SHEIKH_RECITERS.find((r) => r.id === userSheikh) || SHEIKH_RECITERS[0]).name.replace(/\s*[(（].*$/, '');
     r1.innerHTML = none
         ? B('rd-end', 'rd-back', 'rdEnd()', 'العودة')
-        : B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
-        + B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
-    r1.classList.toggle('rd-two', !none);   // «تسجيل» بحصتين و«العودة» بحصة
+        : sheikhPlaying
+            ? B('rd-sname', 'tb-btn on rd-sname', 'rdOpenSettings()', shName)
+            : B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
+            + B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
+    r1.classList.toggle('rd-two', !none && !sheikhPlaying);   // «تسجيل» بحصتين و«العودة» بحصة
     const tt = document.getElementById('rd-taf');
     if (tt) tt.classList.toggle('on', !!rd.tafMode);
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
-    // زر اسم الشيخ (نصف العرض، بلا إطار): لا يظهر في أي صفحة إلا بعد الضغط على «الشيخ» العلوي، ويبقى بعد توقف القراءة؛ يوقف القراءة ويفتح التغيير
-    const pr = document.getElementById('rd-pillrow');
-    if (pr) {
-        const pillShow = !none && recOn === false && !recPaused && !recDone && !rd.tafMode && (sheikhPlaying || rd.pillOn);
-        const nm = (SHEIKH_RECITERS.find((r) => r.id === userSheikh) || SHEIKH_RECITERS[0]).name.replace(/\s*[(（].*$/, '');
-        pr.innerHTML = pillShow ? `<button type="button" id="rd-sname" class="btn-secondary hf-btn tb-btn rd-sname${sheikhPlaying ? ' on' : ''}" onclick="rdOpenSettings()">${nm}</button>` : '';
-    }
-
     rdStripRender((recDone || recPaused) && !none);
 
     // المساحة فوق الأزرار: عبارة التفسير / عدّاد التسجيل / عرض ومواصلة / الشيخ وتعثر للآية المحدَّدة
@@ -2918,9 +2914,7 @@ function rdRenderBars() {
             h = `<button type="button" id="rd-show" class="btn-secondary hf-btn rd-showhint" onclick="rdShowBtn()">العرض</button>`;
         } else if (recDone && !showOn && rd.sel !== null && !none && rd.kind !== 'aqal') {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
-            h = `<div class="rd-act"><button type="button" id="rd-peek" class="btn-secondary hf-btn" onclick="rdPeek()">${rdPeekAudio ? 'توقيف الشيخ' : 'الشيخ'}</button>`
-                + (stumbleAllowed() ? `<button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button>` : '')
-                + `</div>`;
+            h = stumbleAllowed() ? `<div class="rd-act"><button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button></div>` : '';
         }
         hint.innerHTML = h;
     }
@@ -2956,7 +2950,6 @@ function rdSelectAyah(k) {
     if (rdRecState === 'paused') return;      // التسجيل موقوف بانتظار العرض أو المواصلة: لا نمحوه بضغطة على آية
     if (rd.tafMode) { rdOpenAyahTafsir(k); return; }
     if (rdRecState === 'recorded') {   // بعد التسجيل: الضغط على آية يوقف العرض ويحدّدها (يظهر الشيخ والتعثر) ولا يمحو التسجيل
-        rdPeekStop(true);
         rdHaltShow();
         const u = rd.sel !== null ? rdUnitOf(rd.sel) : null, v = rdUnitOf(k);
         rd.sel = (u && u.from === v.from && u.to === v.to) ? null : k;
@@ -3011,43 +3004,6 @@ function rdStumbleToggle() {
 }
 
 // «الشيخ» في المراجعة بعد التسجيل: يقرأ الآية المحدَّدة (أو الجزء) مرة واحدة بالقارئ المختار، بمشغّل مستقل لا يمسّ التسجيل
-let rdPeekAudio = null, rdPeekToken = 0;
-function rdPeekStop(silent) {
-    rdPeekToken++;
-    if (rdPeekAudio) {
-        rdPeekAudio.onended = null; rdPeekAudio.onerror = null;
-        try { rdPeekAudio.pause(); } catch (e) {}
-        rdPeekAudio = null;
-        if (!silent) rdRenderBars();
-    }
-}
-function rdPeek() {
-    if (!rd || rd.sel === null) return;
-    if (rdPeekAudio) { rdPeekStop(); return; }
-    if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
-    const sc = rdScope(), urls = [];
-    for (let k = sc.from; k <= sc.to; k++) {
-        const it = rd.items[k], x = it ? ayahAudioUrls(userRiwaya, it.s, it.a) : null;
-        if (x) urls.push(...x);
-    }
-    if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
-    const token = ++rdPeekToken, a = new Audio();
-    rdPeekAudio = a;
-    try { a.playbackRate = userRate; a.preservesPitch = true; } catch (e) {}
-    let i = 0;
-    const fail = () => { if (token !== rdPeekToken) return; rdPeekStop(); showToast("تعذر تشغيل صوت الشيخ."); };
-    const next = () => {
-        if (token !== rdPeekToken) return;
-        if (i >= urls.length) { rdPeekStop(); return; }
-        a.src = urls[i++];
-        const p = a.play();
-        if (p && p.catch) p.catch(fail);
-    };
-    a.onended = next; a.onerror = fail;
-    next();
-    rdRenderBars();
-}
-
 // ---------- النزول التلقائي أثناء صوت الشيخ أو «العرض» ----------
 
 // نزول الشيخ بسرعة شبه ثابتة: المسافة المتبقية إلى آخر المقطع ÷ الزمن المتبقي المقدَّر
@@ -3122,7 +3078,6 @@ function rdScrollSync() {
 // ---------- صوت الشيخ ----------
 
 function rdStopAudio(silent) {
-    rdPeekStop(true);
     rdBackClear();
     rdAudioToken++;
     if (rdAudio) {
@@ -3188,7 +3143,6 @@ function rdToggleSheikh() {
     if (rd.tafMode) { rd.tafMode = false; rdRefreshUI(); }
     if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
     rdStopAudio(true);
-    rd.pillOn = true;
     const urls = rdSheikhUrls();
     if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
     rdPlayQueue(urls);
@@ -3468,7 +3422,6 @@ function rdShowBtn() {
     if (rd.kind === 'aqal' && rdRecState === 'idle') { rd.hidden = false; rd.revealed = true; rdRefreshUI(); return; }   // عقال الآيات: يُظهر الآية فقط
     if (rdRecState === 'recorded') {
         if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
-        rdPeekStop(true);
         if (rd.sel !== null) { rd.sel = null; rdRenderText(); }   // نزول التحديد عند مواصلة العرض
         if (rdAudio && rdAudioKind === 'rec') rdResumeShow();
         else rdPlayRec();
@@ -3522,7 +3475,6 @@ function rdHaltShow() { if (rdPlaying && rdAudioKind === 'rec') rdPauseShow(); }
 function rdBackClear() { rdBackOrigin = null; rdBackN = 0; }
 function rdBackStep() {
     if (rdRecState !== 'recorded' || !rdAudio || rdAudioKind !== 'rec') return;
-    rdPeekStop(true);
     const cur = rdAudio.currentTime || 0;
     if (rdBackOrigin === null) rdBackOrigin = cur;
     const t = Math.max(0, cur - 1);
