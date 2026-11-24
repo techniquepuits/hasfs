@@ -607,7 +607,6 @@ body.dark-mode .rc-x { color: #cbd5e1; }
 .rd-speed-wrap .stepper { height: 34px; border-radius: 10px; }
 .rd-speed-wrap .stepper button { width: 44px; font-size: 22px; }
 .rd-speed-wrap .stepper .st-val { min-width: 42px; font-size: 17px; }
-.due-badge { display: inline-block; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #dc2626; color: #fff; font: bold 13px/22px sans-serif; font-style: normal; text-align: center; vertical-align: middle; margin-inline-end: 8px; }
 .resume-btn.cm-r3 { background: rgba(34,197,94,0.26); border-color: rgba(22,163,74,0.5); color: #14532d; }
 .resume-btn.cm-r4 { background: rgba(59,130,246,0.24); border-color: rgba(37,99,235,0.5); color: #1e3a8a; }
 .resume-btn.last.cm-r3 { background: #14532d; border-color: #14532d; color: #fff; font-weight: bold; }
@@ -783,9 +782,6 @@ body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color
 .hf-btn.rd-on { background: #fef3c7 !important; border-color: #d97706 !important; color: #92400e !important; box-shadow: inset 0 0 0 1.5px #d97706; position: relative; z-index: 2; }
 body.dark-mode .hf-btn.rd-on { background: #78350f !important; border-color: #f59e0b !important; color: #fef3c7 !important; box-shadow: inset 0 0 0 1.5px #f59e0b; }
 .taf-nav3 .hf-btn:disabled { opacity: 0.4; }
-.hf-small { width: auto !important; max-width: none !important; margin: 0 !important; padding: 7px 16px !important; font-size: 13px !important; font-weight: bold !important; border-radius: 10px !important; background: #e2e8f0 !important; border: 1.5px solid #94a3b8 !important; color: #334155 !important; }
-body.dark-mode .hf-small { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
-#dark-mode-btn.hf-small { font-size: 17px !important; padding: 3px 11px !important; opacity: 0.92; }
 .rd-set-lbl { font-size: 13px; font-weight: bold; color: #64748b; margin-top: 10px; }
 .rd-set-box { max-height: 88vh; overflow-y: auto; }
 .rd-set-box .rd-pop-item { padding: 7px 10px !important; min-height: 0 !important; }
@@ -806,10 +802,6 @@ body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #
 .hf-btn.tb-btn.on { background: #283593 !important; border-color: #1a237e !important; color: #fff !important; }
 body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.2) !important; border-color: rgba(159, 168, 218, 0.5) !important; color: #c5cae9 !important; }
 body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; border-color: #9fa8da !important; color: #fff !important; }
-#dark-mode-btn.rd-moonbar .mi { color: #b45309; }
-#dark-mode-btn.rd-moonbar.on .mi { color: #fde047; }
-#dark-mode-btn.rd-moonbar .mi { font-size: 18px; line-height: 1; }
-body.dark-mode #dark-mode-btn.rd-moonbar .mi { color: #fde047; }
 .rd-mid { min-height: 44px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex-shrink: 0; margin-bottom: 8px; }
 .rd-act .hf-btn { border-radius: 3px !important; }
 .rd-act .hf-btn + .hf-btn { margin-inline-start: -1.5px; }
@@ -819,11 +811,11 @@ body.dark-mode #dark-mode-btn.rd-moonbar .mi { color: #fde047; }
 .rd-page > .exercise-box { margin-bottom: 8px !important; }
 .rd-page > .rd-mid { margin-bottom: 8px; }
 .rd-page > .rd-top { margin-bottom: 10px; }
-.ag-grid { display: grid; gap: 8px; padding: 2px; }
+.ag-grid { display: grid; gap: 6px; padding: 2px; }
 .rd-pop-list.pg-row { display: flex; flex-direction: row; gap: 8px; }
 .rd-pop-list.pg-row .rd-pop-item { flex: 1; text-align: center; justify-content: center; padding: 10px 4px; }
 .pg-sub { display: block; font-size: 12px; font-weight: normal; opacity: 0.75; margin-top: 2px; }
-.ag-btn { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 5px; min-height: 58px; padding: 6px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
+.ag-btn { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 5px; min-height: 40px; padding: 3px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
 .ag-btn .ag-s { font-size: 13px; line-height: 1.3; text-align: center; }
 .ag-btn .ag-n { font-size: 17px; font-weight: bold; }
 .ag-btn.ag-due { background: rgba(220, 38, 38, 0.18); border-color: #dc2626; color: #7f1d1d; }
@@ -860,7 +852,6 @@ body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { colo
 .rd-bar .hf-btn { border-radius: 3px !important; border-width: 0 !important; }
 .rd-page > .rd-top { padding: 10px 12px 0; margin-bottom: 10px; }
 .rd-page > #rd-row1, .rd-page > .rd-bot { padding: 0 12px 10px; }
-.rd-top.has-moon { grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); }
 .rd-top.has-home { grid-template-columns: minmax(0, 0.5fr) repeat(2, minmax(0, 1fr)) minmax(0, 0.5fr); }
 .hf-btn.tb-btn { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
 .hf-btn.tb-btn.on { background: #283593 !important; color: #fff !important; }
@@ -901,6 +892,12 @@ body.dark-mode .rs-lab { color: #c5cae9; }
 .rd-act .hf-btn { flex: 0 0 50%; border: 0 !important; }
 .rd-act .rd-stm.on { background: #fecaca !important; color: #7f1d1d !important; }
 body.dark-mode .rd-act .rd-stm.on { background: #7f1d1d !important; color: #fee2e2 !important; }
+/* الجولة 92: رأس الصفحات [☾] العنوان [⚙] */
+.rd-bar.pg-head { display: flex; align-items: center; gap: 6px; }
+.pg-head .rd-cell { flex: 0 0 46px; }
+.pg-head .hf-btn { min-height: 42px; padding: 0 !important; display: flex; align-items: center; justify-content: center; }
+.pg-head-title { flex: 1; min-width: 0; margin: 0; padding: 0 !important; text-align: center; font-size: 16px !important; }
+.tb-btn svg { display: block; }
 </style>
 </head>
 <body>
@@ -1209,16 +1206,21 @@ function applyTheme() {
 }
 
 // زر الوضع الليلي: نكتب الاسم إن اتسع المكان، وإلا نكتفي بالأيقونة
+// أيقونات الأزرار (SVG ممتلئة بلون الزر): هلال سميك، شمس، ترس
+function tbIcon(n) {
+    if (n === 'moon') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.6.6 0 0 0-.8-.7A9.6 9.6 0 1 0 21.2 15.4a.6.6 0 0 0-.7-.8z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+    if (n === 'sun') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+    return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.5.2 1 .4 1.5.8l2.5-.9 1.7 2.9-2 1.7c.1.6.1 1.2 0 1.8l2 1.7-1.7 2.9-2.5-.9c-.5.4-1 .6-1.5.8L13.7 18h-3.4l-.5-2.6c-.5-.2-1-.4-1.5-.8l-2.5.9-1.7-2.9 2-1.7a6 6 0 0 1 0-1.8l-2-1.7 1.7-2.9 2.5.9c.5-.4 1-.6 1.5-.8zM12 8.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" transform="translate(0 2)"/></svg>';
+}
 function fitDarkBtn() {
     const btn = document.getElementById('dark-mode-btn');
     if (!btn) return;
-    if (btn.classList.contains('hf-small')) { btn.textContent = isDarkMode ? '☀️' : '☾'; return; }
     if (btn.classList.contains('rd-moonbar')) {   // أزرار الأشرطة: أيقونة فقط (هلال/شمس)
         const nm = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
         btn.title = nm;
         btn.classList.toggle('on', !!isDarkMode);
         btn.setAttribute('aria-label', nm);
-        btn.innerHTML = `<span class="mi">${isDarkMode ? '☀' : '☾'}</span>`;
+        btn.innerHTML = `<span class="mi">${tbIcon(isDarkMode ? 'sun' : 'moon')}</span>`;
         return;
     }
     const full = isDarkMode ? 'الوضع العادي' : 'الوضع الليلي';
@@ -1228,7 +1230,7 @@ function fitDarkBtn() {
     btn.textContent = full;
     const cell = btn.parentElement;
     if (cell && cell.scrollWidth > cell.clientWidth + 1) {
-        btn.textContent = isDarkMode ? '☀️' : '🌙';
+        btn.innerHTML = tbIcon(isDarkMode ? 'sun' : 'moon');
         btn.classList.add('icon-only');
     }
 }
@@ -1317,7 +1319,7 @@ function showMainButtons() {
 
             <div class="menu-buttons">
                 <div class="menu-item">
-                    <button class="btn-main" onclick="showClassifyPage()">تصنيف القرآن</button>
+                    <button class="btn-main" onclick="showClassifyPage()">تصنيف الآيات حسب درجة الحفظ</button>
                 </div>
                 <div class="menu-item menu-row3">
                     <button class="btn-main" id="menu-prog-btn" onclick="showProgList()"><span id="menu-prog-lab">قيد الحفظ</span></button>
@@ -1514,7 +1516,6 @@ function showAqalRandom() {
         ? `<div class="rv-empty">لا توجد آيات مستحقة للمراجعة الآن.</div>` : '';
     hfPage('aqalSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title">اختر ما تريد مراجعته</div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
                 <button type="button" class="rv-all" onclick="startReviewAll()">
                     <span class="rb-main">مراجعة آيات التعثر في كل القرآن</span>
@@ -1523,7 +1524,7 @@ function showAqalRandom() {
                 ${rows}
                 ${emptyNote}
             </div>
-        </div>`);
+        </div>`, '', 'اختر ما تريد مراجعته');
 }
 
 // «قائمة آيات التعثر»: زر لكل آية (3 في كل سطر: السورة والرقم في سطر واحد)، أبيض، وأحمر شبه شفاف إن حان موعد مراجعتها؛ يختار المستعمل ما يراجعه
@@ -1545,11 +1546,10 @@ function showAyahGrid(dueOnly) {
     const cells = list.map((o) => `<button type="button" class="ag-btn${o.due ? ' ag-due' : ''}" data-k="${o.k}" onclick="startReviewOne('${o.k}')"><span class="ag-s">${surahsNames[o.s]}</span> <span class="ag-n">${o.a + 1}</span></button>`).join('');
     hfPage('aqalSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title"><span id="ag-title">${dueOnly ? 'الآيات المستحقة' : 'قائمة آيات التعثر'}</span></div>
             <div class="surah-list-container" style="flex: 1; min-height: 0; max-height: none;">
                 ${list.length ? `<div class="ag-grid" style="grid-template-columns: repeat(${AG_COLS}, 1fr);">${cells}</div>` : `<div class="rv-empty">${dueOnly ? 'لا توجد آيات مستحقة الآن.' : 'لا توجد آيات في قائمة التعثر بعد.'}</div>`}
             </div>
-        </div>`);
+        </div>`, '', `<span id="ag-title">${dueOnly ? 'الآيات المستحقة' : 'قائمة آيات التعثر'}</span>`);
 }
 function startReviewOne(k) {
     reviewOnlyKeys = null; reviewScope = 'single'; reviewSingle = k;
@@ -1935,7 +1935,7 @@ function clsOffsets() {
     return off;
 }
 
-let clsOpen = new Set([0]);   // السور المفتوحة: الفاتحة افتراضياً
+let clsOpen = new Set();   // السور المفتوحة: كلها مطويّة في البداية، والضغط على الاسم يفتحها
 let clsLast = null;           // آخر آية ضُغط عليها
 function clsToggleSurah(s) {
     if (clsOpen.has(s)) clsOpen.delete(s); else clsOpen.add(s);
@@ -1957,16 +1957,15 @@ function clsMapHtml() {
 }
 
 function showClassifyPage() {
-    clsOpen = new Set([0]); clsLast = null;
+    clsOpen = new Set(); clsLast = null;
     clsA = null; clsB = null; clsScroll = 0;
     if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
     hfPage('clsSettingsOpen()', 'showMainButtons()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
-            <div class="surah-title select-title">تصنيف القرآن حسب درجة الحفظ</div>
             <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">المحفوظ</button></div>
             <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
-        </div>`, '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>');
+        </div>`, '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>', 'تصنيف الآيات حسب درجة الحفظ', 'تأكيد');
 }
 // إعدادات التصنيف: حدّ المقطع (صفحة/ثمن/ربع/نصف/حزب) يُضع عليه إطار أحمر
 function clsSettingsOpen() {
@@ -2163,21 +2162,12 @@ function renderPassageList(o) {
     psKind = o.kind || psKind;
     const html = `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
-            <div class="surah-title select-title"><i class="due-badge hidden" id="due-ttl" title="عدد الوحدات التي حان موعد مراجعتها"></i><span>${o.title}</span></div>
-            <div class="surah-list-container" id="ps-list" style="flex: 1; min-height: 0; max-height: none;">${rows || `<div class="nr-empty">${o.empty}</div>`}<div id="ps-none" class="nr-empty hidden">لا توجد مقاطع بهذا التصنيف.</div></div>
+                        <div class="surah-list-container" id="ps-list" style="flex: 1; min-height: 0; max-height: none;">${rows || `<div class="nr-empty">${o.empty}</div>`}<div id="ps-none" class="nr-empty hidden">لا توجد مقاطع بهذا التصنيف.</div></div>
         </div>
     `;
-    hfPage('psSettingsOpen()', 'showMainButtons()', html);
+    hfPage('psSettingsOpen()', 'showMainButtons()', html, '', o.title);
     psFilterApply();
     try { const l = document.querySelector('.ps-btn.last'); if (l) l.scrollIntoView({ block: 'center' }); } catch (e) {}
-}
-// الدائرة الحمراء أمام العنوان: عدد الوحدات التي حان موعدها (المتبقي ≤ 0)
-function psBadge() {
-    const b = document.getElementById('due-ttl');
-    if (!b) return;
-    const n = psSched.filter((g) => g && schedRemain(g) <= 0).length;
-    b.textContent = n > 99 ? '99+' : n;
-    b.classList.toggle('hidden', !n);
 }
 function psFilterApply() {
     const rows = document.querySelectorAll('#ps-list .ps-row');
@@ -2191,7 +2181,6 @@ function psFilterApply() {
     });
     const none = document.getElementById('ps-none');
     if (none) none.classList.toggle('hidden', shown > 0 || !rows.length);
-    psBadge();
 }
 let psKind = 'prog';
 function psSetFilter(f) {
@@ -2306,15 +2295,16 @@ let prepEndStr = "";
 
 // ---------- أدوات مشتركة ----------
 
-// الشريط العلوي الموحّد: [الوضع الليلي][الإعدادات]؛ و«العودة» دائماً في الأسفل
-function hfTopBar(settingsFn) {
-    return `<div id="rd-top" class="rd-bar rd-top has-moon">
+// الشريط العلوي الموحّد للصفحات: [☾] العنوان [⚙] أيقونتان صغيرتان على جانبي العنوان؛ و«العودة» دائماً في الأسفل
+function hfTopBar(settingsFn, title) {
+    return `<div id="rd-top" class="rd-bar rd-top pg-head">
         <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
-        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}">الإعدادات</button></div>
+        <div class="surah-title select-title pg-head-title">${title || ''}</div>
+        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}" aria-label="الإعدادات" title="الإعدادات">${tbIcon('gear')}</button></div>
     </div>`;
 }
-function hfPage(settingsFn, backFn, bodyHtml, extraBottom) {
-    renderInContainer(hfTopBar(settingsFn) + bodyHtml + `<div id="pg-bottom" class="rd-bar rd-bot">${extraBottom || ''}<div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">العودة</button></div></div>`);
+function hfPage(settingsFn, backFn, bodyHtml, extraBottom, title, backLabel) {
+    renderInContainer(hfTopBar(settingsFn, title) + bodyHtml + `<div id="pg-bottom" class="rd-bar rd-bot">${extraBottom || ''}<div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">${backLabel || 'العودة'}</button></div></div>`);
     const wc = document.querySelector('#main-container .welcome-container');
     if (wc) wc.classList.add('rd-page');
     applyTheme();
