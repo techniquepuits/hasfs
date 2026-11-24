@@ -724,10 +724,8 @@ body.dark-mode .chunk-a { background: rgba(52, 211, 153, 0.2); }
 body.dark-mode .chunk-b { background: rgba(96, 165, 250, 0.22); }
 
 /* صفحة التفسير */
-.taf-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; width: 100%; margin-bottom: 8px; }
-.taf-tab { padding: 12px 6px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; }
-.taf-tab.active { background: linear-gradient(135deg, #2d6a4f 0%, #1b4d3e 100%) !important; color: #ffffff !important; border-color: transparent !important; }
-body.dark-mode .taf-tab.active { background: #16a34a !important; color: #ffffff !important; border-color: #16a34a !important; }
+.taf-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; flex-shrink: 0; width: 100%; margin-bottom: 8px; }
+.taf-tab { padding: 8px 6px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; min-height: 42px; border-radius: 3px !important; border-width: 0 !important; }
 .taf-ayah { font-size: 20px; line-height: 2.4; text-align: right; color: #1b4d3e; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 6px; }
 .taf-body { font-size: 19px; line-height: 2.1; text-align: right; color: #1e293b; }
 .taf-text { white-space: pre-wrap; }
@@ -773,14 +771,10 @@ body.dark-mode .rs-lab { color: #99f6e4; }
 body.dark-mode .rs-box { background: #334155; }
 body.dark-mode #rs-up { background: #2dd4bf; }
 body.dark-mode #rs-real { background: #0f766e; }
-.hf-btn.rd-confirm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; box-shadow: inset 0 0 0 1.5px #dc2626; position: relative; z-index: 2; }
-body.dark-mode .hf-btn.rd-confirm { background: #7f1d1d !important; border-color: #f87171 !important; color: #fee2e2 !important; box-shadow: inset 0 0 0 1.5px #f87171; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .rd-cell .hf-btn { width: 100%; white-space: nowrap; }
 .rd-timer { font-size: 18px; font-weight: bold; font-variant-numeric: tabular-nums; color: #dc2626; }
-.hf-btn.rd-on { background: #fef3c7 !important; border-color: #d97706 !important; color: #92400e !important; box-shadow: inset 0 0 0 1.5px #d97706; position: relative; z-index: 2; }
-body.dark-mode .hf-btn.rd-on { background: #78350f !important; border-color: #f59e0b !important; color: #fef3c7 !important; box-shadow: inset 0 0 0 1.5px #f59e0b; }
 .taf-nav3 .hf-btn:disabled { opacity: 0.4; }
 .rd-set-lbl { font-size: 13px; font-weight: bold; color: #64748b; margin-top: 10px; }
 .rd-set-box { max-height: 88vh; overflow-y: auto; }
@@ -857,8 +851,8 @@ body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { colo
 .hf-btn.tb-btn.on { background: #283593 !important; color: #fff !important; }
 body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
 body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; color: #fff !important; }
-.rd-bot .hf-btn:not(.rd-on):not(.rd-confirm), #rd-row1 .hf-btn:not(.rd-on):not(.rd-confirm), .rd-showhint { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
-body.dark-mode .rd-bot .hf-btn:not(.rd-on):not(.rd-confirm), body.dark-mode #rd-row1 .hf-btn:not(.rd-on):not(.rd-confirm), body.dark-mode .rd-showhint { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
+.rd-bot .hf-btn:not(.rd-recdark), #rd-row1 .hf-btn:not(.rd-recdark), .rd-showhint { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
+body.dark-mode .rd-bot .hf-btn:not(.rd-recdark), body.dark-mode #rd-row1 .hf-btn:not(.rd-recdark), body.dark-mode .rd-showhint { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
 .rd-homebtn .mi, .rd-homebtn svg { width: 20px; height: 20px; }
 .app-riwaya { font-size: 13px; font-weight: 700; color: #7a9a90; margin: 2px 0 0; }
 body.dark-mode .app-riwaya { color: #94a3b8 !important; }
@@ -883,7 +877,7 @@ body.dark-mode #rs-up { background: #c5cae9; }
 body.dark-mode .rs-lab { color: #c5cae9; }
 
 /* الجولة 88 */
-#rd-row1.rd-two { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+#rd-row1.rd-three { grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr) minmax(0, 0.5fr); }
 .hf-btn.tb-btn.rd-sname { border: 0 !important; box-shadow: none; }
 .rs-step { display: flex; align-items: center; justify-content: center; line-height: 0; }
 .rs-step svg { display: block; }
@@ -898,6 +892,15 @@ body.dark-mode .rd-act .rd-stm.on { background: #7f1d1d !important; color: #fee2
 .pg-head .hf-btn { min-height: 42px; padding: 0 !important; display: flex; align-items: center; justify-content: center; }
 .pg-head-title { flex: 1; min-width: 0; margin: 0; padding: 0 !important; text-align: center; font-size: 16px !important; }
 .tb-btn svg { display: block; }
+/* الجولة 93 */
+.rd-bar.taf-nav3 { grid-auto-flow: row; grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr) minmax(0, 0.5fr); }
+#rd-row1 .hf-btn.rd-recdark { background: #0f172a !important; color: #fff !important; font-size: 17px; }
+body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color: #fff !important; box-shadow: inset 0 0 0 1.5px #64748b; }
+#rd-row1 .hf-btn:disabled { opacity: 0.4; }
+#rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #ea580c !important; }
+body.dark-mode #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
+#rd-row1.rd-three .hf-btn { padding: 0 !important; }
+.taf-nav3 .hf-btn { min-height: 50px; padding: 0 !important; }
 </style>
 </head>
 <body>
@@ -1208,7 +1211,9 @@ function applyTheme() {
 // زر الوضع الليلي: نكتب الاسم إن اتسع المكان، وإلا نكتفي بالأيقونة
 // أيقونات الأزرار (SVG ممتلئة بلون الزر): هلال سميك، شمس، ترس
 function tbIcon(n) {
-    if (n === 'moon') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.6.6 0 0 0-.8-.7A9.6 9.6 0 1 0 21.2 15.4a.6.6 0 0 0-.7-.8z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+    if (n === 'moon') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.6.6 0 0 0-.8-.7A9.6 9.6 0 1 0 21.2 15.4a.6.6 0 0 0-.7-.8z" fill="currentColor" stroke="currentColor" stroke-width="0.7" stroke-linejoin="round"/></svg>';
+    if (n === 'arrR') return '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (n === 'arrL') return '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     if (n === 'sun') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
     return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.5.2 1 .4 1.5.8l2.5-.9 1.7 2.9-2 1.7c.1.6.1 1.2 0 1.8l2 1.7-1.7 2.9-2.5-.9c-.5.4-1 .6-1.5.8L13.7 18h-3.4l-.5-2.6c-.5-.2-1-.4-1.5-.8l-2.5.9-1.7-2.9 2-1.7a6 6 0 0 1 0-1.8l-2-1.7 1.7-2.9 2.5.9c.5-.4 1-.6 1.5-.8zM12 8.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" transform="translate(0 2)"/></svg>';
 }
@@ -2642,13 +2647,13 @@ const rdBlobs = {};           // ملفات الآيات المحمَّلة كا
 const rdPending = {};
 let rdRecState = 'idle';      // idle | recording | paused | recorded
 let rdRecAcc = 0, rdRecEnd = 0;   // ميلّيثانية مسجَّلة قبل الإيقاف المؤقت، وموضع نهاية العرض
-let rdRecUrl = null, rdRecorder = null, rdRecStream = null;
+let rdRecorder = null, rdRecStream = null;
+let rdSegs = [], rdRecSessMs = 0;   // مقاطع التسجيل الحالي في الذاكرة [{blob, dur(ثوانٍ)}]، ومدة آخر جلسة تسجيل
 let rdRecChunks = [], rdPlayAfterStop = false, rdRecStarting = false;
 let rdRecT0 = 0, rdTick = null;
 let rdTafToken = 0;
 let rdScrollSaved = 0;
 let rdBackOrigin = null, rdBackN = 0, rdStripTimer = null, rdRecLen = 0;   // رجوع العرض: نقطة الأصل وعدد الثواني التي رجعناها
-let rdCancelArmed = false, rdCancelTimer = null;
 
 // نوع الجلسة ← سلوكها
 const RD_KINDS = {
@@ -2695,7 +2700,7 @@ function rdOpen(cfg) {
         cuts: (cfg.cuts || []).slice(), title: cfg.title || '', tail: cfg.tail || '', msg: cfg.msg || '',
         sel: null, startHidden: K.startHidden, revealed: false,
         hidden: K.startHidden, recScope: K.startHidden && n ? { from: 0, to: n - 1 } : null,
-        tafMode: false, tafIdx: null, tafEd: 'muyassar', stumbled: new Set()
+        tafIdx: null, tafEd: 'muyassar', stumbled: new Set()
     };
     rdRenderPage(false);
 }
@@ -2837,16 +2842,16 @@ function rdRenderText() {
         if (it.s !== prevS) { sep = `<span class="rv-surah-sep">سورة ${surahsNames[it.s]}</span>`; prevS = it.s; }
         return `${sep}<span class="prep-ayah${on ? ' prep-sel' : ''}${rd.stumbled.has(k) ? ' ayah-stumbled' : ''}" id="rd-a-${k}" onclick="rdSelectAyah(${k})"><span class="at${hidd ? ' prep-hide' : ''}">${rdAyahText(it.s, it.a)}</span> <span class="circle-num prep-cn" onclick="rdCircleTap(${k}, event)">${it.a + 1}</span> </span>`;
     };
-    // التلوين المتناوب: دائماً في الحفظ (الأجزاء)، وفي بقية الصفحات عند تفعيل زر التفسير فقط
+    // التلوين المتناوب في الحفظ (الأجزاء) فقط
     const n = rd.items.length;
     let html = rdLeadHtml();
-    if (rd.kind === 'prep' || rd.tafMode) {
+    if (rd.kind === 'prep') {
         let from = 0, idx = 0;
-        const ends = rd.kind === 'prep' ? rd.cuts.concat([n - 1]) : rd.items.map((_, i) => i);
+        const ends = rd.cuts.concat([n - 1]);
         ends.forEach((to) => {
             let inner = '';
             for (let k = from; k <= to; k++) inner += one(k);
-            const isSel = sel && sel.from === from && rd.kind === 'prep';
+            const isSel = sel && sel.from === from;
             html += `<span class="chunk ${idx % 2 === 0 ? 'chunk-a' : 'chunk-b'}${isSel ? ' chunk-sel' : ''}">${inner}</span> `;
             from = to + 1; idx++;
         });
@@ -2876,18 +2881,18 @@ function rdRenderBars() {
     rdSpeedVis();
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
-    const recCls = rdCancelArmed ? 'rd-confirm' : ((recOn || recPaused || recDone) ? 'rd-on' : '');
     // أثناء قراءة الشيخ يحلّ زر اسمه (بلا إطار) محلّ «تسجيل» و«العودة»؛ وبتوقف القراءة يعودان
     const shName = (SHEIKH_RECITERS.find((r) => r.id === userSheikh) || SHEIKH_RECITERS[0]).name.replace(/\s*[(（].*$/, '');
     r1.innerHTML = none
         ? B('rd-end', 'rd-back', 'rdEnd()', 'العودة')
         : sheikhPlaying
             ? B('rd-sname', 'tb-btn on rd-sname', 'rdOpenSettings()', shName)
-            : B('rd-rec', recCls, 'rdRecBtn()', rdCancelArmed ? 'تأكيد الإلغاء؟' : 'تسجيل')
-            + B('rd-end', 'rd-back', 'rdEnd()', 'العودة');
-    r1.classList.toggle('rd-two', !none && !sheikhPlaying);   // «تسجيل» بحصتين و«العودة» بحصة
-    const tt = document.getElementById('rd-taf');
-    if (tt) tt.classList.toggle('on', !!rd.tafMode);
+            : recOn
+                ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', '<span class="rec-dot"></span><span>إيقاف التسجيل</span>')   // أثناء التسجيل: زر داكن بعرض كامل
+                : `<div class="rd-cell"><button type="button" id="rd-restore" class="btn-secondary hf-btn tb-btn" onclick="rdRestoreRec()" aria-label="استرجاع آخر تسجيل" title="استرجاع آخر تسجيل"${recMem ? '' : ' disabled'}>${RD_ICONS.restore}</button></div>`
+                + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
+                + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrR')}</button></div>`;
+    r1.classList.toggle('rd-three', !none && !sheikhPlaying && !recOn);   // [استرجاع][تسجيل][عودة]
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
     rdStripRender((recDone || recPaused) && !none);
@@ -2896,9 +2901,7 @@ function rdRenderBars() {
     const hint = document.getElementById('rd-hint');
     if (hint) {
         let h = '';
-        if (rd.tafMode && !none) {
-            h = `<div id="rd-taf-note" class="rd-note">اضغط على آية لتفسيرها</div>`;
-        } else if (recOn) {
+        if (recOn) {
             h = `<button type="button" id="rd-recbox" class="rd-recbox" onclick="rdRecBtn()"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span class="rd-recmsg">اضغط لوقف التسجيل</span></button>`;
         } else if (aqalHid) {
             h = `<button type="button" id="rd-show" class="btn-secondary hf-btn rd-showhint" onclick="rdShowBtn()">العرض</button>`;
@@ -2938,7 +2941,6 @@ function rdSelectAyah(k) {
     if (!rd) return;
     if (rdGuardHidden()) return;
     if (rdRecState === 'paused') return;      // التسجيل موقوف بانتظار العرض أو المواصلة: لا نمحوه بضغطة على آية
-    if (rd.tafMode) { rdOpenAyahTafsir(k); return; }
     if (rdRecState === 'recorded') {   // بعد التسجيل: الضغط على آية يوقف العرض ويحدّدها (يظهر الشيخ والتعثر) ولا يمحو التسجيل
         rdHaltShow();
         const u = rd.sel !== null ? rdUnitOf(rd.sel) : null, v = rdUnitOf(k);
@@ -2960,7 +2962,7 @@ function rdSelectAyah(k) {
 function rdCircleTap(k, ev) {
     if (ev && ev.stopPropagation) ev.stopPropagation();
     if (!rd) return;
-    if (rd.kind !== 'prep' || rd.tafMode) { rdSelectAyah(k); return; }
+    if (rd.kind !== 'prep') { rdSelectAyah(k); return; }
     if (rdGuardHidden()) return;
     if (k >= rd.items.length - 1) return;      // آخر آية في المقطع نهايته أصلاً
     rdStopAudio();
@@ -3074,6 +3076,7 @@ function rdStopAudio(silent) {
         rdAudio.onended = null;
         rdAudio.onerror = null;
         try { rdAudio.pause(); } catch (e) {}
+        if (rdAudio._urls) rdAudio._urls.forEach((u) => { try { URL.revokeObjectURL(u); } catch (e) {} });
         rdAudio = null;
     }
     if (rdPlaying) releaseWakeLock();
@@ -3129,8 +3132,8 @@ function rdToggleSheikh() {
         return;
     }
     if (rd.kind !== 'aqal' && rdGuardHidden()) return;
-    if (rdRecState !== 'idle') { showToast("ألغِ التسجيل أولاً (اضغط «تسجيل»)."); return; }
-    if (rd.tafMode) { rd.tafMode = false; rdRefreshUI(); }
+    if (rdRecState === 'recording') { showToast("أوقف التسجيل أولاً (اضغط «إيقاف التسجيل»)."); return; }
+    if (rdRecState !== 'idle') rdRecDiscard();   // التسجيل محفوظ في الهاتف ويمكن استرجاعه
     if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
     rdStopAudio(true);
     const urls = rdSheikhUrls();
@@ -3289,28 +3292,128 @@ function rdSetDone() {
 
 function rdFullScope() { return { from: 0, to: rd.items.length - 1 }; }
 
+// ---------- آخر تسجيل في ذاكرة الهاتف ----------
+// يُحفظ تسجيل واحد فقط (IndexedDB) ويحلّ كل تسجيل جديد محل السابق؛ ومواصلة التسجيل تضيف مقطعاً إلى السجل نفسه ويُشغَّل المجموع كملف واحد
+let recMem = null, recDbP = null;
+function recDb() {
+    if (recDbP) return recDbP;
+    recDbP = new Promise((res) => {
+        try {
+            if (typeof indexedDB === 'undefined' || !indexedDB) { res(null); return; }
+            const q = indexedDB.open('ibn-badis-rec', 1);
+            q.onupgradeneeded = () => { try { q.result.createObjectStore('kv'); } catch (e) {} };
+            q.onsuccess = () => res(q.result);
+            q.onerror = () => res(null);
+            q.onblocked = () => res(null);
+        } catch (e) { res(null); }
+    });
+    return recDbP;
+}
+async function recStoreSave(segs) {
+    recMem = { segs: segs.map((x) => ({ blob: x.blob, dur: x.dur })), ts: Date.now() };
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+    const db = await recDb();
+    if (!db) return;
+    try {
+        await new Promise((res) => {
+            const tx = db.transaction('kv', 'readwrite');
+            tx.objectStore('kv').put(recMem, 'last');
+            tx.oncomplete = () => res(); tx.onerror = () => res(); tx.onabort = () => res();
+        });
+    } catch (e) {}
+}
+async function recStoreLoad() {
+    let exists = true;
+    try { if (typeof indexedDB !== 'undefined' && indexedDB && indexedDB.databases) exists = (await indexedDB.databases()).some((d) => d.name === 'ibn-badis-rec'); } catch (e) {}
+    const db = exists ? await recDb() : null;
+    if (db) {
+        try {
+            const v = await new Promise((res) => {
+                const g = db.transaction('kv', 'readonly').objectStore('kv').get('last');
+                g.onsuccess = () => res(g.result || null);
+                g.onerror = () => res(null);
+            });
+            if (v && v.segs && v.segs.length && !recMem) recMem = v;
+        } catch (e) {}
+    }
+    if (rd) rdRenderBars();
+}
+recStoreLoad();
+
+// يجمع مقاطع التسجيل كأنها ملف واحد بواجهة Audio نفسها (currentTime, duration, play, pause, onended, onerror)
+function rdSegAudio(segs) {
+    const urls = segs.map((x) => URL.createObjectURL(x.blob));
+    const offs = [];
+    let tot = 0;
+    segs.forEach((x) => { offs.push(tot); tot += x.dur; });
+    let i = 0, playing = false, a = null;
+    const self = { onended: null, onerror: null, _urls: urls };
+    const open = (k, at) => {
+        if (a) { a.onended = null; a.onerror = null; try { a.pause(); } catch (e) {} }
+        i = k;
+        const cur = new Audio(urls[k]);
+        a = cur;
+        cur.onerror = () => { if (self.onerror) self.onerror(); };
+        cur.onended = () => {
+            if (i < segs.length - 1) {
+                open(i + 1, 0);
+                if (playing) { const p = a.play(); if (p && p.catch) p.catch(() => { if (self.onerror) self.onerror(); }); }
+            } else if (self.onended) self.onended();
+        };
+        if (at) {
+            const set = () => { try { cur.currentTime = at; } catch (e) {} };
+            if (cur.readyState >= 1 || !cur.addEventListener) set(); else cur.addEventListener('loadedmetadata', set, { once: true });
+        }
+    };
+    open(0, 0);
+    Object.defineProperty(self, 'currentTime', {
+        get: () => offs[i] + ((a && a.currentTime) || 0),
+        set: (t) => {
+            let k = 0;
+            while (k < segs.length - 1 && t >= offs[k + 1]) k++;
+            const at = Math.max(0, t - offs[k]);
+            if (k === i) { try { a.currentTime = at; } catch (e) {} return; }
+            open(k, at);
+            if (playing) { const p = a.play(); if (p && p.catch) p.catch(() => {}); }
+        }
+    });
+    Object.defineProperty(self, 'duration', { get: () => tot });
+    self.play = () => {
+        playing = true;
+        if (a.ended && i > 0) open(0, 0);
+        return a.play();
+    };
+    self.pause = () => { playing = false; try { a.pause(); } catch (e) {} };
+    return self;
+}
+
+function rdSegsTotal() { return rdSegs.reduce((t, x) => t + x.dur, 0); }
+
+// تصفير حالة التسجيل في الذاكرة (المحفوظ في الهاتف يبقى). وإن كان التسجيل جارياً عند الخروج نحفظ ما سُجِّل ولا نخسره
 function rdRecDiscard() {
     rdPlayAfterStop = false;
     rdRecStarting = false;
     if (rdPlaying && rdAudioKind === 'rec') rdStopAudio(true);
     if (rdRecorder) {
-        const r = rdRecorder;
+        const r = rdRecorder, chunks = rdRecChunks, segs = rdSegs.slice();
+        const ms = rdRecState === 'recording' ? Date.now() - rdRecT0 : rdRecSessMs;
         rdRecorder = null;
-        r.onstop = null;
+        r.onstop = () => {
+            if (chunks.length) recStoreSave(segs.concat([{ blob: new Blob(chunks, { type: r.mimeType || 'audio/webm' }), dur: Math.max(0.1, ms / 1000) }]));
+        };
         try { if (r.state !== 'inactive') r.stop(); } catch (e) {}
     }
     if (rdRecStream) {
         try { rdRecStream.getTracks().forEach((t) => t.stop()); } catch (e) {}
         rdRecStream = null;
     }
-    if (rdRecUrl) { try { URL.revokeObjectURL(rdRecUrl); } catch (e) {} rdRecUrl = null; }
     if (rdRecState === 'recording' || rdRecState === 'paused') releaseWakeLock();
     rdRecTickStop();
-    rdCancelDisarm();
     rdBackClear();
     rdRecState = 'idle';
     rdRecAcc = 0; rdRecEnd = 0; rdRecLen = 0;
     rdRecChunks = [];
+    rdSegs = [];
     if (rd) {
         // الصفحات التي تبدأ مخفية (المراجعة الحرة وعقال الآيات) تبقى مخفية حتى أول «عرض»
         rd.hidden = !!(rd.startHidden && !rd.revealed);
@@ -3318,22 +3421,27 @@ function rdRecDiscard() {
     }
 }
 
+// زر «تسجيل»: يبدأ تسجيلاً جديداً يحلّ محل المحفوظ؛ وأثناء التسجيل يوقفه ويحفظ كل ما سُجِّل
 async function rdRecBtn() {
     if (!rd || !rd.items.length || rdRecStarting) return;
-    if (rdRecState === 'recording') {          // إيقاف التسجيل: تظهر الآيات مباشرة ويظهر المشغّل [عرض][شريط][مواصلة التسجيل]
-        try { if (rdRecorder && rdRecorder.pause) rdRecorder.pause(); } catch (e) {}
-        rdRecAcc += Date.now() - rdRecT0;
+    if (rdRecState === 'recording') {          // إيقاف: تظهر الآيات ويظهر المشغّل [عرض][شريط][مواصلة]
+        rdRecSessMs = Date.now() - rdRecT0;
+        rdRecAcc += rdRecSessMs;
         rdRecState = 'paused';
         rdRecTickStop();
         rd.hidden = false;
         rd.revealed = true;
+        rdRecStop(false);
         rdRefreshUI();
         return;
     }
-    if (rdRecState === 'paused' || rdRecState === 'recorded') { rdCancelRec(); return; }   // إعادة الضغط على زر التسجيل نفسه تلغيه (بتأكيد)
-    if (rd.tafMode) rd.tafMode = false;
     rdStopAudio(true);
     rdRecDiscard();
+    await rdRecStart(false);
+}
+
+// يبدأ جلسة تسجيل (جديدة، أو مقطعاً يُضاف إلى التسجيل الحالي عند المواصلة)
+async function rdRecStart(resume) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') {
         showToast("التسجيل غير مدعوم في هذا المتصفح.");
         rdRefreshUI();
@@ -3346,14 +3454,16 @@ async function rdRecBtn() {
     if (!rdRecStarting) { try { stream.getTracks().forEach((t) => t.stop()); } catch (e) {} return; }   // أُلغي أثناء طلب الإذن
     rdRecStarting = false;
     const rec = new MediaRecorder(stream);
+    const chunks = [];
     rdRecStream = stream;
     rdRecorder = rec;
-    rdRecChunks = [];
-    rd.recScope = rdScope();
+    rdRecChunks = chunks;
+    rd.recScope = (resume && rd.recScope) ? rd.recScope : rdScope();
+    if (resume) rd.sel = null;
     rd.hidden = true;
-    rdRecAcc = 0;
+    rdRecAcc = resume ? Math.round(rdSegsTotal() * 1000) : 0;
     rdRecState = 'recording';
-    rec.ondataavailable = (e) => { if (e.data && e.data.size) rdRecChunks.push(e.data); };
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
     rec.onstop = () => rdRecFinish(rec);
     rec.start();
     acquireWakeLock();
@@ -3368,6 +3478,7 @@ function rdRecStop(playAfter) {
     try { if (r.state !== 'inactive') r.stop(); else rdRecFinish(r); } catch (e) { rdRecFinish(r); }
 }
 
+// انتهاء جلسة تسجيل: يُضاف مقطعها إلى التسجيل ويُحفظ المجموع في ذاكرة الهاتف (سجل واحد)
 function rdRecFinish(rec) {
     if (rec !== rdRecorder) return;
     const chunks = rdRecChunks;
@@ -3377,30 +3488,51 @@ function rdRecFinish(rec) {
     rdRecTickStop();
     const play = rdPlayAfterStop;
     rdPlayAfterStop = false;
+    if (rdRecState === 'recording') {   // توقف المسجِّل من تلقاء نفسه (مقاطعة)
+        rdRecSessMs = Date.now() - rdRecT0;
+        rdRecAcc += rdRecSessMs;
+        rdRecState = 'paused';
+        rd.hidden = false;
+        rd.revealed = true;
+    }
     if (!chunks.length) {
-        rdRecState = 'idle';
-        rd.hidden = !!(rd.startHidden && !rd.revealed);
-        rd.recScope = rd.hidden ? rdFullScope() : null;
-        showToast("لم يُسجَّل شيء.");
+        if (!rdSegs.length) {
+            rdRecState = 'idle';
+            rd.hidden = !!(rd.startHidden && !rd.revealed);
+            rd.recScope = rd.hidden ? rdFullScope() : null;
+            showToast("لم يُسجَّل شيء.");
+        }
         rdRefreshUI();
         return;
     }
-    rdRecLen = rdRecElapsed() / 1000;
-    rdRecUrl = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || 'audio/webm' }));
-    rdRecState = 'recorded';
-    if (play) { rd.hidden = false; rd.revealed = true; rdRefreshUI(); rdPlayRec(); }
+    rdSegs.push({ blob: new Blob(chunks, { type: rec.mimeType || 'audio/webm' }), dur: Math.max(0.1, rdRecSessMs / 1000) });
+    rdRecLen = rdSegsTotal();
+    rdRecAcc = Math.round(rdRecLen * 1000);
+    recStoreSave(rdSegs);
+    if (play) { rdRecState = 'recorded'; rd.hidden = false; rd.revealed = true; rdRefreshUI(); rdPlayRec(); }
     else rdRefreshUI();
 }
 
-// «مواصلة التسجيل» (تظهر فوق الأزرار عند الإيقاف المؤقت): يكمل في الملف نفسه
-function rdRecResume() {
-    if (rdRecState !== 'paused') return;
-    try { if (rdRecorder && rdRecorder.resume) rdRecorder.resume(); } catch (e) {}
-    rdRecState = 'recording';
-    rd.hidden = true;
+// «مواصلة»: تسجيل مقطع جديد يُضاف إلى التسجيل الحالي (القديم المسترجَع أو الذي لتوّنا سجلناه)
+async function rdRecResume() {
+    if (rdRecState !== 'paused' || rdRecStarting || rdRecorder) return;
+    await rdRecStart(true);
+}
+
+// استرجاع آخر تسجيل محفوظ في الهاتف: يظهر المشغّل [عرض][شريط][مواصلة]
+function rdRestoreRec() {
+    if (!rd || !rd.items.length || rdRecState === 'recording' || rdRecStarting) return;
+    if (!recMem || !recMem.segs.length) { showToast("لا يوجد تسجيل محفوظ بعد."); return; }
+    rdStopAudio(true);
+    rdRecDiscard();
+    rdSegs = recMem.segs.map((x) => ({ blob: x.blob, dur: x.dur }));
+    rdRecLen = rdSegsTotal();
+    rdRecAcc = Math.round(rdRecLen * 1000);
+    rdRecState = 'paused';
     rd.sel = null;
-    rdCancelDisarm();
-    rdRecTickStart();
+    rd.hidden = false;
+    rd.revealed = true;
+    rd.recScope = null;
     rdRefreshUI();
 }
 
@@ -3408,7 +3540,12 @@ function rdRecResume() {
 // (في الصفحات التي تبدأ مخفية يُظهر الآيات فقط قبل أي تسجيل)
 function rdShowBtn() {
     if (!rd || !rd.items.length) return;
-    if (rdRecState === 'recording' || rdRecState === 'paused') { rdRecStop(true); return; }
+    if (rdRecState === 'recording') return;
+    if (rdRecState === 'paused') {
+        if (rdRecorder) { rdPlayAfterStop = true; return; }     // المقطع الأخير ما زال يُحفظ: يُعرض فور انتهائه
+        rdRecState = 'recorded'; rd.hidden = false; rd.revealed = true; rdRefreshUI(); rdPlayRec();
+        return;
+    }
     if (rd.kind === 'aqal' && rdRecState === 'idle') { rd.hidden = false; rd.revealed = true; rdRefreshUI(); return; }   // عقال الآيات: يُظهر الآية فقط
     if (rdRecState === 'recorded') {
         if (rdPlaying && rdAudioKind === 'rec') { rdPauseShow(); return; }
@@ -3436,23 +3573,6 @@ function rdResumeShow() {
     if (p && p.catch) p.catch(() => { if (token === rdAudioToken) { rdStopAudio(); showToast("تعذر تشغيل التسجيل."); } });
     rdRenderBars();
     rdScrollSync();
-}
-// «إلغاء التسجيل/العرض»: يحتاج تأكيداً (ضغطتان خلال 3 ثوانٍ) ثم يعود إلى الأزرار الأربعة
-function rdCancelDisarm() {
-    rdCancelArmed = false;
-    if (rdCancelTimer) { clearTimeout(rdCancelTimer); rdCancelTimer = null; }
-}
-function rdCancelRec() {
-    if (!rdCancelArmed) {
-        rdCancelArmed = true;
-        if (rdCancelTimer) clearTimeout(rdCancelTimer);
-        rdCancelTimer = setTimeout(() => { rdCancelTimer = null; rdCancelArmed = false; rdRenderBars(); }, 3000);
-        rdRenderBars();
-        return;
-    }
-    rdStopAudio(true);
-    rdRecDiscard();
-    rdRefreshUI();
 }
 // مشغّل العرض: [تشغيل/إيقاف][شريط التقدم][رجوع ثانية]؛ كل ضغطة على الرجوع تعيد ثانية واحدة، والتشغيل يواصل من هناك مباشرة
 function rdCurT() { return (rdAudio && rdAudioKind === 'rec') ? (rdAudio.currentTime || 0) : 0; }
@@ -3482,6 +3602,7 @@ const RD_ICONS = {
     play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M17 4.5v15L4 12z" fill="currentColor"/></svg>',
     pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>',
     back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
+    restore: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3.6 12a8.4 8.4 0 1 0 2.5-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M3.5 3.8v4.9h4.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.6V12l3 1.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     home: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z" fill="currentColor"/></svg>'
 };
 // «الرئيسية»: خروج مباشر من القارئ إلى القائمة الرئيسية (بلا تأكيد مراجعة)
@@ -3526,13 +3647,13 @@ function rdStripUpdate() {
 }
 
 function rdPlayRec() {
-    if (!rdRecUrl) return;
+    if (!rdSegs.length) return;
     rdStopAudio(true);
     const token = ++rdAudioToken;
     rdPlaying = true;
     rdAudioKind = 'rec';
     acquireWakeLock();
-    const a = new Audio(rdRecUrl);
+    const a = rdSegAudio(rdSegs);
     rdAudio = a;
     const fail = () => {
         if (token !== rdAudioToken) return;
@@ -3557,13 +3678,11 @@ function rdPlayRec() {
 
 // ---------- التفسير ----------
 
-// زر التفسير: يتلوّن وتتلوّن الآيات بالتناوب وينتظر الضغط على آية؛ الضغط عليه ثانية يعيد كل شيء
+// زر التفسير: يفتح مباشرة تفسير الآية المحدَّدة؛ وبلا تحديد الآية الأولى؛ ومع جزء ملوَّن محدَّد أولُ آية فيه (ثم التنقل بالسابقة/اللاحقة)
 function rdToggleTafsir() {
     if (!rd || !rd.items.length || rdGuardHidden()) return;
-    if (rdRecState !== 'idle') { showToast("ألغِ التسجيل أولاً (اضغط «تسجيل»)."); return; }
-    rdStopAudio(true);
-    rd.tafMode = !rd.tafMode;
-    rdRefreshUI();
+    if (rdRecState === 'recording') { showToast("أوقف التسجيل أولاً (اضغط «إيقاف التسجيل»)."); return; }
+    rdOpenAyahTafsir(rd.sel !== null ? rdUnitOf(rd.sel).from : 0);
 }
 
 function rdOpenAyahTafsir(k) {
@@ -3586,17 +3705,17 @@ function showRdTafsir() {
     const k = rd.tafIdx;
     const html = `
         <div class="taf-tabs">
-            <button type="button" id="taf-tab-muyassar" class="btn-secondary taf-tab" onclick="rdTafSwitch('muyassar')">${TAFSIR_EDITIONS.muyassar.name}</button>
-            <button type="button" id="taf-tab-saadi" class="btn-secondary taf-tab" onclick="rdTafSwitch('saadi')">${TAFSIR_EDITIONS.saadi.name}</button>
+            <button type="button" id="taf-tab-muyassar" class="btn-secondary hf-btn tb-btn taf-tab" onclick="rdTafSwitch('muyassar')">${TAFSIR_EDITIONS.muyassar.name}</button>
+            <button type="button" id="taf-tab-saadi" class="btn-secondary hf-btn tb-btn taf-tab" onclick="rdTafSwitch('saadi')">${TAFSIR_EDITIONS.saadi.name}</button>
         </div>
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title" style="font-size: 16px;">سورة ${surahsNames[it.s]} — الآية ${it.a + 1}</div>
             <div id="tafsir-body" class="taf-body"></div>
         </div>
-        <div class="hf-grid3 taf-nav3">
-            <div class="rd-cell"><button type="button" id="taf-prev-btn" class="btn-secondary hf-btn" onclick="rdTafStep(-1)" ${k <= 0 ? 'disabled' : ''}>الآية السابقة</button></div>
-            <div class="rd-cell"><button type="button" id="taf-next-btn" class="btn-secondary hf-btn" onclick="rdTafStep(1)" ${k >= rd.items.length - 1 ? 'disabled' : ''}>الآية اللاحقة</button></div>
-            <div class="rd-cell"><button type="button" id="taf-back-btn" class="btn-secondary hf-btn" onclick="rdBackFromTafsir()">رجوع</button></div>
+        <div class="rd-bar taf-nav3">
+            <div class="rd-cell"><button type="button" id="taf-prev-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(-1)" aria-label="الآية السابقة" title="الآية السابقة" ${k <= 0 ? 'disabled' : ''}>${tbIcon('arrR')}</button></div>
+            <div class="rd-cell"><button type="button" id="taf-back-btn" class="btn-secondary hf-btn tb-btn" onclick="rdBackFromTafsir()">العودة</button></div>
+            <div class="rd-cell"><button type="button" id="taf-next-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(1)" aria-label="الآية اللاحقة" title="الآية اللاحقة" ${k >= rd.items.length - 1 ? 'disabled' : ''}>${tbIcon('arrL')}</button></div>
         </div>
     `;
     renderInContainer(html);
@@ -3615,7 +3734,7 @@ async function rdTafRender() {
     const edKey = rd.tafEd;
     ['muyassar', 'saadi'].forEach((k) => {
         const b = document.getElementById('taf-tab-' + k);
-        if (b) b.classList.toggle('active', k === edKey);
+        if (b) b.classList.toggle('on', k === edKey);
     });
     const body = document.getElementById('tafsir-body');
     if (!body || !rd) return;
@@ -3698,7 +3817,6 @@ async function rdTafRender() {
 // الرجوع من صفحة التفسير: نعود إلى الآيات المتلوّنة وزر التفسير ما زال مفعَّلاً
 function rdBackFromTafsir() {
     rdTafToken++;
-    rd.tafMode = false;
     rd.tafIdx = null;
     rdRenderPage(true);
 }
