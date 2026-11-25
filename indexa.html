@@ -705,8 +705,6 @@ body.dark-mode .cm-pick { color: #f1f5f9; }
 body.dark-mode .cm-pick.cm-r0 { background: #1e293b; }
 .nr-empty { text-align: center; color: #64748b; line-height: 2; padding: 24px 8px; font-size: 15px; }
 body.dark-mode .nr-empty { color: #94a3b8; }
-.hf-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex-shrink: 0; width: 100%; }
-.hf-grid3 .hf-btn { font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .hf-btn { padding: 14px 4px !important; font-size: 15px !important; font-weight: bold !important; max-width: none !important; line-height: 1.3; }
 
 /* النص: التحديد بتغيير لون الكتابة، والأجزاء بخلفيتين متناوبتين */
@@ -822,8 +820,6 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 #rd-text .ayah-blue { font-weight: normal; }
 .rd-showhint { width: 100%; min-height: 44px; border-radius: 3px !important; }
 .rd-delbtn { width: 100%; margin: 6px 0 10px; border-radius: 12px !important; color: #b91c1c !important; }
-.rd-note { width: 100%; box-sizing: border-box; text-align: center; font-size: 15px; font-weight: bold; padding: 10px 4px; background: #fef3c7; border: 1.5px solid #d97706; color: #92400e; }
-body.dark-mode .rd-note { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
 .rs-step { border-radius: 14px; }
 .rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: linear-gradient(180deg, #ffffff, #f1f5f9); box-shadow: 0 2px 8px rgba(15,23,42,0.10); }
 .rd-strip.hidden { margin-top: 0; padding: 0; border: 0; box-shadow: none; }
@@ -834,10 +830,6 @@ body.dark-mode .rd-strip { border-color: #334155; background: linear-gradient(18
 body.dark-mode .rs-step.rs-resume { background: #450a0a; border-color: #f87171; color: #fecaca; }
 .rec-dot { width: 11px; height: 11px; border-radius: 50%; background: #dc2626; flex: none; }
 body.dark-mode .rec-dot { background: #f87171; }
-.rd-recbox { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 44px; box-sizing: border-box; border: 2px solid #dc2626; border-radius: 12px; background: rgba(220, 38, 38, 0.08); color: #dc2626; font-family: inherit; cursor: pointer; padding: 4px 10px; touch-action: manipulation; }
-.rd-recbox .rd-recmsg { font-size: 14px; font-weight: bold; color: #dc2626; }
-body.dark-mode .rd-recbox { border-color: #f87171; background: rgba(248, 113, 113, 0.12); }
-body.dark-mode .rd-recbox .rd-timer, body.dark-mode .rd-recbox .rd-recmsg { color: #fca5a5; }
 .rs-play { color: #115e59; }
 
 /* ===== الجولة 86: لمسة جمالية موحّدة للأزرار ===== */
@@ -901,6 +893,12 @@ body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color:
 body.dark-mode #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
 #rd-row1.rd-three .hf-btn { padding: 0 !important; }
 .taf-nav3 .hf-btn { min-height: 50px; padding: 0 !important; }
+/* الجولة 94 */
+.rs-step.rs-cancel { min-width: 40px; }
+.rs-step.rs-cancel.rs-wide { width: auto; min-width: 56px; padding: 0 10px; gap: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.rs-step.rs-cancel.rs-wide svg { width: 14px; height: 14px; }
+#rd-row1 .rd-recdark .rd-timer { color: #fff; font-size: 18px; }
+#rd-row1 .rd-recdark { gap: 12px; }
 </style>
 </head>
 <body>
@@ -2877,7 +2875,7 @@ function rdRenderBars() {
     const none = !rd.items.length;
     const aqalHid = rd.kind === 'aqal' && rd.hidden && rdRecState === 'idle' && !none;
 
-    r1.classList.remove('hidden');
+    r1.classList.toggle('hidden', (recDone || recPaused) && !none);   // المشغّل يحلّ محل الأزرار السفلية
     rdSpeedVis();
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
@@ -2888,7 +2886,7 @@ function rdRenderBars() {
         : sheikhPlaying
             ? B('rd-sname', 'tb-btn on rd-sname', 'rdOpenSettings()', shName)
             : recOn
-                ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', '<span class="rec-dot"></span><span>إيقاف التسجيل</span>')   // أثناء التسجيل: زر داكن بعرض كامل
+                ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', `<span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span>إيقاف التسجيل</span>`)   // أثناء التسجيل: زر داكن بعرض كامل
                 : `<div class="rd-cell"><button type="button" id="rd-restore" class="btn-secondary hf-btn tb-btn" onclick="rdRestoreRec()" aria-label="استرجاع آخر تسجيل" title="استرجاع آخر تسجيل"${recMem ? '' : ' disabled'}>${RD_ICONS.restore}</button></div>`
                 + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
                 + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrR')}</button></div>`;
@@ -2901,9 +2899,7 @@ function rdRenderBars() {
     const hint = document.getElementById('rd-hint');
     if (hint) {
         let h = '';
-        if (recOn) {
-            h = `<button type="button" id="rd-recbox" class="rd-recbox" onclick="rdRecBtn()"><span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span class="rd-recmsg">اضغط لوقف التسجيل</span></button>`;
-        } else if (aqalHid) {
+        if (aqalHid) {
             h = `<button type="button" id="rd-show" class="btn-secondary hf-btn rd-showhint" onclick="rdShowBtn()">العرض</button>`;
         } else if (recDone && !showOn && rd.sel !== null && !none && rd.kind !== 'aqal') {
             const on = stumbleAllowed() && rd.stumbled.has(rd.sel);
@@ -3536,6 +3532,15 @@ function rdRestoreRec() {
     rdRefreshUI();
 }
 
+// «إلغاء»: يتخلّى عن التسجيل الظاهر ويعود إلى الأزرار الثلاثة (ما حُفظ في الهاتف يبقى قابلاً للاسترجاع)
+function rdCancelTake() {
+    if (!rd || (rdRecState !== 'paused' && rdRecState !== 'recorded')) return;
+    rdStopAudio(true);
+    rdRecDiscard();
+    rd.sel = null;
+    rdRefreshUI();
+}
+
 // «العرض» جزء من عملية التسجيل: بعد التسجيل يشغّل تسجيلك مع النزول التلقائي، والضغط عليه يوقف العرض مؤقتاً ثم يواصله.
 // (في الصفحات التي تبدأ مخفية يُظهر الآيات فقط قبل أي تسجيل)
 function rdShowBtn() {
@@ -3603,6 +3608,7 @@ const RD_ICONS = {
     pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>',
     back: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
     restore: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3.6 12a8.4 8.4 0 1 0 2.5-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M3.5 3.8v4.9h4.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.6V12l3 1.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    cancel: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
     home: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z" fill="currentColor"/></svg>'
 };
 // «الرئيسية»: خروج مباشر من القارئ إلى القائمة الرئيسية (بلا تأكيد مراجعة)
@@ -3626,7 +3632,8 @@ function rdStripRender(show) {
     el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play${pz ? ' rs-wide' : ''}" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : (pz ? 'عرض التسجيل' : 'تشغيل العرض')}">${on ? RD_ICONS.pause : RD_ICONS.play}${pz ? '<span>العرض</span>' : ''}</button>`
         + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
         + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i></div></div>`
-        + (rdRecState === 'paused'
+        + `<button type="button" id="rd-cancel" class="rs-step rs-cancel${pz ? ' rs-wide' : ''}" onclick="rdCancelTake()" aria-label="إلغاء التسجيل" title="إلغاء التسجيل">${RD_ICONS.cancel}${pz ? '<span>إلغاء</span>' : ''}</button>`
+        + (pz
             ? `<button type="button" id="rd-resume" class="rs-step rs-resume" onclick="rdRecResume()" aria-label="مواصلة التسجيل"><span class="rec-dot"></span><span>مواصلة</span></button>`
             : `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`);
     rdStripUpdate();

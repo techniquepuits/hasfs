@@ -659,10 +659,31 @@
   }
 
   /* الباركود أخفّ حضوراً حتى لا ينافس رقم الحجز */
-  #ticket .ticket-card .ticket-bar svg{fill:#2b2b2b;opacity:.72}
+  #ticket .ticket-card .ticket-bar svg{fill:#000;opacity:1}
   #ticket .ticket-card .ticket-bar{padding:8px 12px 3px}
   #ticket .ticket-card .ticket-bar .digits{color:#6b6b6b;line-height:1.1;margin-top:3px}
   @media (max-height:700px){ #ticket .ticket-card .ticket-bar{padding:6px 12px 2px} }
+
+  /* تذكرة بطبقة ورقية واحدة، والنصوص سوداء، والأخضر للرمز وحده */
+  .ticket-card{background:#fffcf0;border-color:#f1e8cc}
+  #ticket .ticket-card .ticket-title{
+    background:none;border-radius:0;
+    color:#111;font-weight:800;font-size:22px;
+    border-bottom:none;
+  }
+  #ticket .ticket-card .ticket-title::after{
+    content:"";display:block;height:0;
+    border-top:1px solid rgba(0,0,0,.16);
+    margin:9px 24px 0;
+  }
+  html[dir="ltr"] #ticket .ticket-card .ticket-title{letter-spacing:.16em;font-size:19px}
+  #ticket .ticket-card .info-line,
+  #ticket .ticket-card .info-line b{color:#111;font-weight:400}
+  #ticket .ticket-card .legal-note,
+  #ticket .ticket-card .cancel-note{color:#1a1a1a}
+  #ticket .ticket-card .note-sep{border-top-color:rgba(0,0,0,.16)}
+  #ticket .ticket-card .ticket-bar .digits{color:#111}
+  @media (max-height:620px){ #ticket .ticket-card .ticket-title{font-size:18px} }
 </style>
 </head>
 <body>
@@ -799,7 +820,7 @@
       tabServices:"الخدمات",
       tabContact:"الموقع",
       tabMine:"مواعيدي",
-      ticketTitle:"تذكرة الحجز",
+      ticketTitle:"تـــذكـــرة الـــحـــجـــز",
       noBooking:"لا يوجد لديكم موعد محجوز",
       hint:"اضغط على الخدمة للتفاصيل",
       phone:"هاتف العيادة",
