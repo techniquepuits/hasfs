@@ -893,6 +893,11 @@ body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color:
 body.dark-mode #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
 #rd-row1.rd-three .hf-btn { padding: 0 !important; }
 .taf-nav3 .hf-btn { min-height: 50px; padding: 0 !important; }
+/* الجولة 95 */
+.taf-box { padding-left: 0 !important; padding-right: 0 !important; }
+.taf-box > .surah-title, .taf-box .taf-text { padding-left: 10px; padding-right: 10px; }
+.taf-box .taf-ayah { background: rgba(22, 163, 74, 0.14); border-bottom: 0; margin: 0 0 8px; padding: 8px 10px; }
+body.dark-mode .taf-box .taf-ayah { background: rgba(52, 211, 153, 0.14); }
 /* الجولة 94 */
 .rs-step.rs-cancel { min-width: 40px; }
 .rs-step.rs-cancel.rs-wide { width: auto; min-width: 56px; padding: 0 10px; gap: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
@@ -2889,7 +2894,7 @@ function rdRenderBars() {
                 ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', `<span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span>إيقاف التسجيل</span>`)   // أثناء التسجيل: زر داكن بعرض كامل
                 : `<div class="rd-cell"><button type="button" id="rd-restore" class="btn-secondary hf-btn tb-btn" onclick="rdRestoreRec()" aria-label="استرجاع آخر تسجيل" title="استرجاع آخر تسجيل"${recMem ? '' : ' disabled'}>${RD_ICONS.restore}</button></div>`
                 + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
-                + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrR')}</button></div>`;
+                + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>`;
     r1.classList.toggle('rd-three', !none && !sheikhPlaying && !recOn);   // [استرجاع][تسجيل][عودة]
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
@@ -3632,10 +3637,10 @@ function rdStripRender(show) {
     el.innerHTML = `<button type="button" id="rd-play" class="rs-step rs-play${pz ? ' rs-wide' : ''}" onclick="rdShowBtn()" aria-label="${on ? 'إيقاف العرض' : (pz ? 'عرض التسجيل' : 'تشغيل العرض')}">${on ? RD_ICONS.pause : RD_ICONS.play}${pz ? '<span>العرض</span>' : ''}</button>`
         + `<div class="rs-bars" dir="ltr" title="شريط تقدم العرض"><div class="rs-lab-row"><span id="rd-rp-n" class="rs-lab"></span></div>`
         + `<div class="rs-box"><i id="rs-real"></i><i id="rs-up"></i></div></div>`
-        + `<button type="button" id="rd-cancel" class="rs-step rs-cancel${pz ? ' rs-wide' : ''}" onclick="rdCancelTake()" aria-label="إلغاء التسجيل" title="إلغاء التسجيل">${RD_ICONS.cancel}${pz ? '<span>إلغاء</span>' : ''}</button>`
         + (pz
             ? `<button type="button" id="rd-resume" class="rs-step rs-resume" onclick="rdRecResume()" aria-label="مواصلة التسجيل"><span class="rec-dot"></span><span>مواصلة</span></button>`
-            : `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`);
+            : `<button type="button" id="rd-back" class="rs-step" onclick="rdBackStep()" aria-label="رجوع ثانية">${RD_ICONS.back}</button>`)
+        + `<button type="button" id="rd-cancel" class="rs-step rs-cancel${pz ? ' rs-wide' : ''}" onclick="rdCancelTake()" aria-label="إلغاء التسجيل" title="إلغاء التسجيل">${RD_ICONS.cancel}${pz ? '<span>إلغاء</span>' : ''}</button>`;
     rdStripUpdate();
     if (!rdStripTimer) rdStripTimer = setInterval(rdStripTick, 100);
 }
@@ -3715,7 +3720,7 @@ function showRdTafsir() {
             <button type="button" id="taf-tab-muyassar" class="btn-secondary hf-btn tb-btn taf-tab" onclick="rdTafSwitch('muyassar')">${TAFSIR_EDITIONS.muyassar.name}</button>
             <button type="button" id="taf-tab-saadi" class="btn-secondary hf-btn tb-btn taf-tab" onclick="rdTafSwitch('saadi')">${TAFSIR_EDITIONS.saadi.name}</button>
         </div>
-        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="exercise-box taf-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
             <div class="surah-title" style="font-size: 16px;">سورة ${surahsNames[it.s]} — الآية ${it.a + 1}</div>
             <div id="tafsir-body" class="taf-body"></div>
         </div>
