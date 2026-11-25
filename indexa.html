@@ -1085,6 +1085,13 @@ function fetchStaticFile(fileName) {
     return staticFetchPromises[fileName];
 }
 
+// الياء الصغيرة المتوسطة (إبراهيم، النبيين، الأميين…) تأتي في بيانات حفص بلا مدّة فتظهر منفصلة؛ نكتبها بالشكل المعتاد «ـۧ»
+// (لا نمسّ ياء بِهِۦ الطرفية ولا ما بعد حرف غير الياء/الهاء مثل يُحْۦِىَ)
+const MID_SMALL_YA = /([\u064A\u0647][\u064B-\u0652\u0670]*)\u06E6(?=[\u064B-\u065F\u0670]*[\u0621-\u064A])/g;
+function fixSmallYa(t) {
+    return t.map((sura) => sura.map((a) => (typeof a === 'string' ? a.replace(MID_SMALL_YA, '$1\u0640\u06E6') : a)));
+}
+
 function isValidRiwayaTexts(x) {
     return Array.isArray(x) && x.length === 114 && Array.isArray(x[0]) && x[0].length > 0;
 }
@@ -1095,7 +1102,7 @@ async function ensureTextsForRiwaya(riwaya) {
 
     const cached = lsGet(LS_KEYS.texts(riwaya), null);
     if (isValidRiwayaTexts(cached)) {
-        quranTexts[riwaya] = cached;
+        quranTexts[riwaya] = fixSmallYa(cached);
         return;
     }
 
@@ -1103,7 +1110,7 @@ async function ensureTextsForRiwaya(riwaya) {
     const all = json.ayah_texts || json;
 
     for (let r = 0; r < all.length; r++) {
-        if (!quranTexts[r] && isValidRiwayaTexts(all[r])) quranTexts[r] = all[r];
+        if (!quranTexts[r] && isValidRiwayaTexts(all[r])) quranTexts[r] = fixSmallYa(all[r]);
     }
     delete staticFetchPromises["ayah_texts.json"];   // تحرير الذاكرة
 
