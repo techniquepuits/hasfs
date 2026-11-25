@@ -516,7 +516,7 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
 .hidden { display: none !important; }
 
 @media screen and (max-width: 768px) {
-    .welcome-container { padding: 15px 10px; width: 96%; height: 94vh; height: calc(100dvh - 22px); }
+    .welcome-container { padding: 15px 10px; width: 96%; height: calc(100dvh - 22px); }
     .app-title { font-size: 30px; }
     .exercise-box { font-size: 21px !important; line-height: 2.8; padding: 12px 8px !important; }
     .circle-num { width: 22px; height: 22px; font-size: 11px; }
@@ -543,12 +543,10 @@ body.dark-mode .sheikh-select { background: #0f172a !important; color: #e2e8f0 !
 .ayah-stumbled .at { color: #dc2626 !important; }
 body.dark-mode .ayah-stumbled .at { color: #f87171 !important; }
 .rd-act { display: flex; gap: 8px; width: 100%; }
-.rd-act .hf-btn { flex: 1; min-height: 42px; padding: 8px 4px !important; }
+.rd-act .hf-btn { min-height: 42px; padding: 8px 4px !important; }
 .rd-act .rd-stm { background: #fee2e2 !important; border-color: #dc2626 !important; color: #b91c1c !important; }
-.rd-act .rd-stm.on { background: #fff !important; }
 body.dark-mode .rd-act .rd-stm { background: #450a0a !important; border-color: #f87171 !important; color: #fecaca !important; }
-body.dark-mode .rd-act .rd-stm.on { background: #1e293b !important; }
-.stats-line { display: inline-flex; align-items: center; gap: 7px; margin-inline-start: 4px; }
+.stats-line { display: inline-flex; align-items: center; margin-inline-start: 4px; }
 .due-num { font-weight: bold; font-size: 17px; }
 .due-total { color: #1b4d3e; font-size: 20px; }
 body.dark-mode .due-total { color: #6ee7b7; }
@@ -569,7 +567,7 @@ body.dark-mode .rv-empty { color: #cbd5e1; }
 .resume-btn { width: 100%; padding: 15px 12px; margin-bottom: 6px; font-family: inherit; border-radius: 12px; flex: none; background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #1b4d3e; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .resume-btn .rb-main { font-size: 16px; font-weight: bold; }
 .resume-btn.ps-btn { padding: 9px 12px; margin-bottom: 5px; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; }
-.cm-name { cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; background: #f1f5f9; }
+.cm-name { cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-radius: 8px; background: #f1f5f9; }
 .cm-surah { flex: none; }
 .cm-name { flex: none; }
 .cm-name::after { content: '▾'; font-size: 12px; }
@@ -751,24 +749,19 @@ body.dark-mode .rd-msg { color: #cbd5e1; }
 .rd-hint:empty { display: none; }
 .rd-strip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; direction: rtl; }
 .rd-strip.hidden { display: none; }
-.rs-step { flex: none; width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #0d9488; background: #ccfbf1; color: #115e59; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
+.rs-step { flex: none; width: 40px; height: 40px; font-size: 22px; font-weight: bold; font-family: inherit; padding: 0; cursor: pointer; touch-action: manipulation; }
 .rs-bars { position: relative; flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; }
 .rs-bars .rs-box { flex: 1; margin: 0; }
 .rs-lab-row { position: absolute; top: 0; left: 0; right: 0; height: 13px; direction: rtl; }
-.rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 11px; line-height: 13px; color: #115e59; white-space: nowrap; font-family: sans-serif; }
+.rs-lab { direction: ltr; unicode-bidi: isolate; position: absolute; top: 0; transform: translateX(50%); font-size: 11px; line-height: 13px; white-space: nowrap; font-family: sans-serif; }
 .rs-lab b { font-size: 11px; }
-.rs-box { position: relative; height: 14px; border-radius: 7px; background: #e2e8f0; overflow: hidden; direction: rtl; margin-top: 2px; }
+.rs-box { position: relative; height: 14px; border-radius: 7px; overflow: hidden; direction: rtl; margin-top: 2px; }
 .rs-box i { position: absolute; top: 0; bottom: 0; }
-#rs-real { right: 0; background: #1b4d3e; }
-#rs-up { background: #5eead4; }
+#rs-real { right: 0; }
 body.dark-mode #rd-text .at { color: #4ade80; }
 body.dark-mode #rd-text .chunk-b .at { color: #bbf7d0; }
 body.dark-mode #rd-text .chunk-a, body.dark-mode #rd-text .chunk-b { background: transparent; }
-body.dark-mode .rs-step { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
-body.dark-mode .rs-lab { color: #99f6e4; }
-body.dark-mode .rs-box { background: #334155; }
-body.dark-mode #rs-up { background: #2dd4bf; }
-body.dark-mode #rs-real { background: #0f766e; }
+body.dark-mode .rs-step { border-color: #2dd4bf; }
 #rd-row1 .rd-cell { align-items: stretch; }
 .rd-cell { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .rd-cell .hf-btn { width: 100%; white-space: nowrap; }
@@ -785,15 +778,14 @@ body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #
 .rd-rep-row { display: flex; justify-content: center; margin: 10px 0; }
 /* ===== القارئ: شريطا أزرار (علوي وسفلي) مستطيلان بزوايا قائمة ===== */
 .rd-bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; flex-shrink: 0; }
-.rd-bar .rd-cell + .rd-cell { margin-inline-start: -1.5px; }
-.rd-bar .hf-btn { border-radius: 3px !important; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.rd-bar .hf-btn { display: flex; align-items: center; justify-content: center; gap: 6px; }
 .rd-top { margin-bottom: 8px; }
 .rd-top .rd-cell .hf-btn { min-height: 42px; padding: 8px 2px !important; font-size: 14px !important; }
 /* أزرار الشريط العلوي: نيلي شبه شفاف، ويصير داكناً عند تفعيله */
-.hf-btn.tb-btn { background: rgba(40, 53, 147, 0.13) !important; border: 1.5px solid rgba(40, 53, 147, 0.4) !important; color: #283593 !important; }
-.hf-btn.tb-btn.on { background: #283593 !important; border-color: #1a237e !important; color: #fff !important; }
-body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.2) !important; border-color: rgba(159, 168, 218, 0.5) !important; color: #c5cae9 !important; }
-body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; border-color: #9fa8da !important; color: #fff !important; }
+.hf-btn.tb-btn { border: 1.5px solid rgba(40, 53, 147, 0.4) !important; }
+.hf-btn.tb-btn.on { border-color: #1a237e !important; }
+body.dark-mode .hf-btn.tb-btn { border-color: rgba(159, 168, 218, 0.5) !important; }
+body.dark-mode .hf-btn.tb-btn.on { border-color: #9fa8da !important; }
 .rd-mid { min-height: 44px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex-shrink: 0; margin-bottom: 8px; }
 .rd-act .hf-btn { border-radius: 3px !important; }
 .rd-act .hf-btn + .hf-btn { margin-inline-start: -1.5px; }
@@ -802,7 +794,6 @@ body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; border-color:
 .rd-page > .exercise-box, .rd-page > .rd-mid, .rd-page > .rating-buttons { margin-left: 14px !important; margin-right: 14px !important; width: auto; }
 .rd-page > .exercise-box { margin-bottom: 8px !important; }
 .rd-page > .rd-mid { margin-bottom: 8px; }
-.rd-page > .rd-top { margin-bottom: 10px; }
 .ag-grid { display: grid; gap: 6px; padding: 2px; }
 .rd-pop-list.pg-row { display: flex; flex-direction: row; gap: 8px; }
 .rd-pop-list.pg-row .rd-pop-item { flex: 1; text-align: center; justify-content: center; padding: 10px 4px; }
@@ -821,13 +812,12 @@ body.dark-mode .ag-btn.ag-due { background: rgba(220, 38, 38, 0.3); border-color
 .rd-showhint { width: 100%; min-height: 44px; border-radius: 3px !important; }
 .rd-delbtn { width: 100%; margin: 6px 0 10px; border-radius: 12px !important; color: #b91c1c !important; }
 .rs-step { border-radius: 14px; }
-.rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; border: 1.5px solid #e2e8f0; background: linear-gradient(180deg, #ffffff, #f1f5f9); box-shadow: 0 2px 8px rgba(15,23,42,0.10); }
+.rd-strip { margin-top: 24px; padding: 7px 9px; border-radius: 20px; }
 .rd-strip.hidden { margin-top: 0; padding: 0; border: 0; box-shadow: none; }
-body.dark-mode .rd-strip { border-color: #334155; background: linear-gradient(180deg, #1e293b, #172033); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .rs-step.rs-wide { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 .rs-step.rs-wide svg { width: 16px; height: 16px; }
-.rs-step.rs-resume { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center; background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
-body.dark-mode .rs-step.rs-resume { background: #450a0a; border-color: #f87171; color: #fecaca; }
+.rs-step.rs-resume { width: auto; min-width: 84px; padding: 0 12px; gap: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center; border-color: #dc2626; }
+body.dark-mode .rs-step.rs-resume { border-color: #f87171; }
 .rec-dot { width: 11px; height: 11px; border-radius: 50%; background: #dc2626; flex: none; }
 body.dark-mode .rec-dot { background: #f87171; }
 .rs-play { color: #115e59; }
@@ -1088,8 +1078,10 @@ function fetchStaticFile(fileName) {
 // الياء الصغيرة المتوسطة (إبراهيم، النبيين، الأميين…) تأتي في بيانات حفص بلا مدّة فتظهر منفصلة؛ نكتبها بالشكل المعتاد «ـۧ»
 // (لا نمسّ ياء بِهِۦ الطرفية ولا ما بعد حرف غير الياء/الهاء مثل يُحْۦِىَ)
 const MID_SMALL_YA = /([\u064A\u0647][\u064B-\u0652\u0670]*)\u06E6(?=[\u064B-\u065F\u0670]*[\u0621-\u064A])/g;
+// نصوص خُزِّنت سابقاً في الهاتف بالصيغة القديمة (تطويلة + ۧ العالية، تشبه الهمزة) تُحوَّل إلى الصيغة الحالية
+const OLD_MID_YA = /([\u064A\u0647][\u064B-\u0652\u0670]*)\u0640\u06E7/g;
 function fixSmallYa(t) {
-    return t.map((sura) => sura.map((a) => (typeof a === 'string' ? a.replace(MID_SMALL_YA, '$1\u0640\u06E6') : a)));
+    return t.map((sura) => sura.map((a) => (typeof a === 'string' ? a.replace(OLD_MID_YA, '$1\u0640\u06E6').replace(MID_SMALL_YA, '$1\u0640\u06E6') : a)));
 }
 
 function isValidRiwayaTexts(x) {
