@@ -259,7 +259,9 @@ body.dark-mode .ayah-blue {
 .menu-item { width: 100%; max-width: 420px; text-align: center; }
 .menu-item .btn-main, .menu-item .btn-secondary { margin: 0; max-width: 100%; padding-top: 11px; padding-bottom: 11px; font-size: 16px; }
 .menu-row3 { display: flex; gap: 8px; }
-.menu-item.menu-row3 .btn-main { flex: 1 1 0; min-width: 0; width: auto; padding-left: 4px; padding-right: 4px; }
+.menu-item.menu-row3 #menu-prog-btn { flex: 1 1 0; }
+.menu-item.menu-row3 #menu-rev-btn { flex: 3 1 0; }
+.menu-item.menu-row3 .btn-main {  min-width: 0; width: auto; padding-left: 4px; padding-right: 4px; }
 
 /* النافذة المنبثقة لاختيار آية البداية */
 .modal-overlay {
@@ -577,6 +579,21 @@ body.dark-mode .cm-name { background: #1e293b; }
 .cm-txt { font-size: 22px; line-height: 2.1; text-align: center; margin: 8px 0 12px; max-height: 45vh; overflow-y: auto; }
 .cm-txt-nav { display: flex; gap: 8px; margin-bottom: 8px; }
 .cm-txt-nav button { flex: 1 1 0; }
+.rd-bot#pg-bottom { display: flex; }
+#pg-bottom .rd-cell { flex: 1 1 0; }
+#pg-bottom .rd-cell.rd-sq { flex: 0 0 54px; }
+#pg-bottom { align-items: stretch; }
+#pg-bottom .rd-cell .hf-btn { min-height: 54px; }
+#pg-bottom .rd-cell.hidden { display: none; }
+.rd-bot .hf-btn.rd-bkico:not(.rd-recdark) { color: #ea580c !important; }
+body.dark-mode .rd-bot .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
+.pg-head-title { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.ps-due-btn { border: 0; background: transparent; padding: 0; cursor: pointer; display: inline-flex; font-family: inherit; touch-action: manipulation; }
+.rd-page > .exercise-box.ps-box { margin-left: 6px !important; margin-right: 6px !important; padding: 4px !important; }
+#ps-list { padding: 8px 6px; }
+#ps-due .ps-due-n { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #dc2626; color: #fff; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; opacity: 0.6; }
+#ps-due .ps-due-n.on { opacity: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #dc2626; }
+#ps-due .ps-due-n.z { background: #94a3b8; opacity: 1; box-shadow: none; }
 .ps-row { position: relative; margin-bottom: 5px; }
 .ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 78px; box-sizing: border-box; }
 /* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
@@ -800,8 +817,6 @@ body.dark-mode .hf-btn.tb-btn.on { border-color: #9fa8da !important; }
 .rd-page > .exercise-box { margin-bottom: 8px !important; }
 .rd-page > .rd-mid { margin-bottom: 8px; }
 .ag-grid { display: grid; gap: 6px; padding: 2px; }
-.rd-pop-list.pg-row { display: flex; flex-direction: row; gap: 8px; }
-.rd-pop-list.pg-row .rd-pop-item { flex: 1; text-align: center; justify-content: center; padding: 10px 4px; }
 .pg-sub { display: block; font-size: 12px; font-weight: normal; opacity: 0.75; margin-top: 2px; }
 .ag-btn { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 5px; min-height: 40px; padding: 3px 4px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #fff; color: #1b4d3e; font-family: inherit; cursor: pointer; touch-action: manipulation; min-width: 0; }
 .ag-btn .ag-s { font-size: 13px; line-height: 1.3; text-align: center; }
@@ -878,7 +893,9 @@ body.dark-mode .rd-act .rd-stm.on { background: #7f1d1d !important; color: #fee2
 .pg-head-title { flex: 1; min-width: 0; margin: 0; padding: 0 !important; text-align: center; font-size: 16px !important; }
 .tb-btn svg { display: block; }
 /* الجولة 93 */
-.rd-bar.taf-nav3 { grid-auto-flow: row; grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr) minmax(0, 0.5fr); }
+.rd-bar.taf-nav3 { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 54px; }
+#taf-back-btn { color: #ea580c !important; }
+body.dark-mode #taf-back-btn { color: #fb923c !important; }
 #rd-row1 .hf-btn.rd-recdark { background: #0f172a !important; color: #fff !important; font-size: 17px; }
 body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color: #fff !important; box-shadow: inset 0 0 0 1.5px #64748b; }
 #rd-row1 .hf-btn:disabled { opacity: 0.4; }
@@ -1223,8 +1240,8 @@ function applyTheme() {
 // أيقونات الأزرار (SVG ممتلئة بلون الزر): هلال سميك، شمس، ترس
 function tbIcon(n) {
     if (n === 'moon') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.6.6 0 0 0-.8-.7A9.6 9.6 0 1 0 21.2 15.4a.6.6 0 0 0-.7-.8z" fill="currentColor" stroke="currentColor" stroke-width="0.7" stroke-linejoin="round"/></svg>';
-    if (n === 'arrR') return '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     if (n === 'arrL') return '<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (n === 'review') return '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 3.5V9h-5.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     if (n === 'sun') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
     return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.5.2 1 .4 1.5.8l2.5-.9 1.7 2.9-2 1.7c.1.6.1 1.2 0 1.8l2 1.7-1.7 2.9-2.5-.9c-.5.4-1 .6-1.5.8L13.7 18h-3.4l-.5-2.6c-.5-.2-1-.4-1.5-.8l-2.5.9-1.7-2.9 2-1.7a6 6 0 0 1 0-1.8l-2-1.7 1.7-2.9 2.5.9c.5-.4 1-.6 1.5-.8zM12 8.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" transform="translate(0 2)"/></svg>';
 }
@@ -1250,14 +1267,7 @@ function fitDarkBtn() {
         btn.classList.add('icon-only');
     }
 }
-function fitMenuLabels() {
-    const b = document.getElementById('menu-prog-btn'), lab = document.getElementById('menu-prog-lab');
-    if (!b || !lab) return;
-    b.style.whiteSpace = 'nowrap';
-    lab.textContent = 'قيد الحفظ';
-    if (b.scrollWidth > b.clientWidth + 1) lab.textContent = 'الحفظ';
-}
-window.addEventListener('resize', () => { fitDarkBtn(); fitMenuLabels(); });
+window.addEventListener('resize', () => { fitDarkBtn(); });
 
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
@@ -1338,8 +1348,8 @@ function showMainButtons() {
                     <button class="btn-main" onclick="showClassifyPage()">تصنيف الآيات حسب درجة الحفظ</button>
                 </div>
                 <div class="menu-item menu-row3">
-                    <button class="btn-main" id="menu-prog-btn" onclick="showProgList()"><span id="menu-prog-lab">قيد الحفظ</span></button>
-                    <button class="btn-main" onclick="showRasikhList()">المحفوظ</button>
+                    <button class="btn-main" id="menu-prog-btn" onclick="showProgList()">الحفظ</button>
+                    <button class="btn-main" id="menu-rev-btn" onclick="showRasikhList()">المـــــراجعـــــة</button>
                 </div>
                 <div class="menu-item">
                     <button class="btn-secondary" onclick="showReviewSelect()" style="width: 100%;">عقال الآيات</button>
@@ -1348,7 +1358,6 @@ function showMainButtons() {
         </div>
     `;
     renderInContainer(MainButtonshtml);
-    fitMenuLabels();
 }
 
 function showHelpScreen() {
@@ -1972,16 +1981,19 @@ function clsMapHtml() {
     return h;
 }
 
-function showClassifyPage() {
+let clsFrom = 'main';
+function clsBack() { if (clsFrom === 'prog') showProgList(); else if (clsFrom === 'rasikh') showRasikhList(); else showMainButtons(); }
+function showClassifyPage(from) {
+    clsFrom = from === 'prog' || from === 'rasikh' ? from : 'main';
     clsOpen = new Set(); clsLast = null;
     clsA = null; clsB = null; clsScroll = 0;
     if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
-    hfPage('clsSettingsOpen()', 'showMainButtons()', `
+    hfPage('clsSettingsOpen()', 'clsBack()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
             <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">المحفوظ</button></div>
             <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
-        </div>`, '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>', 'تصنيف الآيات حسب درجة الحفظ', 'تأكيد');
+        </div>`, '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>', 'تصنيف الآيات حسب درجة الحفظ');
 }
 // إعدادات التصنيف: حدّ المقطع (صفحة/ثمن/ربع/نصف/حزب) يُضع عليه إطار أحمر
 function clsSettingsOpen() {
@@ -2194,11 +2206,15 @@ function renderPassageList(o) {
     }).join('');
     psKind = o.kind || psKind;
     const html = `
-        <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="exercise-box ps-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 8px;">
                         <div class="surah-list-container" id="ps-list" style="flex: 1; min-height: 0; max-height: none;">${rows || `<div class="nr-empty">${o.empty}</div>`}<div id="ps-none" class="nr-empty hidden">لا توجد مقاطع بهذا التصنيف.</div></div>
         </div>
     `;
-    hfPage('psSettingsOpen()', 'showMainButtons()', html, '', o.title);
+    const other = psKind === 'prog' ? 'showRasikhList()' : 'showProgList()', otherName = psKind === 'prog' ? 'المراجعة' : 'الحفظ';
+    const endBtn = `<button type="button" id="ps-torev" class="btn-secondary hf-btn tb-btn" onclick="${other}" aria-label="الانتقال إلى ${otherName}" title="الانتقال إلى ${otherName}">${tbIcon('review')}</button>`;
+    const ttl = `<span>${o.title || ''}</span>` + (psKind === 'prog' ? '' : `<button type="button" id="ps-due" class="ps-due-btn" onclick="psToggleDue()" aria-label="المقاطع المستحقة" title="المقاطع المستحقة"><span id="ps-due-n" class="ps-due-n"></span></button>`);
+    const clsBtn = `<div class="rd-cell"><button type="button" id="ps-cls" class="btn-secondary hf-btn" onclick="showClassifyPage('${psKind}')">تصنيف الآيات</button></div>`;
+    hfPage('', 'showMainButtons()', html, clsBtn, ttl, '', endBtn);
     psFilterApply();
     try { const l = document.querySelector('.ps-btn.last'); if (l) l.scrollIntoView({ block: 'center' }); } catch (e) {}
 }
@@ -2214,28 +2230,17 @@ function psFilterApply() {
     });
     const none = document.getElementById('ps-none');
     if (none) none.classList.toggle('hidden', shown > 0 || !rows.length);
+    const dn = document.getElementById('ps-due-n');
+    if (dn) {
+        const n = document.querySelectorAll('#ps-list .sd-btn.sd-r').length;
+        dn.textContent = n;
+        dn.className = 'ps-due-n' + (n === 0 ? ' z' : (psFilter === 'red' ? ' on' : ''));
+    }
 }
 let psKind = 'prog';
-function psSetFilter(f) {
-    psFilter = f === 'red' ? 'red' : 'all';
-    pgPopClose();
+function psToggleDue() {
+    psFilter = psFilter === 'red' ? 'all' : 'red';
     psFilterApply();
-    const l = document.getElementById('ps-list');
-    if (l) l.scrollTop = 0;
-}
-function psGoKind(k) {
-    pgPopClose();
-    if (k === psKind) return;
-    if (k === 'rasikh') showRasikhList(); else showProgList();
-}
-// إعدادات القوائم: العرض (الكل/المستحق) والنوع (قيد الحفظ/المحفوظ) دون الرجوع إلى الرئيسية
-function psSettingsOpen() {
-    const f = (id, cur, lab, fn) => `<button type="button" id="${id}" class="resume-btn rd-pop-item${cur ? ' on' : ''}" onclick="${fn}"><span class="rb-main">${lab}</span></button>`;
-    pgPopOpen(`<div class="modal-title">الإعدادات</div>
-        ${psKind === 'prog' ? '' : `<div class="rd-set-lbl">العرض</div>
-        <div class="rd-pop-list pg-row">${f('ps-set-all', psFilter === 'all', 'الكل', "psSetFilter('all')")}${f('ps-set-red', psFilter === 'red', 'المستحق', "psSetFilter('red')")}</div>`}
-        <div class="rd-set-lbl">النوع</div>
-        <div class="rd-pop-list pg-row">${f('ps-k-prog', psKind === 'prog', 'قيد الحفظ', "psGoKind('prog')")}${f('ps-k-rasikh', psKind === 'rasikh', 'المحفوظ', "psGoKind('rasikh')")}</div>`);
 }
 
 // مقاطع «قيد الحفظ»: كل مقطع مصنَّف في سورة واحدة (يُقصّ مما صار في درجة أخرى)
@@ -2329,15 +2334,15 @@ let prepEndStr = "";
 // ---------- أدوات مشتركة ----------
 
 // الشريط العلوي الموحّد للصفحات: [☾] العنوان [⚙] أيقونتان صغيرتان على جانبي العنوان؛ و«العودة» دائماً في الأسفل
-function hfTopBar(settingsFn, title) {
+function hfTopBar(settingsFn, title, endBtn) {
     return `<div id="rd-top" class="rd-bar rd-top pg-head">
         <div class="rd-cell"><button type="button" id="dark-mode-btn" class="btn-secondary hf-btn tb-btn rd-moonbar" onclick="toggleDarkMode()" aria-label="الوضع الليلي"></button></div>
         <div class="surah-title select-title pg-head-title">${title || ''}</div>
-        <div class="rd-cell"><button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}" aria-label="الإعدادات" title="الإعدادات">${tbIcon('gear')}</button></div>
+        <div class="rd-cell">${endBtn || `<button type="button" id="pg-settings" class="btn-secondary hf-btn tb-btn" onclick="${settingsFn}" aria-label="الإعدادات" title="الإعدادات">${tbIcon('gear')}</button>`}</div>
     </div>`;
 }
-function hfPage(settingsFn, backFn, bodyHtml, extraBottom, title, backLabel) {
-    renderInContainer(hfTopBar(settingsFn, title) + bodyHtml + `<div id="pg-bottom" class="rd-bar rd-bot">${extraBottom || ''}<div class="rd-cell"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back" onclick="${backFn}">${backLabel || 'العودة'}</button></div></div>`);
+function hfPage(settingsFn, backFn, bodyHtml, extraBottom, title, backLabel, endBtn) {
+    renderInContainer(hfTopBar(settingsFn, title, endBtn) + bodyHtml + `<div id="pg-bottom" class="rd-bar rd-bot">${extraBottom || ''}<div class="rd-cell rd-sq"><button type="button" id="pg-back" class="btn-secondary hf-btn rd-back rd-bkico" onclick="${backFn}" aria-label="${backLabel || 'العودة'}" title="${backLabel || 'العودة'}">${tbIcon('arrL')}</button></div></div>`);
     const wc = document.querySelector('#main-container .welcome-container');
     if (wc) wc.classList.add('rd-page');
     applyTheme();
@@ -2911,7 +2916,7 @@ function rdRenderBars() {
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
     // أثناء قراءة الشيخ يحلّ زر اسمه (بلا إطار) محلّ «تسجيل» و«العودة»؛ وبتوقف القراءة يعودان
     r1.innerHTML = none
-        ? B('rd-end', 'rd-back', 'rdEnd()', 'العودة')
+        ? `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>`
         : sheikhPlaying
             ? SHEIKH_RECITERS.map((r) => B('rd-shk-' + SHEIKH_RECITERS.indexOf(r), 'tb-btn rd-shk' + (r.id === userSheikh ? ' rd-shk-on' : ''), `rdPickSheikh('${r.id}')`, r.short)).join('')
                 + `<div class="rd-cell"><button type="button" id="rd-sset" class="btn-secondary hf-btn tb-btn rd-shk" onclick="rdOpenSettings()" aria-label="إعدادات الشيخ (التكرار)" title="إعدادات الشيخ (التكرار)">${tbIcon('gear')}</button></div>`   // كل الشيوخ + الإعدادات (٨ أزرار)
@@ -3753,9 +3758,9 @@ function showRdTafsir() {
             <div id="tafsir-body" class="taf-body"></div>
         </div>
         <div class="rd-bar taf-nav3">
-            <div class="rd-cell"><button type="button" id="taf-prev-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(-1)" aria-label="الآية السابقة" title="الآية السابقة" ${k <= 0 ? 'disabled' : ''}>${tbIcon('arrR')}</button></div>
-            <div class="rd-cell"><button type="button" id="taf-back-btn" class="btn-secondary hf-btn tb-btn" onclick="rdBackFromTafsir()">العودة</button></div>
-            <div class="rd-cell"><button type="button" id="taf-next-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(1)" aria-label="الآية اللاحقة" title="الآية اللاحقة" ${k >= rd.items.length - 1 ? 'disabled' : ''}>${tbIcon('arrL')}</button></div>
+            <div class="rd-cell"><button type="button" id="taf-prev-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(-1)" aria-label="الآية السابقة" title="الآية السابقة" ${k <= 0 ? 'disabled' : ''}>الآية السابقة</button></div>
+            <div class="rd-cell"><button type="button" id="taf-next-btn" class="btn-secondary hf-btn tb-btn" onclick="rdTafStep(1)" aria-label="الآية اللاحقة" title="الآية اللاحقة" ${k >= rd.items.length - 1 ? 'disabled' : ''}>الآية اللاحقة</button></div>
+            <div class="rd-cell"><button type="button" id="taf-back-btn" class="btn-secondary hf-btn tb-btn" onclick="rdBackFromTafsir()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>
         </div>
     `;
     renderInContainer(html);
