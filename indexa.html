@@ -578,9 +578,13 @@ body.dark-mode .cm-name { background: #1e293b; }
 .cm-txt-nav { display: flex; gap: 8px; margin-bottom: 8px; }
 .cm-txt-nav button { flex: 1 1 0; }
 .ps-row { position: relative; margin-bottom: 5px; }
-.ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 68px; box-sizing: border-box; }
+.ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 78px; box-sizing: border-box; }
 /* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
-.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 60%; min-width: 46px; padding: 0 9px; box-sizing: border-box; border-radius: 9px; border: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #14532d; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
+.sd-btn { position: absolute; left: 7px; top: 50%; transform: translateY(-50%); height: 76%; min-width: 58px; padding: 0 12px; box-sizing: border-box; border-radius: 9px; border: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: inherit; color: #14532d; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
+.sd-info, .sd-first { text-align: center; line-height: 2; margin: 10px 0 4px; font-size: 16px; }
+.sd-first { font-size: 22px; margin-top: 2px; }
+.sd-ftitle { text-align: center; font-weight: bold; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(100,116,139,0.3); }
+.sd-first-lbl { font-size: 14px; opacity: 0.75; }
 .sd-btn.sd-g { background: rgba(34,197,94,0.32); color: #14532d; }
 .sd-btn.sd-r { background: rgba(249,115,22,0.30); color: #7c2d12; }
 body.dark-mode .sd-btn.sd-g { background: rgba(34,197,94,0.30); color: #bbf7d0; }
@@ -786,6 +790,7 @@ body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #
 .hf-btn.tb-btn.on { border-color: #1a237e !important; }
 body.dark-mode .hf-btn.tb-btn { border-color: rgba(159, 168, 218, 0.5) !important; }
 body.dark-mode .hf-btn.tb-btn.on { border-color: #9fa8da !important; }
+.rd-mid.rd-mid-off { display: none; }
 .rd-mid { min-height: 44px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex-shrink: 0; margin-bottom: 8px; }
 .rd-act .hf-btn { border-radius: 3px !important; }
 .rd-act .hf-btn + .hf-btn { margin-inline-start: -1.5px; }
@@ -833,8 +838,8 @@ body.dark-mode .rec-dot { background: #f87171; }
 .hf-btn.tb-btn.on { background: #283593 !important; color: #fff !important; }
 body.dark-mode .hf-btn.tb-btn { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
 body.dark-mode .hf-btn.tb-btn.on { background: #1a237e !important; color: #fff !important; }
-.rd-bot .hf-btn:not(.rd-recdark), #rd-row1 .hf-btn:not(.rd-recdark), .rd-showhint { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
-body.dark-mode .rd-bot .hf-btn:not(.rd-recdark), body.dark-mode #rd-row1 .hf-btn:not(.rd-recdark), body.dark-mode .rd-showhint { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
+.rd-bot .hf-btn:not(.rd-recdark), #rd-row1 .hf-btn:not(.rd-recdark):not(.rd-shk-on), .rd-showhint { background: rgba(40, 53, 147, 0.26) !important; color: #1a237e !important; }
+body.dark-mode .rd-bot .hf-btn:not(.rd-recdark), body.dark-mode #rd-row1 .hf-btn:not(.rd-recdark):not(.rd-shk-on), body.dark-mode .rd-showhint { background: rgba(121, 134, 203, 0.34) !important; color: #e8eaf6 !important; }
 .rd-homebtn .mi, .rd-homebtn svg { width: 20px; height: 20px; }
 .app-riwaya { font-size: 13px; font-weight: 700; color: #7a9a90; margin: 2px 0 0; }
 body.dark-mode .app-riwaya { color: #94a3b8 !important; }
@@ -860,10 +865,8 @@ body.dark-mode .rs-lab { color: #c5cae9; }
 
 /* الجولة 88 */
 #rd-row1.rd-three { grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr) minmax(0, 0.5fr); }
-.hf-btn.tb-btn.rd-sname { border: 0 !important; box-shadow: none; }
 .rs-step { display: flex; align-items: center; justify-content: center; line-height: 0; }
 .rs-step svg { display: block; }
-#rd-row1 .rd-sname { min-height: 50px; font-size: 16px !important; }
 .rd-act { justify-content: center; }
 .rd-act .hf-btn { flex: 0 0 50%; border: 0 !important; }
 .rd-act .rd-stm.on { background: #fecaca !important; color: #7f1d1d !important; }
@@ -883,6 +886,11 @@ body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color:
 body.dark-mode #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
 #rd-row1.rd-three .hf-btn { padding: 0 !important; }
 .taf-nav3 .hf-btn { min-height: 50px; padding: 0 !important; }
+/* الجولة 99 */
+#rd-row1.rd-shk8 { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#rd-row1.rd-shk8 .hf-btn { min-height: 46px; padding: 0 2px !important; font-size: 14px !important; border-width: 0 !important; box-shadow: none; }
+#rd-row1 .hf-btn.rd-shk-on { background: #283593 !important; color: #fff !important; }
+body.dark-mode #rd-row1 .hf-btn.rd-shk-on { background: #1a237e !important; color: #fff !important; }
 /* الجولة 95 */
 .taf-box { padding-left: 0 !important; padding-right: 0 !important; }
 .taf-box > .surah-title, .taf-box .taf-text { padding-left: 10px; padding-right: 10px; }
@@ -1005,12 +1013,13 @@ function lsSet(key, value) {
 // --- الإعدادات ---
 // القرّاء المتاحون لزر «الشيخ» (حفص فقط): المفتاح = اسم المجلد في everyayah.com
 const SHEIKH_RECITERS = [
-    { id: "Minshawy_Murattal_128kbps", name: "محمد صديق المنشاوي (مرتّل)" },
-    { id: "Husary_128kbps", name: "محمود خليل الحصري" },
-    { id: "Abdul_Basit_Murattal_192kbps", name: "عبد الباسط عبد الصمد (مرتّل)" },
-    { id: "Abdurrahmaan_As-Sudais_192kbps", name: "عبد الرحمن السديس" },
-    { id: "Hudhaify_128kbps", name: "علي الحذيفي" },
-    { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب" }
+    { id: "Minshawy_Murattal_128kbps", name: "محمد صديق المنشاوي (مرتّل)", short: "المنشاوي" },
+    { id: "Husary_128kbps", name: "محمود خليل الحصري", short: "الحصري" },
+    { id: "Abdul_Basit_Murattal_192kbps", name: "عبد الباسط عبد الصمد (مرتّل)", short: "عبد الباسط" },
+    { id: "Abdurrahmaan_As-Sudais_192kbps", name: "عبد الرحمن السديس", short: "السديس" },
+    { id: "Hudhaify_128kbps", name: "علي الحذيفي", short: "الحذيفي" },
+    { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب", short: "محمد أيوب" },
+    { id: "Alafasy_128kbps", name: "مشاري العفاسي", short: "العفاسي" }
 ];
 let userSheikh = SHEIKH_RECITERS[0].id;
 const SHEIKH_RATES = [1, 1.15, 1.3, 1.5, 1.75];
@@ -2139,10 +2148,26 @@ function schedCls(sig) {
     const r = schedGet(sig), rem = schedRemain(sig);
     return rem <= 0 ? 'sd-r' : 'sd-g';   // أخضر: بقي وقت · أحمر: حان الوقت
 }
+// الرقم = الأيام منذ آخر مراجعة (أخضر قبل الاستحقاق، برتقالي بعده)؛ الضغط عليه يبيّن المتبقي أو التأخر؛ «؟» تعرض أول آية في المقطع
+function schedElapsed(sig) {
+    const r = schedGet(sig), t = schedToday();
+    if (r.l !== null && !isNaN(r.l)) return Math.max(0, t - r.l);
+    return isNaN(r.d) ? 0 : Math.max(0, t - (r.d - r.n));
+}
 function schedBtnHtml(k, sig) {
-    return `<span id="sd-${k}" class="sd-btn ${schedCls(sig)}" title="عدد الأيام المتبقية للمراجعة"><span dir="ltr">${schedRemain(sig)}</span></span>`;
+    return `<button type="button" id="sd-${k}" class="sd-btn ${schedCls(sig)}" onclick="schedInfo(${k})" aria-label="الأيام منذ آخر مراجعة" title="الأيام منذ آخر مراجعة"><span dir="ltr">${schedElapsed(sig)}</span></button>`;
+}
+function schedInfo(k) {
+    const sig = psSched[k];
+    if (!sig) return;
+    const rem = schedRemain(sig), e = schedElapsed(sig);
+    const msg = rem > 0 ? `بقي <b>${rem}</b> ${rem === 1 ? 'يوم' : 'أيام'} حتى موعد المراجعة.` : (rem === 0 ? 'موعد المراجعة اليوم.' : `تأخرتَ عن المراجعة <b>${-rem}</b> ${-rem === 1 ? 'يوماً' : 'أياماً'}.`);
+    const f = psFirst[k], words = f ? String(rdAyahText(f.surah, f.start - 1)).split(/\s+/).filter(Boolean) : [];
+    const beg = words.length ? words.slice(0, 5).join(' ') + (words.length > 5 ? ' …' : '') : '';
+    pgPopOpen(`<div class="modal-title">موعد المراجعة</div><p id="sd-info" class="sd-info">مضى ${e} ${e === 1 ? 'يوم' : 'أيام'} على آخر مراجعة.<br>${msg}</p>` + (f ? `<div class="sd-ftitle">الآية الأولى من المقطع</div><p id="sd-first" class="sd-first"><span class="sd-first-lbl">${surahsNames[f.surah]} — الآية ${f.start}</span><br>${beg}</p>` : ''));
 }
 let psSched = [];
+let psFirst = [];
 function lastPassSet(rank, s, a) {
     const m = lsGet(LS_KEYS.lastpass, {}) || {};
     m[userRiwaya + ':' + rank] = { s, a };
@@ -2162,6 +2187,7 @@ function renderPassageList(o) {
     rd = null;
     newReviewMode = false;
     psSched = o.items.map((it) => it.sched || null);
+    psFirst = o.items.map((it) => it.first || null);
     const rows = o.items.map((it, k) => {
         const btn = `<button type="button" id="ps-${k}" class="resume-btn ps-btn ${it.cls || ''}${it.last ? ' last' : ''}" onclick="${it.on || (o.startFn + '(' + k + ')')}"><span class="rb-main">${it.label}</span></button>`;
         return `<div class="ps-row" id="psr-${k}">${btn}${it.sched ? schedBtnHtml(k, it.sched) : ''}</div>`;
@@ -2272,7 +2298,7 @@ function showRasikhList() {
     rasikhList = rasikhPassages();
     const li = lastPassIndex(3, rasikhList.map((p) => p.segs));
     renderPassageList({
-        items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li, sched: passSig(3, p.segs) })),
+        items: rasikhList.map((p, i) => ({ label: unitLabelOf(p.segs), cls: 'cm-r3', last: i === li, sched: passSig(3, p.segs), first: p.segs[0] })),
         startFn: 'startRasikhPassage', kind: 'rasikh',
         title: 'اختر المقطع الذي تريد مراجعته',
         empty: 'لا توجد مقاطع في «المحفوظ» بعد.<br>صنّف ما حفظتَه من «تصنيف القرآن» باختيار «المحفوظ».'
@@ -2884,16 +2910,17 @@ function rdRenderBars() {
     const B = (id, cls, fn, label) => `<div class="rd-cell"><button type="button" id="${id}" class="btn-secondary hf-btn${cls ? ' ' + cls : ''}" onclick="${fn}">${label}</button></div>`;
     // الأزرار السفلية ثابتة: [الشيخ][التسجيل][العودة]؛ يتغير اللون فقط: الشيخ يقرأ / تسجيل جارٍ أو موقوف أو مسجَّل؛ والتفسير في الشريط العلوي
     // أثناء قراءة الشيخ يحلّ زر اسمه (بلا إطار) محلّ «تسجيل» و«العودة»؛ وبتوقف القراءة يعودان
-    const shName = (SHEIKH_RECITERS.find((r) => r.id === userSheikh) || SHEIKH_RECITERS[0]).name.replace(/\s*[(（].*$/, '');
     r1.innerHTML = none
         ? B('rd-end', 'rd-back', 'rdEnd()', 'العودة')
         : sheikhPlaying
-            ? B('rd-sname', 'tb-btn on rd-sname', 'rdOpenSettings()', shName)
+            ? SHEIKH_RECITERS.map((r) => B('rd-shk-' + SHEIKH_RECITERS.indexOf(r), 'tb-btn rd-shk' + (r.id === userSheikh ? ' rd-shk-on' : ''), `rdPickSheikh('${r.id}')`, r.short)).join('')
+                + `<div class="rd-cell"><button type="button" id="rd-sset" class="btn-secondary hf-btn tb-btn rd-shk" onclick="rdOpenSettings()" aria-label="إعدادات الشيخ (التكرار)" title="إعدادات الشيخ (التكرار)">${tbIcon('gear')}</button></div>`   // كل الشيوخ + الإعدادات (٨ أزرار)
             : recOn
                 ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', `<span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span>إيقاف التسجيل</span>`)   // أثناء التسجيل: زر داكن بعرض كامل
                 : `<div class="rd-cell"><button type="button" id="rd-restore" class="btn-secondary hf-btn tb-btn" onclick="rdRestoreRec()" aria-label="استرجاع آخر تسجيل" title="استرجاع آخر تسجيل"${recMem ? '' : ' disabled'}>${RD_ICONS.restore}</button></div>`
                 + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
                 + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>`;
+    r1.classList.toggle('rd-shk8', sheikhPlaying && !none);   // شبكة الشيوخ ٤×٢
     r1.classList.toggle('rd-three', !none && !sheikhPlaying && !recOn);   // [استرجاع][تسجيل][عودة]
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
@@ -2910,6 +2937,8 @@ function rdRenderBars() {
             h = stumbleAllowed() ? `<div class="rd-act"><button type="button" id="rd-stumble" class="btn-secondary hf-btn rd-stm${on ? ' on' : ''}" onclick="rdStumbleToggle()">${on ? 'إلغاء التعثر' : 'تعثر'}</button></div>` : '';
         }
         hint.innerHTML = h;
+        const mid = document.getElementById('rd-mid');
+        if (mid) mid.classList.toggle('rd-mid-off', sheikhPlaying && !h && !none);   // قراءة الشيخ: لا فراغ بين الإطار والأزرار
     }
     // أزرار التقييم في عقال الآيات بعد إظهار الآية
     const rate = document.getElementById('rd-rate');
@@ -3231,11 +3260,7 @@ function closeRdPop() {
 
 function rdSetHtml() {
     return `
-        <div class="modal-title">الشيخ والتكرار</div>
-        <div class="rd-set-lbl">القارئ</div>
-        <div class="rd-pop-list">
-            ${SHEIKH_RECITERS.map((r) => `<button type="button" class="resume-btn rd-pop-item${r.id === userSheikh ? ' on' : ''}" onclick="rdPickReciter('${r.id}')"><span class="rb-main">${r.name}</span></button>`).join('')}
-        </div>
+        <div class="modal-title">التكرار</div>
         <div class="rd-set-lbl">عدد التكرارات (1 = بلا تكرار)</div>
         <div class="rd-rep-row">
             <span class="stepper"><button type="button" id="rd-rep-minus" onclick="rdRepStep(-1)" aria-label="إنقاص">−</button><span id="rd-rep-n" class="st-val">${userRep}</span><button type="button" id="rd-rep-plus" onclick="rdRepStep(1)" aria-label="زيادة">+</button></span>
@@ -3263,11 +3288,15 @@ function rdSetRefresh() {
     if (box) { const t = box.scrollTop; box.innerHTML = rdSetHtml(); box.scrollTop = t; }
 }
 
-function rdPickReciter(id) {
-    if (!SHEIKH_RECITERS.some((r) => r.id === id)) return;
+// الضغط على شيخ يبدأ القراءة به مباشرة؛ وعلى الشيخ الجاري يوقفها
+function rdPickSheikh(id) {
+    if (!rd || !SHEIKH_RECITERS.some((r) => r.id === id)) return;
+    if (rdPlaying && rdAudioKind === 'sheikh' && id === userSheikh) { rdToggleSheikh(); return; }
     userSheikh = id;
     saveSettings();
-    rdSetRefresh();
+    rdSheikhPos = null;
+    rdStopAudio(true);
+    rdToggleSheikh();
 }
 
 function rdRepStep(delta) {
