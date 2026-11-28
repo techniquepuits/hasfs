@@ -587,14 +587,11 @@ body.dark-mode .rd-bot .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !impor
 .ps-row { position: relative; margin-bottom: 5px; }
 .ps-row .resume-btn.ps-btn { width: 100%; margin-bottom: 0; padding-left: 10px; box-sizing: border-box; gap: 8px; }
 .ps-box .resume-btn { border-width: 0 !important; }
-.resume-btn.cm-rdue { background: rgba(239,68,68,0.28); color: #7f1d1d; }
-.resume-btn.last.cm-rdue { background: #7f1d1d; color: #fff; font-weight: bold; }
-body.dark-mode .resume-btn.cm-rdue { background: rgba(239,68,68,0.34) !important; color: #fff !important; }
-body.dark-mode .resume-btn.last.cm-rdue { background: #450a0a !important; }
 .ps-cyc { margin-inline-start: auto; font-size: 13px; font-weight: normal; opacity: 0.85; white-space: nowrap; }
 .ps-circ { flex: none; min-width: 30px; height: 30px; padding: 0 5px; box-sizing: border-box; border-radius: 15px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.7); color: inherit; font-size: 15px; font-weight: bold; line-height: 1; font-variant-numeric: tabular-nums; }
 body.dark-mode .ps-circ { background: rgba(0,0,0,0.32); }
-.resume-btn.last .ps-circ { background: rgba(255,255,255,0.22); }
+.ps-circ.late { background: linear-gradient(rgba(239,68,68,0.16), rgba(239,68,68,0.16)), rgba(255,255,255,0.7); color: #b91c1c; }
+body.dark-mode .ps-circ.late { background: rgba(248,113,113,0.22); color: #fecaca; }
 .pg-head-title .ps-fbtn { flex: 1 1 0; min-width: 0; }
 .pg-head-title:has(.ps-fbtn) { gap: 4px; }
 /* شارة الأيام المتبقية: للعرض فقط (يُحدَّث العدّاد من «تأكيد المراجعة» عند إنهاء الجلسة)، والعدد أبيض على لون داكن */
@@ -603,8 +600,8 @@ body.dark-mode .ps-circ { background: rgba(0,0,0,0.32); }
 .sd-step .stepper button { flex: 1 1 0; width: auto; min-width: 0; font-size: 26px; }
 .sd-step .stepper .st-val { flex: 1.4 1 0; min-width: 0; padding: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .sd-box { position: relative; }
-.rc-two { display: flex; gap: 10px; margin-top: 14px; }
-.rc-two button { flex: 1; padding: 14px 6px; font-size: 16px; font-weight: bold; font-family: inherit; border-radius: 12px; }
+.rc-skip { display: block; width: 25vw; min-width: 88px; height: 34px; margin: 10px auto 0; padding: 0; font-family: inherit; font-size: 14px; font-weight: bold; border: 0; border-radius: 10px; background: #e2e8f0; color: #475569; cursor: pointer; }
+body.dark-mode .rc-skip { background: #1e293b; color: #cbd5e1; }
 .rc-x { position: absolute; top: 6px; left: 8px; width: 40px; height: 40px; border: none; background: transparent; color: #64748b; font-size: 30px; line-height: 1; cursor: pointer; padding: 0; touch-action: manipulation; font-family: inherit; }
 body.dark-mode .rc-x { color: #cbd5e1; }
 .sd-ok { margin-top: 12px !important; width: 100% !important; }
@@ -620,12 +617,12 @@ body.dark-mode .rc-x { color: #cbd5e1; }
 .rd-speed-wrap .stepper .st-val { min-width: 42px; font-size: 17px; }
 .resume-btn.cm-r3 { background: rgba(34,197,94,0.26); border-color: rgba(22,163,74,0.5); color: #14532d; }
 .resume-btn.cm-r4 { background: rgba(59,130,246,0.24); border-color: rgba(37,99,235,0.5); color: #1e3a8a; }
-.resume-btn.last.cm-r3 { background: #14532d; border-color: #14532d; color: #fff; font-weight: bold; }
-.resume-btn.last.cm-r4 { background: #1e3a8a; border-color: #1e3a8a; color: #fff; font-weight: bold; }
+.resume-btn.last.cm-r3 { background: rgba(34,197,94,0.52); border-color: rgba(22,163,74,0.8); font-weight: bold; }
+.resume-btn.last.cm-r4 { background: rgba(59,130,246,0.48); border-color: rgba(37,99,235,0.8); font-weight: bold; }
 body.dark-mode .resume-btn.cm-r3 { background: rgba(34,197,94,0.30) !important; border-color: rgba(74,222,128,0.6) !important; color: #fff !important; }
 body.dark-mode .resume-btn.cm-r4 { background: rgba(59,130,246,0.34) !important; border-color: rgba(96,165,250,0.6) !important; color: #fff !important; }
-body.dark-mode .resume-btn.last.cm-r3 { background: #052e16 !important; border-color: #4ade80 !important; }
-body.dark-mode .resume-btn.last.cm-r4 { background: #172554 !important; border-color: #60a5fa !important; }
+body.dark-mode .resume-btn.last.cm-r3 { background: rgba(34,197,94,0.52) !important; border-color: #4ade80 !important; }
+body.dark-mode .resume-btn.last.cm-r4 { background: rgba(59,130,246,0.55) !important; border-color: #60a5fa !important; }
 .resume-btn .rb-sub { font-size: 12.5px; font-weight: normal; color: #475569; }
 body.dark-mode .resume-btn { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
 body.dark-mode .resume-btn .rb-sub { color: #cbd5e1 !important; }
@@ -2186,9 +2183,9 @@ function showRasikhList() {
     });
     units.sort((a, b) => a.surah - b.surah || a.start - b.start);
     const rows = units.map((u, k) => {
-        const cls = u.rank === 4 ? 'cm-r4' : (u.due ? 'cm-rdue' : 'cm-r3');
+        const cls = u.rank === 4 ? 'cm-r4' : 'cm-r3';
         const fn = u.rank === 4 ? `startProgPassage(${u.i})` : `startRasikhPassage(${u.i})`;
-        const extra = u.rank === 3 ? `<span class="ps-cyc">${u.n} يوم</span><span class="ps-circ" dir="ltr">${u.e}</span>` : '';
+        const extra = u.rank === 3 ? `<span class="ps-cyc">${u.n} يوم</span><span class="ps-circ${u.due ? ' late' : ''}" dir="ltr">${u.e}</span>` : '';
         return `<div class="ps-row${u.rank === 4 || u.due ? ' due' : ''}" id="psr-${k}"><button type="button" id="ps-${k}" class="resume-btn ps-btn ${cls}${u.last ? ' last' : ''}" onclick="${fn}"><span class="rb-main">${u.label}</span>${extra}</button></div>`;
     }).join('');
     const empty = 'لا توجد وحدات بعد.<br>اضغط «تصنيف الآيات» في الأسفل لتصنّف ما تحفظه الآن وما حفظتَه.';
@@ -3790,17 +3787,14 @@ function rdConfOpen() {
     d.innerHTML = `<div class="modal-box sd-box" id="rc-box">
         <button type="button" id="rc-x" class="rc-x" onclick="closeRdPop()" aria-label="إغلاق والرجوع للمراجعة">&times;</button>
         <div class="modal-title">تأكيد المراجعة</div>
-        <div id="rc-body"><div class="rc-two"><button type="button" id="rc-done" class="btn-main" onclick="rcDone()">تمت المراجعة</button><button type="button" id="rc-skip" class="btn-secondary" onclick="rdEndNow()">تخطي</button></div></div>
+        <div id="rc-body">
+            <div class="rd-set-lbl">دورة المراجعة بالأيام</div>
+            <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span>يوم</span><span id="rc-n">${rcVal}</span></span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
+            <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد المراجعة</button>
+            <button type="button" id="rc-skip" class="rc-skip" onclick="rdEndNow()">تخطي</button>
+        </div>
     </div>`;
     document.body.appendChild(d);
-}
-// بعد «تمت المراجعة»: مدة المراجعة بالأيام ثم التأكيد
-function rcDone() {
-    const b = document.getElementById('rc-body');
-    if (!b) return;
-    b.innerHTML = `<div class="rd-set-lbl">مدة المراجعة بالأيام</div>
-        <div class="sd-step"><span class="stepper"><button type="button" id="rc-minus" onclick="rcStep(-1)" aria-label="إنقاص">−</button><span class="st-val"><span>يوم</span><span id="rc-n">${rcVal}</span></span><button type="button" id="rc-plus" onclick="rcStep(1)" aria-label="زيادة">+</button></span></div>
-        <button type="button" id="rc-ok" class="btn-main sd-ok" onclick="rcConfirm()">تأكيد</button>`;
 }
 function rcStep(d) {
     rcVal = Math.max(0, Math.min(365, rcVal + d));
