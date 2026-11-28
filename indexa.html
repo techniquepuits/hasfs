@@ -576,21 +576,19 @@ body.dark-mode .rv-empty { color: #cbd5e1; }
 .cm-surah.open .cm-name::after { content: '▴'; }
 .cm-surah:not(.open) .cm-ayahs { display: none; }
 body.dark-mode .cm-name { background: #1e293b; }
-.cm-txt { font-size: 22px; line-height: 2.1; text-align: center; margin: 8px 0 12px; max-height: 45vh; overflow-y: auto; }
-.cm-txt-nav { display: flex; gap: 8px; margin-bottom: 8px; }
-.cm-txt-nav button { flex: 1 1 0; }
 .rd-bot#pg-bottom { display: flex; }
 #pg-bottom .rd-cell { flex: 1 1 0; }
 #pg-bottom .rd-cell.rd-sq { flex: 0 0 54px; }
-#pg-bottom .rd-cell.rd-w2 { flex: 2 1 0; }
 #pg-bottom .rd-cell.rd-mk { flex: 1 1 0; }
 #pg-bottom .hf-btn.cm-mkb { padding: 0 2px; font-size: clamp(12px, 3.4vw, 14px); font-weight: bold; }
 #pg-bottom .hf-btn.cm-mkb.on { background: #283593 !important; color: #fff !important; }
 body.dark-mode #pg-bottom .hf-btn.cm-mkb.on { background: #1a237e !important; }
-#ps-torev svg { width: 18px; height: 18px; flex: none; }
-#ps-torev { font-size: 13px; }
-#pg-bottom { align-items: stretch; }
-#pg-bottom .rd-cell .hf-btn { min-height: 54px; }
+#ps-torev svg { width: 24px; height: 24px; flex: none; }
+#pg-bottom { align-items: center; }
+#pg-bottom .rd-cell .hf-btn { height: 42px; min-height: 42px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+#pg-bottom .rd-cell.rd-sq .hf-btn { height: 42px; min-height: 42px; padding: 0; }
+#taf-back-btn { height: 42px; min-height: 42px; }
+.taf-nav3 .hf-btn, #rd-row1 .hf-btn { box-sizing: border-box; }
 #pg-bottom .rd-cell.hidden { display: none; }
 .rd-bot .hf-btn.rd-bkico:not(.rd-recdark) { color: #ea580c !important; }
 body.dark-mode .rd-bot .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
@@ -696,6 +694,9 @@ body.dark-mode .rv-surah-sep { color: #6ee7b7; }
 .cm-legend { display: flex; justify-content: center; gap: 4px; flex-wrap: nowrap; }
 .cm-legend span { display: inline-flex; align-items: center; gap: 4px; }
 .cm-status { text-align: center; font-size: 12px; color: #475569; min-height: 20px; }
+.cm-status.txt { text-align: start; white-space: nowrap; overflow-x: auto; overflow-y: hidden; font-size: 17px; line-height: 1.9; color: #1f2937; background: #fff; border-radius: 8px; padding: 0 10px; scrollbar-width: none; }
+.cm-status.txt::-webkit-scrollbar { display: none; }
+body.dark-mode .cm-status.txt { background: #1e293b; color: #e2e8f0; }
 .cm-map { padding: 4px 2px; gap: 4px; }
 .cm-surah { margin-bottom: 0; }
 .cm-name { font-size: 15px; font-weight: bold; color: #1b4d3e; margin: 0; padding: 6px 10px; }
@@ -795,7 +796,7 @@ body.dark-mode .rs-step { border-color: #2dd4bf; }
 .rd-set-box { max-height: 88vh; overflow-y: auto; }
 .rd-set-box .rd-pop-item { padding: 7px 10px !important; min-height: 0 !important; }
 .rd-set-box .rd-pop-list { gap: 4px; margin: 4px 0; }
-.rd-cell .hf-btn { min-height: 50px; }
+.rd-cell .hf-btn { min-height: 42px; }
 .rd-pop-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
 .rd-pop-item.on { background: #bbf7d0 !important; border-color: #16a34a !important; color: #14532d !important; }
 body.dark-mode .rd-pop-item.on { background: #166534 !important; border-color: #22c55e !important; color: #fff !important; }
@@ -882,7 +883,7 @@ body.dark-mode #rs-up { background: #c5cae9; }
 body.dark-mode .rs-lab { color: #c5cae9; }
 
 /* الجولة 88 */
-#rd-row1.rd-three { grid-template-columns: minmax(0, 0.5fr) minmax(0, 2fr) minmax(0, 0.5fr); }
+#rd-row1.rd-three { grid-template-columns: 54px minmax(0, 1fr) 54px; }
 .rs-step { display: flex; align-items: center; justify-content: center; line-height: 0; }
 .rs-step svg { display: block; }
 .rd-act { justify-content: center; }
@@ -891,8 +892,8 @@ body.dark-mode .rs-lab { color: #c5cae9; }
 body.dark-mode .rd-act .rd-stm.on { background: #7f1d1d !important; color: #fee2e2 !important; }
 /* الجولة 92: رأس الصفحات [☾] العنوان [⚙] */
 .rd-bar.pg-head { display: flex; align-items: center; gap: 6px; }
-.pg-head .rd-cell { flex: 0 0 46px; }
-.pg-head .hf-btn { min-height: 42px; padding: 0 !important; display: flex; align-items: center; justify-content: center; }
+.pg-head .rd-cell { flex: 0 0 54px; }
+.pg-head .hf-btn { height: 42px; min-height: 42px; padding: 0 !important; display: flex; align-items: center; justify-content: center; }
 .pg-head-title { flex: 1; min-width: 0; margin: 0; padding: 0 !important; text-align: center; font-size: 16px !important; }
 .tb-btn svg { display: block; }
 /* الجولة 93 */
@@ -905,10 +906,10 @@ body.dark-mode #rd-row1 .hf-btn.rd-recdark { background: #000 !important; color:
 #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #ea580c !important; }
 body.dark-mode #rd-row1 .hf-btn.rd-bkico:not(.rd-recdark) { color: #fb923c !important; }
 #rd-row1.rd-three .hf-btn { padding: 0 !important; }
-.taf-nav3 .hf-btn { min-height: 50px; padding: 0 !important; }
+.taf-nav3 .hf-btn { min-height: 42px; padding: 0 !important; }
 /* الجولة 99 */
 #rd-row1.rd-shk8 { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-#rd-row1.rd-shk8 .hf-btn { min-height: 46px; padding: 0 2px !important; font-size: 14px !important; border-width: 0 !important; box-shadow: none; }
+#rd-row1.rd-shk8 .hf-btn { min-height: 42px; padding: 0 2px !important; font-size: 14px !important; border-width: 0 !important; box-shadow: none; }
 #rd-row1 .hf-btn.rd-shk-on { background: #283593 !important; color: #fff !important; }
 body.dark-mode #rd-row1 .hf-btn.rd-shk-on { background: #1a237e !important; color: #fff !important; }
 /* الجولة 95 */
@@ -1041,7 +1042,17 @@ const SHEIKH_RECITERS = [
     { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب", short: "محمد أيوب" },
     { id: "Alafasy_128kbps", name: "مشاري العفاسي", short: "العفاسي" }
 ];
+// قرّاء ورش (آية بآية، ترقيم ملفاتهم بترقيم حفص): المجلد داخل warsh/ في everyayah.com
+const WARSH_RECITERS = [
+    { id: "warsh/warsh_ibrahim_aldosary_128kbps", name: "إبراهيم الدوسري (ورش)", short: "الدوسري" },
+    { id: "warsh/warsh_yassin_al_jazaery_64kbps", name: "ياسين الجزائري (ورش)", short: "الجزائري" },
+    { id: "warsh/warsh_Abdul_Basit_128kbps", name: "عبد الباسط عبد الصمد (ورش)", short: "عبد الباسط", own: true }   // own: ملفاته بترقيم ورش نفسه (ملف n = آية ورش n) لا بترقيم حفص
+];
 let userSheikh = SHEIKH_RECITERS[0].id;
+let userSheikhW = WARSH_RECITERS[0].id;
+function sheikhList() { return userRiwaya === 1 ? SHEIKH_RECITERS : WARSH_RECITERS; }
+function curSheikh() { return userRiwaya === 1 ? userSheikh : userSheikhW; }
+function setSheikh(id) { if (userRiwaya === 1) userSheikh = id; else userSheikhW = id; }
 const SHEIKH_RATES = [1, 1.15, 1.3, 1.5, 1.75];
 let userRate = 1;
 let userRep = 1;          // عدد تكرارات قراءة الشيخ
@@ -1066,6 +1077,7 @@ function loadSettings() {
     isDarkMode = false;   // يبدأ التطبيق دائماً بوضع النهار
     if (Number.isInteger(s.rep) && s.rep >= 1 && s.rep <= 30) userRep = s.rep;
     if (SHEIKH_RECITERS.some((r) => r.id === s.sheikh)) userSheikh = s.sheikh;
+    if (WARSH_RECITERS.some((r) => r.id === s.sheikhW)) userSheikhW = s.sheikhW;
     if (SHEIKH_RATES.includes(s.rate)) userRate = s.rate;
 }
 
@@ -1074,6 +1086,7 @@ function saveSettings() {
         riwaya: userRiwaya,
         darkMode: isDarkMode,
         sheikh: userSheikh,
+        sheikhW: userSheikhW,
         rate: userRate,
         rep: userRep
     });
@@ -1243,8 +1256,8 @@ function applyTheme() {
 // أيقونات الأزرار (SVG ممتلئة بلون الزر): هلال سميك، شمس، ترس
 function tbIcon(n) {
     if (n === 'moon') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.6.6 0 0 0-.8-.7A9.6 9.6 0 1 0 21.2 15.4a.6.6 0 0 0-.7-.8z" fill="currentColor" stroke="currentColor" stroke-width="0.7" stroke-linejoin="round"/></svg>';
-    if (n === 'arrL') return '<svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true"><path d="M2 12 11 4V9h11v6H11v5z" fill="currentColor"/></svg>';
-    if (n === 'review') return '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 3.5V9h-5.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (n === 'arrL') return '<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M2 12 11 4V9h11v6H11v5z" fill="currentColor"/></svg>';
+    if (n === 'review') return '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 8h16M15 3.5 19.5 8 15 12.5M21 16H5M9 11.5 4.5 16 9 20.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     if (n === 'sun') return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
     return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.5.2 1 .4 1.5.8l2.5-.9 1.7 2.9-2 1.7c.1.6.1 1.2 0 1.8l2 1.7-1.7 2.9-2.5-.9c-.5.4-1 .6-1.5.8L13.7 18h-3.4l-.5-2.6c-.5-.2-1-.4-1.5-.8l-2.5.9-1.7-2.9 2-1.7a6 6 0 0 1 0-1.8l-2-1.7 1.7-2.9 2.5.9c.5-.4 1-.6 1.5-.8zM12 8.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" transform="translate(0 2)"/></svg>';
 }
@@ -1415,9 +1428,9 @@ function showSettings() {
         </div>
 
         <div class="setting-row-box" style="flex-direction: column; align-items: stretch; gap: 4px;">
-            <span class="setting-row-label">القارئ في زر «الشيخ» (رواية حفص):</span>
+            <span class="setting-row-label">القارئ في زر «الشيخ» (حسب الرواية):</span>
             <select id="sheikh-select" class="sheikh-select" onchange="changeSheikhSetting(this.value)">
-                ${SHEIKH_RECITERS.map((r) => `<option value="${r.id}" ${r.id === userSheikh ? 'selected' : ''}>${r.name}</option>`).join('')}
+                ${sheikhList().map((r) => `<option value="${r.id}" ${r.id === curSheikh() ? 'selected' : ''}>${r.name}</option>`).join('')}
             </select>
         </div>
 
@@ -1435,8 +1448,8 @@ function showSettings() {
 }
 
 function changeSheikhSetting(id) {
-    if (!SHEIKH_RECITERS.some((r) => r.id === id)) return;
-    userSheikh = id;
+    if (!sheikhList().some((r) => r.id === id)) return;
+    setSheikh(id);
     saveSettings();
 }
 
@@ -1739,7 +1752,7 @@ function reviewSessionStumbles() {
     showReviewScreen(keys);
 }
 
-// مصدر تلاوة الآيات (آية بآية). حفص فقط حالياً؛ ورش غير متاح بعد.
+// مصدر تلاوة الآيات (آية بآية): حفص وورش
 const SHEIKH_AUDIO_HOST = "https://everyayah.com/data/";
 
 function showToast(msg) {
@@ -1755,13 +1768,23 @@ function showToast(msg) {
 
 // قائمة روابط الملفات الصوتية للآية (قد تكون بسملة ثم الآية)
 function ayahAudioUrls(riwaya, surah, ayah) {
-    if (riwaya !== 1) return null;
-    const base = SHEIKH_AUDIO_HOST + userSheikh + "/";
-    const f = (s, a) => base + String(s + 1).padStart(3, "0") + String(a + 1).padStart(3, "0") + ".mp3";
+    const base = SHEIKH_AUDIO_HOST + curSheikh() + "/";
+    const f = (s, h) => base + String(s + 1).padStart(3, "0") + String(h).padStart(3, "0") + ".mp3";   // h = رقم الآية بترقيم حفص (من 1)
+    const cur = sheikhList().find((r) => r.id === curSheikh());
+    if (riwaya !== 1 && cur && cur.own) return [f(surah, ayah + 1)];   // ترقيم ورش مباشرة: بلا تحويل ولا ملف بسملة
+    let hs;
+    if (riwaya === 1) hs = [ayah + 1];
+    else {
+        // ملفات ورش مرقّمة بترقيم حفص: نحوّل رقم آية ورش إلى آية (أو آيات) حفص المقابلة (نفس مطابقة التفسير)
+        if (!quranTexts[0]?.[surah] || !quranTexts[1]?.[surah]) return null;
+        const r = warshToHafsMap(surah)[ayah + 1];
+        if (!r || !r.length) return null;
+        hs = r.slice().sort((a, b) => a - b);
+    }
     const urls = [];
-    // في حفص نص الآية الأولى يتضمن البسملة، بينما ملف الآية الأولى في المصدر بدونها
-    if (riwaya === 1 && ayah === 0 && surah !== 0 && surah !== 8) urls.push(f(0, 0));
-    urls.push(f(surah, ayah));
+    // نص الآية الأولى يتضمن البسملة، بينما ملف الآية الأولى في المصدر بدونها
+    if (ayah === 0 && surah !== 8 && (surah !== 0 || riwaya !== 1)) urls.push(f(0, 1));   // الفاتحة في ورش: نصّها بلا البسملة فتُقرأ قبلها
+    hs.forEach((h) => urls.push(f(surah, h)));
     return urls;
 }
 
@@ -1990,55 +2013,32 @@ function showClassifyPage(from) {
     clsFrom = from === 'prog' || from === 'rasikh' ? from : 'main';
     clsOpen = new Set(); clsLast = null;
     clsA = null; clsB = null; clsScroll = 0;
-    if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark])) clsMark = null;
+    if (clsMark && !(CLS_MARKS[userRiwaya] && CLS_MARKS[userRiwaya][clsMark] && !(userRiwaya === 0 && clsMark === 'rub'))) clsMark = 'hizb';
     hfPage('', 'clsBack()', `
         <div class="exercise-box" id="exercise-container" style="display: flex; flex-direction: column; gap: 6px;" onclick="clsGlobalTap(event)">
             <div class="cm-legend"><button type="button" class="cm-pick cm-r0" onclick="clsApply('none')">غير مصنف</button><button type="button" class="cm-pick cm-r4" onclick="clsApply('prog')">قيد الحفظ</button><button type="button" class="cm-pick cm-r3" onclick="clsApply('rasikh')">المحفوظ</button></div>
             <div id="cm-status" class="cm-status"></div>
             <div class="surah-list-container cm-map" id="cm-map" style="flex: 1; min-height: 0; max-height: none;">${clsMapHtml()}</div>
-        </div>`, clsMarkBtns() + '<div class="rd-cell cls-text-cell hidden" id="cls-text-cell"><button type="button" id="cls-text-btn" class="btn-secondary hf-btn" onclick="clsShowText()">عرض الآية</button></div>', 'تصنيف الآيات حسب درجة الحفظ', '', HOME_BTN());
+        </div>`, clsMarkBtns(), 'تصنيف الآيات حسب درجة الحفظ', '', HOME_BTN());
 }
-// الحدّ (صفحة/ثمن/ربع/نصف/حزب): خمسة أزرار ظاهرة أسفل الصفحة، والحزب مفعَّل افتراضياً؛ يُوضع إطار أحمر على آخر آية في كل وحدة
+// الحدّ (صفحة/ثمن/ربع/نصف/حزب): أربعة أزرار ظاهرة أسفل الصفحة (حفص: بلا ثمن، ورش: بلا ربع)، والحزب مفعَّل افتراضياً؛ يُوضع إطار أحمر على آخر آية في كل وحدة
 function clsMarkBtns() {
-    return ['page', 'thumn', 'rub', 'half', 'hizb'].map((k) => `<div class="rd-cell rd-mk"><button type="button" id="cm-mk-${k}" class="btn-secondary hf-btn cm-mkb${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button></div>`).join('');
+    return (userRiwaya === 1 ? ['page', 'rub', 'half', 'hizb'] : ['page', 'thumn', 'half', 'hizb']).map((k) => `<div class="rd-cell rd-mk"><button type="button" id="cm-mk-${k}" class="btn-secondary hf-btn cm-mkb${clsMark === k ? ' on' : ''}" onclick="clsSetMark('${k}')">${CLS_MARK_NAMES[k]}</button></div>`).join('');
 }
-function clsCloseText() { const d = document.getElementById('cls-txt-pop'); if (d) d.remove(); }
-function clsShowText(pos) {
-    const p = pos || clsLast;
-    if (!p) { showToast('اضغط على آية أولاً ثم اضغط «نص الآية».'); return; }
-    clsLast = p;
-    clsCloseText();
-    const t = getAyahText(userRiwaya, p.s, p.a - 1);
-    const prev = clsStepPos(p, -1), next = clsStepPos(p, 1);
-    const d = document.createElement('div');
-    d.id = 'cls-txt-pop';
-    d.className = 'modal-overlay';
-    d.onclick = (e) => { if (e.target === d) clsCloseText(); };
-    d.innerHTML = `<div class="modal-box">
-        <div class="modal-title">${surahsNames[p.s]} — الآية ${p.a}</div>
-        <div class="cm-txt" id="cls-txt">${t || 'تعذّر تحميل النص'}</div>
-        <div class="cm-txt-nav"><button type="button" id="cls-txt-prev" class="btn-secondary"${prev ? '' : ' disabled'} onclick="clsStepText(-1)">الآية السابقة</button><button type="button" id="cls-txt-next" class="btn-secondary"${next ? '' : ' disabled'} onclick="clsStepText(1)">الآية اللاحقة</button></div>
-        <div class="modal-actions"><button type="button" id="cls-txt-close" class="btn-cancel" style="width:100%" onclick="clsCloseText()">إلغاء</button></div>
-    </div>`;
-    document.body.appendChild(d);
-}
-function clsStepPos(p, d) {
-    let s = p.s, a = p.a + d;
-    if (a < 1) { if (s === 0) return null; s--; a = getAyatCount(s) || 0; if (a < 1) return null; }
-    else if (a > (getAyatCount(s) || 0)) { if (s >= surahsNames.length - 1) return null; s++; a = 1; }
-    return { s, a };
-}
-function clsStepText(d) { const n = clsStepPos(clsLast, d); if (n) clsShowText(n); }
-
 function clsPaint() {
     document.querySelectorAll('#cm-map .cm-a').forEach((e) => {
         e.classList.toggle('sel', clsInSel(+e.dataset.s, +e.dataset.a) || (!clsB && !!clsA && +e.dataset.s === clsA.s && +e.dataset.a === clsA.a));
     });
+    clsStatus();
+}
+// السطر فوق القائمة: نص آخر آية ضُغط عليها (بلا رجوع إلى السطر؛ يُمرَّر بالإصبع لبقية الآية)، وبعد تحديد المقطع كاملاً: وصفه
+function clsStatus() {
     const st = document.getElementById('cm-status');
     if (!st) return;
-    if (!clsA) st.textContent = '';
-    else if (!clsB) st.textContent = 'اضغط آية النهاية';
-    else st.textContent = clsRangeLabel() + ' · اختر الدرجة أو اضغط للإلغاء';
+    const range = !!(clsA && clsB);
+    st.classList.toggle('txt', !range);
+    st.textContent = range ? clsRangeLabel() + ' · اختر الدرجة أو اضغط للإلغاء' : (clsLast ? (getAyahText(userRiwaya, clsLast.s, clsLast.a - 1) || '') : '');
+    if (!range) st.scrollLeft = 0;
 }
 
 function clsRangeLabel() {
@@ -2071,8 +2071,7 @@ function clsTap(ev) {
     if (!el) return;
     const s = +el.dataset.s, a = +el.dataset.a;
     clsLast = { s, a };
-    const tc = document.getElementById('cls-text-cell');
-    if (tc) tc.classList.remove('hidden');
+    clsStatus();
     if (clsA && clsB) {
         clsA = null; clsB = null; clsPaint(); return;
     } else if (clsA && !clsB) {
@@ -2213,9 +2212,9 @@ function renderPassageList(o) {
     `;
     const other = psKind === 'prog' ? 'showRasikhList()' : 'showProgList()', otherName = psKind === 'prog' ? 'المراجعة' : 'الحفظ';
     const ttl = `<span>${o.title || ''}</span>` + (psKind === 'prog' ? '' : `<button type="button" id="ps-due" class="ps-due-btn" onclick="psToggleDue()" aria-label="المقاطع المستحقة" title="المقاطع المستحقة"><span id="ps-due-n" class="ps-due-n"></span></button>`);
-    const clsBtn = `<div class="rd-cell"><button type="button" id="ps-torev" class="btn-secondary hf-btn" onclick="${other}" aria-label="الانتقال إلى ${otherName}" title="الانتقال إلى ${otherName}">${tbIcon('review')}<span>${otherName}</span></button></div>`
-        + `<div class="rd-cell rd-w2"><button type="button" id="ps-cls" class="btn-secondary hf-btn" onclick="showClassifyPage('${psKind}')">إعادة تصنيف الآيات</button></div>`;
-    hfPage('', 'showMainButtons()', html, clsBtn, ttl, '', MOON_BTN, HOME_BTN());
+    const clsBtn = `<div class="rd-cell rd-sq"><button type="button" id="ps-torev" class="btn-secondary hf-btn" onclick="${other}" aria-label="الانتقال إلى ${otherName}" title="الانتقال إلى ${otherName}">${tbIcon('review')}</button></div>`
+        + `<div class="rd-cell"><button type="button" id="ps-cls" class="btn-secondary hf-btn" onclick="showClassifyPage('${psKind}')">إعادة تصنيف الآيات</button></div>`;
+    hfPage('', 'showMainButtons()', html, clsBtn, ttl, '', HOME_BTN());
     psFilterApply();
     try { const l = document.querySelector('.ps-btn.last'); if (l) l.scrollIntoView({ block: 'center' }); } catch (e) {}
 }
@@ -2679,6 +2678,8 @@ let rdAudioToken = 0;
 let rdAudioKind = null;       // 'sheikh' | 'rec'
 let rdSheikhPos = null;       // موضع توقف الشيخ: {key, i, t}
 let rdSheikhLive = null, rdSheikhMapNext = null;
+let rdMissingToast = false;
+const rdMissing = {};         // ملفات غير موجودة عند القارئ (404): تُتخطّى
 const rdBlobs = {};           // ملفات الآيات المحمَّلة كاملة (رابط → رابط محلي)
 const rdPending = {};
 let rdRecState = 'idle';      // idle | recording | paused | recorded
@@ -2921,14 +2922,15 @@ function rdRenderBars() {
     r1.innerHTML = none
         ? `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>`
         : sheikhPlaying
-            ? SHEIKH_RECITERS.map((r) => B('rd-shk-' + SHEIKH_RECITERS.indexOf(r), 'tb-btn rd-shk' + (r.id === userSheikh ? ' rd-shk-on' : ''), `rdPickSheikh('${r.id}')`, r.short)).join('')
+            ? sheikhList().map((r) => B('rd-shk-' + sheikhList().indexOf(r), 'tb-btn rd-shk' + (r.id === curSheikh() ? ' rd-shk-on' : ''), `rdPickSheikh('${r.id}')`, r.short)).join('')
                 + `<div class="rd-cell"><button type="button" id="rd-sset" class="btn-secondary hf-btn tb-btn rd-shk" onclick="rdOpenSettings()" aria-label="إعدادات الشيخ (التكرار)" title="إعدادات الشيخ (التكرار)">${tbIcon('gear')}</button></div>`   // كل الشيوخ + الإعدادات (٨ أزرار)
             : recOn
                 ? B('rd-rec', 'rd-recdark', 'rdRecBtn()', `<span class="rec-pulse"></span><span id="rd-timer" class="rd-timer" dir="ltr">${formatHMS(rdRecElapsed())}</span><span>إيقاف التسجيل</span>`)   // أثناء التسجيل: زر داكن بعرض كامل
                 : `<div class="rd-cell"><button type="button" id="rd-restore" class="btn-secondary hf-btn tb-btn" onclick="rdRestoreRec()" aria-label="استرجاع آخر تسجيل" title="استرجاع آخر تسجيل"${recMem ? '' : ' disabled'}>${RD_ICONS.restore}</button></div>`
                 + B('rd-rec', '', 'rdRecBtn()', 'تسجيل')
                 + `<div class="rd-cell"><button type="button" id="rd-end" class="btn-secondary hf-btn rd-back rd-bkico" onclick="rdEnd()" aria-label="العودة" title="العودة">${tbIcon('arrL')}</button></div>`;
-    r1.classList.toggle('rd-shk8', sheikhPlaying && !none);   // شبكة الشيوخ ٤×٢
+    r1.classList.toggle('rd-shk8', sheikhPlaying && !none);
+    r1.style.gridTemplateColumns = (sheikhPlaying && !none) ? (sheikhList().length > 3 ? 'repeat(4, minmax(0, 1fr))' : `repeat(${sheikhList().length}, minmax(0, 1fr)) 54px`) : '';   // شبكة الشيوخ ٤×٢
     r1.classList.toggle('rd-three', !none && !sheikhPlaying && !recOn);   // [استرجاع][تسجيل][عودة]
     const sb = document.getElementById('rd-sheikh');
     if (sb) sb.classList.toggle('on', sheikhPlaying);
@@ -3147,10 +3149,15 @@ function rdSheikhUrls() {
     };
     units.forEach((q) => {
         const ks = [], groups = [];
+        let prevKey = '';
         for (let k = q.from; k <= q.to; k++) {
             const it = rd.items[k];
             const x = it ? ayahAudioUrls(userRiwaya, it.s, it.a) : null;
-            if (x) { groups.push(x); ks.push(k); }
+            if (!x) continue;
+            const key = x.join('|');
+            if (key === prevKey) continue;   // آيتا ورش داخل آية حفص واحدة: يُقرأ الملف مرة واحدة
+            prevKey = key;
+            groups.push(x); ks.push(k);
         }
         for (let r = 0; r < userRep; r++) groups.forEach((g, gi) => put(g, ks[gi], sel ? r : 0));
     });
@@ -3171,14 +3178,19 @@ function rdToggleSheikh() {
     if (rd.kind !== 'aqal' && rdGuardHidden()) return;
     if (rdRecState === 'recording') { showToast("أوقف التسجيل أولاً (اضغط «إيقاف التسجيل»)."); return; }
     if (rdRecState !== 'idle') rdRecDiscard();   // التسجيل محفوظ في الهاتف ويمكن استرجاعه
-    if (userRiwaya !== 1) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    if (userRiwaya !== 1 && !(quranTexts[0] && quranTexts[1])) {   // ورش: نحتاج نصّي الروايتين لمطابقة الترقيم
+        showToast('جارٍ تجهيز صوت ورش…');
+        ensureTextsForRiwaya(1).then(() => ensureTextsForRiwaya(0)).then(() => rdToggleSheikh()).catch(() => showToast('تعذّر تجهيز صوت ورش (تحقق من الاتصال).'));
+        return;
+    }
     rdStopAudio(true);
     const urls = rdSheikhUrls();
-    if (!urls.length) { showToast("صوت الشيخ متاح حالياً لرواية حفص فقط."); return; }
+    if (!urls.length) { showToast("لا يوجد ملف صوتي لهذه الآية."); return; }
     rdPlayQueue(urls);
 }
 
 function rdPlayQueue(urls) {
+    rdMissingToast = false;
     const token = ++rdAudioToken;
     rdPlaying = true;
     rdAudioKind = 'sheikh';
@@ -3206,7 +3218,7 @@ function rdPlayQueue(urls) {
         const u = urls[n];
         if (rdBlobs[u]) return Promise.resolve(rdBlobs[u]);
         if (!rdPending[u]) {
-            rdPending[u] = fetch(u).then((r) => { if (!r.ok) throw new Error('http'); return r.blob(); })
+            rdPending[u] = fetch(u).then((r) => { if (!r.ok) { if (r.status === 404) rdMissing[u] = true; throw new Error('http'); } return r.blob(); })
                 .then((bl) => { const o = URL.createObjectURL(bl); rdBlobs[u] = o; delete rdPending[u]; return o; })
                 .catch(() => { delete rdPending[u]; return u; });   // تعذّر التحميل الكامل: نبثّ الرابط مباشرة
         }
@@ -3220,6 +3232,12 @@ function rdPlayQueue(urls) {
         i = n; lastT = -1; stall = 0; loading = true;
         ensure(n).then((src) => {
             if (!alive() || i !== n) return;
+            if (rdMissing[urls[n]]) {   // ملف الآية غير موجود عند هذا القارئ: ننتقل إلى التالية
+                loading = false;
+                if (!rdMissingToast) { rdMissingToast = true; showToast('بعض الآيات غير متوفرة بصوت هذا القارئ فتُتخطّى.'); }
+                if (n + 1 >= urls.length) { rdSheikhPos = null; rdStopAudio(); } else start(n + 1, 0);
+                return;
+            }
             loading = false;
             a.src = src;
             if (at) a.onloadedmetadata = () => { a.onloadedmetadata = null; try { a.currentTime = at; } catch (e) {} };
@@ -3298,9 +3316,9 @@ function rdSetRefresh() {
 
 // الضغط على شيخ يبدأ القراءة به مباشرة؛ وعلى الشيخ الجاري يوقفها
 function rdPickSheikh(id) {
-    if (!rd || !SHEIKH_RECITERS.some((r) => r.id === id)) return;
-    if (rdPlaying && rdAudioKind === 'sheikh' && id === userSheikh) { rdToggleSheikh(); return; }
-    userSheikh = id;
+    if (!rd || !sheikhList().some((r) => r.id === id)) return;
+    if (rdPlaying && rdAudioKind === 'sheikh' && id === curSheikh()) { rdToggleSheikh(); return; }
+    setSheikh(id);
     saveSettings();
     rdSheikhPos = null;
     rdStopAudio(true);
